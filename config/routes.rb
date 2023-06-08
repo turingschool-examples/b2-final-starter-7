@@ -12,4 +12,6 @@ Rails.application.routes.draw do
     resources :merchant_status, only: [:update]
     resources :invoices, except: [:new, :destroy]
   end
+
+  get "/coupons", to: "coupons#index"
 end
