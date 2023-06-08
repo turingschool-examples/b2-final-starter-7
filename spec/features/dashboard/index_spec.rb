@@ -108,9 +108,9 @@ RSpec.describe "merchant dashboard" do
   end
 
   it "each invoice id is a link to my merchant's invoice show page " do
-    expect(page).to have_link(@item_1.invoice_ids)
-    expect(page).to have_link(@item_2.invoice_ids)
-    expect(page).to_not have_link(@item_3.invoice_ids)
+    expect(page).to have_link("#{@item_1.invoice_ids}")
+    expect(page).to have_link("#{@item_2.invoice_ids}")
+    expect(page).to_not have_link("#{@item_3.invoice_ids}")
 
     click_link("#{@item_1.invoice_ids}", match: :first)
     expect(current_path).to eq("/merchants/#{@merchant1.id}/invoices/#{@invoice_1.id}")
@@ -118,5 +118,17 @@ RSpec.describe "merchant dashboard" do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+  # 1. Merchant Coupons Index 
+
+# I see a link to view all of my coupons
+# When I click this link
+# I'm taken to my coupons index page
+# Where I see all of my coupon names including their amount off 
+# And each coupon's name is also a link to its show page.
+  it "has a link to my coupons index page" do
+    expect(page).to have_link("View All Coupons")
+    click_link("View All Coupons")
+    expect(current_path).to eq("/coupons")
   end
 end
