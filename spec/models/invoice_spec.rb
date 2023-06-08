@@ -7,9 +7,12 @@ RSpec.describe Invoice, type: :model do
   end
   describe "relationships" do
     it { should belong_to :customer }
+    it { should belong_to(:coupon).optional(true) }
+    # it { is_expected.to belong_to(:coupon).optional(true) }
     it { should have_many(:items).through(:invoice_items) }
     it { should have_many(:merchants).through(:items) }
     it { should have_many :transactions}
+
   end
   describe "instance methods" do
     it "total_revenue" do
