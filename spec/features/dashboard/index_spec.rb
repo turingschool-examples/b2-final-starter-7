@@ -4,6 +4,7 @@ RSpec.describe "merchant dashboard" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
+    @coupon_1 = Coupon.create!(name: "Coupon 1", unique_code: "10%OFF")
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
     @customer_3 = Customer.create!(first_name: "Mariah", last_name: "Carrey")
