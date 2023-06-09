@@ -3,6 +3,7 @@ class Coupon < ApplicationRecord
                         :unique_code,
                         :discount,
                         :status
+  validates :amount_off, presence: true, numericality: true
                       
   belongs_to :merchant 
   has_many :invoices
