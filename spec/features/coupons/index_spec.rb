@@ -44,7 +44,7 @@ RSpec.describe "coupons index" do
     @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @merchant1)
     @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", percent_dollar: "dollar", merchant: @merchant1)
     @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, code: "20123456789",percent_dollar: "dollar", merchant: @merchant2)
+    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 20, code: "20123456789",percent_dollar: "dollar", merchant: @merchant2)
 
     visit "/merchants/#{@merchant1.id}/coupons"
   end

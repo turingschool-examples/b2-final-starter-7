@@ -13,17 +13,17 @@ RSpec.describe "coupons index" do
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
     @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon2 = Coupon.create!(name: "Ten Percent Off", discount: 10, code: "10987654321", percent_dollar: "percent", merchant: @merchant1)
     @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, code: "20123456789", percent_dollar: "dollar", merchant: @merchant2)
+    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 20, code: "20123456789", percent_dollar: "dollar", merchant: @merchant2)
 
     @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon1.id)
-    @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2)
+    @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon2.id)
     @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2, coupon_id: @coupon1.id)
     @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2, coupon_id: @coupon1.id)
-    @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2)
+    @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2, coupon_id: @coupon2.id)
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
-    @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1)
+    @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2)
 
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
@@ -45,23 +45,30 @@ RSpec.describe "coupons index" do
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_6.id)
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
+    @transaction8 = Transaction.create!(credit_card_number: 203942, result: 0, invoice_id: @invoice_1.id)
 
     visit "/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}"
   end
-# 3. Merchant Coupon Show Page 
+# 3. Merchant Coupon Show Page - Dollar 
   it "displays a coupon's attributes" do 
     expect(page).to have_content("Name: #{@coupon1.name}")
     expect(page).to have_content("Code: #{@coupon1.code}")
     expect(page).to have_content("Discount: $#{@coupon1.discount}")
     expect(page).to have_content("Status: #{@coupon1.status}")
-    expect(page).to have_content("Times Used:")
-
-# create an if for dollar vs percent
+    expect(page).to have_content("Times Used: 3")
 
     expect(page).to_not have_content("Name: #{@coupon2.name}")
     expect(page).to_not have_content("Code: #{@coupon3.code}")
     expect(page).to_not have_content("Name: #{@coupon4.name}")
-
-# (Note: "use" of a coupon should be limited to successful transactions.)
+# write model test
+  end
+# 3. Merchant Coupon Show Page - Percent 
+  it "displays a coupon's attributes" do 
+    visit "/merchants/#{@merchant1.id}/coupons/#{@coupon2.id}"
+    expect(page).to have_content("Name: #{@coupon2.name}")
+    expect(page).to have_content("Code: #{@coupon2.code}")
+    expect(page).to have_content("Discount: #{@coupon2.discount}%")
+    expect(page).to have_content("Status: #{@coupon2.status}")
+    expect(page).to have_content("Times Used: 2")
   end
 end

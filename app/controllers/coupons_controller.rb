@@ -21,6 +21,11 @@ class CouponsController < ApplicationController
     end
   end
 # need to refactor to include ACTIVE vs inactive coupons
+
+  def show 
+    @coupon = Coupon.find(params[:id])
+  end
+
   private
   def coupon_params
     params.permit(:name, :discount, :code, :percent_dollar)
