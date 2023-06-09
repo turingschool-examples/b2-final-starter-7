@@ -70,4 +70,15 @@ RSpec.describe "coupon show page" do
     expect(page).to have_content("Status: #{@coupon2.status}")
     expect(page).to have_content("Times Used: 2")
   end
+# 4. Merchant Coupon Deactivate
+  it "can deactivate coupons" do 
+    expect(page).to have_content("Status: active")
+    expect(page).to have_button("Deactivate")
+    click_button "Deactivate"
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}")
+    expect(page).to have_content("Status: inactive")
+  end
+
+# * Sad Path: 
+# 1. A coupon cannot be deactivated if there are any pending invoices with that coupon.
 end
