@@ -9,8 +9,6 @@ RSpec.describe "merchant dashboard" do
     @coupon4 = @merchant1.coupons.create!(name: "Ten Dollars Off", unique_code: "10$OFF", discount: 0, status: 1)
     @coupon5 = @merchant1.coupons.create!(name: "Twelve Percent Off", unique_code: "12%OFF", discount: 1, status: 0)
 
-
-    require 'pry'; binding.pry
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
     @customer_3 = Customer.create!(first_name: "Mariah", last_name: "Carrey")
@@ -133,7 +131,7 @@ RSpec.describe "merchant dashboard" do
 
       expect(page).to have_link("All My Coupons")
       click_link("All My Coupons")
-      expect(current_path).to eq(merchant_coupons_index_path(@merchant1))
+      expect(current_path).to eq(merchant_coupons_path(@merchant1))
     end
   end
 end
