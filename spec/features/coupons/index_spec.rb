@@ -41,15 +41,15 @@ RSpec.describe "coupons index" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, merchant: @merchant1)
-    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, merchant: @merchant1)
-    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, merchant: @merchant1)
-    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, merchant: @merchant2)
+    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", merchant: @merchant1)
+    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", merchant: @merchant1)
+    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", merchant: @merchant1)
+    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, code: "20123456789", merchant: @merchant2)
 
-    visit "merchants/#{@merchant1.id}/coupons"
+    visit "/merchants/#{@merchant1.id}/coupons"
   end
   # 1. Merchant Coupons Index 
-  it "has a link to my coupons index page" do
+  it "displays my coupon names, amount off, and links to each coupon show page" do
     expect(page).to have_content(@coupon1.name)
     expect(page).to have_content(@coupon2.name)
     expect(page).to have_content(@coupon3.name)
@@ -61,4 +61,72 @@ RSpec.describe "coupons index" do
     expect(page).to have_link("Show #{@coupon3.name}")
     expect(page).to_not have_content(@coupon4.name)
   end
+  # 2. Merchant Coupon Create 
+  it "can create new coupons" do
+    expect(page).to_not have_content("Seven Dollars Off")
+    expect(page).to have_link("Create New Coupon")
+    click_link("Create New Coupon")
+
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+    expect(page).to have_field("name")
+    expect(page).to have_field("code")
+    expect(page).to have_field("discount")
+    expect(page).to have_field("percent_dollar")
+
+    fill_in "name", with: "Seven Dollars Off"
+    fill_in "code", with: "7123456789"
+    fill_in "discount", with: "7"
+    select "$", from: "percent_dollar"
+    click_button "Submit"
+
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons")
+    expect(page).to have_content("Seven Dollars Off")
+  end
+  # 2b. Sad Path Testing - valid data input
+  xit "validates form data input" do
+    click_link("Create New Coupon")
+    fill_in "name", with: "Seven Dollars Off"
+    fill_in "code", with: "5123456789"
+    fill_in "discount", with: "7"
+    select "$", from: "percent_dollar"
+    click_button "Submit"
+
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+    expect(page).to have_content("Error: Valid data must be entered")
+    
+    fill_in "name", with: "Seven Dollars Off"
+    fill_in "code", with: "7123456789"
+    fill_in "discount", with: "not_a_number"
+    select "$", from: "percent_dollar"
+    click_button "Submit"
+
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+    expect(page).to have_content("Error: Valid data must be entered")
+    
+    fill_in "name", with: "Seven Dollars Off"
+    fill_in "code", with: "7123456789"
+    fill_in "discount", with: "7"
+    click_button "Submit"
+
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+    expect(page).to have_content("Error: Valid data must be entered")
+  end
+  # 2c. Sad Path Testing - only 5 coupons
+  it "does not allow nore than 5 coupons per merchant" do
+    @coupon4 = Coupon.create!(name: "Six Dollars Off", discount: 6, code: "6123456789", merchant: @merchant1)
+    @coupon5 = Coupon.create!(name: "Eight Dollars Off", discount: 8, code: "8123456789", merchant: @merchant1)
+
+    click_link("Create New Coupon")
+    fill_in "name", with: "Seven Dollars Off"
+    fill_in "code", with: "7123456789"
+    fill_in "discount", with: "7"
+    select "$", from: "percent_dollar"
+    click_button "Submit"
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+    expect(page).to have_content("Error: Too many coupons")
+    end
+  # * Sad Paths to consider: 
+  # 1. This Merchant already has 5 active coupons
+  # 2. Coupon code entered is NOT unique
+  # ACTIVE vs inactive coupons??
 end
