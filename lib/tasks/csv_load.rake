@@ -22,7 +22,7 @@ namespace :csv_load do
       end
       ActiveRecord::Base.connection.reset_pk_sequence!("items")
       puts "Items imported."
-      end
+   end
 
    task :invoices => :environment do
       CSV.foreach("db/data/invoices.csv", headers: true) do |row|
@@ -84,7 +84,7 @@ namespace :csv_load do
       puts "InvoiceItems imported."
    end
 
-   task :all do 
+   task :all do
       [:customers, :invoices, :merchants, :items, :invoice_items, :transactions].each do |task|
          Rake::Task["csv_load:#{task}".to_sym].invoke
       end

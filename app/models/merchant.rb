@@ -1,12 +1,30 @@
 class Merchant < ApplicationRecord
   validates_presence_of :name
+
   has_many :items
   has_many :invoice_items, through: :items
   has_many :invoices, through: :invoice_items
   has_many :customers, through: :invoices
   has_many :transactions, through: :invoices
+  has_many :coupons
+
+  # validate :coupon_count
+  # validates :coupons, length: { maximum: 5 }, on: :create
+  # validate :active_coupon_count
 
   enum status: [:enabled, :disabled]
+
+  # def active_coupon_count
+  #   if coupons.where(status: 0).size == 5
+  #     errors.add(:active_coupon_error, "Too Many Active Coupons")
+  #   end
+  #   # count = 0
+  #   # coupons.map do |c|
+  #   #   if c.status == 0
+  #   #     count += 1
+  #   #   end
+  #   # end
+  # end
 
   def favorite_customers
     transactions.joins(invoice: :customer)
