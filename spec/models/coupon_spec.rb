@@ -14,4 +14,8 @@ RSpec.describe Coupon, type: :model do
   describe 'validations' do 
     it {should validate_uniqueness_of :unique_code} 
   end
+
+  describe 'enum' do 
+    it { should define_enum_for :status }
+  end
 end
