@@ -13,7 +13,7 @@ class CouponsController < ApplicationController
     if @merchant.coupons.where(status:1).count >= 5
       redirect_to "/merchants/#{@merchant.id}/coupons/new"
       flash[:alert] = "Error: Too many coupons"
-    elsif @merchant.coupon_valid?(@coupon) == true && @coupon.save
+    elsif @merchant.coupon_valid?(@coupon.code) == true && @coupon.save
       redirect_to "/merchants/#{@merchant.id}/coupons"
     else
       redirect_to "/merchants/#{@merchant.id}/coupons/new"

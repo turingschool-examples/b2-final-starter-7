@@ -63,8 +63,8 @@ class Merchant < ApplicationRecord
     items.where(status: 0)
   end
   
-  def coupon_valid?(coupon)
-    !coupons.exists?(code: coupon.code)
+  def coupon_valid?(code)
+    !coupons.exists?(code: code)
   end
 
 end

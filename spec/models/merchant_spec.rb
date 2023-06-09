@@ -112,6 +112,11 @@ describe Merchant do
       @customer_5 = Customer.create!(first_name: 'Sylvester', last_name: 'Nader')
       @customer_6 = Customer.create!(first_name: 'Herber', last_name: 'Kuhn')
 
+      @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @merchant1)
+      @coupon2 = Coupon.create!(name: "Ten Percent Off", discount: 10, code: "10987654321", percent_dollar: "percent", merchant: @merchant1)
+      @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
+      @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 20, code: "20123456789", percent_dollar: "dollar", merchant: @merchant2)
+
       @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2)
       @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2)
       @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2)
@@ -168,6 +173,11 @@ describe Merchant do
     it "disabled_items" do 
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    it "coupon_valid" do 
+      expect(@merchant1.coupon_valid?("1234554321")).to eq(true)
+      expect(@merchant1.coupon_valid?("5123456789")).to eq(false)
     end
   end
 end
