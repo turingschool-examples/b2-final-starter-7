@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Cupon, type: :model do
+RSpec.describe Coupon, type: :model do
   describe "Exsist" do
     it "exists" do
     end
@@ -9,8 +9,8 @@ RSpec.describe Cupon, type: :model do
   describe "validations" do
     it { should validate_presence_of :name }
     it { should validate_presence_of :code }
-    it { should validate_presence_of :percent_discount }
-    it { should validate_presence_of :dollar_discount }
+    it { should validate_presence_of :percent_disc }
+    it { should validate_presence_of :dollar_disc }
     it { should validate_presence_of :status }
 
     it { should belong_to :merchant }

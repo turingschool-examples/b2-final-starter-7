@@ -167,7 +167,7 @@ Layout/TrailingEmptyLines:
     - 'app/controllers/admin/dashboard_controller.rb'
     - 'app/controllers/admin/invoices_controller.rb'
     - 'app/controllers/admin/merchant_status_controller.rb'
-    - 'app/models/cupon.rb'
+    - 'app/models/coupon.rb'
     - 'db/seeds.rb'
     - 'lib/tasks/csv_load.rake'
 
@@ -177,7 +177,7 @@ Layout/TrailingEmptyLines:
 Layout/TrailingWhitespace:
   Exclude:
     - 'app/controllers/admin/merchant_status_controller.rb'
-    - 'app/models/cupon.rb'
+    - 'app/models/coupon.rb'
     - 'app/models/customer.rb'
     - 'lib/tasks/csv_load.rake'
     - 'spec/features/admin/merchants/new_spec.rb'
