@@ -1,4 +1,13 @@
 FactoryBot.define do
+  factory :coupon do
+    name { Faker::App.name }
+    unique_code { Faker::Commerce.promotion_code }
+    percent_discount { Faker::Number.within(range: 1..100) } ||
+    dollar_discount { Faker::Number.decimal(l_digits: 2) }
+    merchant
+    invoice
+  end
+
   factory :customer do
     first_name {Faker::Name.first_name}
     last_name {Faker::Dessert.variety}
@@ -12,8 +21,6 @@ FactoryBot.define do
 
   factory :merchant do
     name {Faker::Space.galaxy}
-    invoices
-    items
   end
 
   factory :item do
