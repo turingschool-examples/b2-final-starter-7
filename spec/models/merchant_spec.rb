@@ -175,9 +175,13 @@ describe Merchant do
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
 
-    it "coupon_valid" do 
+    it "coupon_valid?" do 
       expect(@merchant1.coupon_valid?("1234554321")).to eq(true)
       expect(@merchant1.coupon_valid?("5123456789")).to eq(false)
+    end
+
+    it "coupon_count?" do 
+      expect(@merchant1.coupon_count?).to eq(false)
     end
   end
 end

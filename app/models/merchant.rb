@@ -67,4 +67,7 @@ class Merchant < ApplicationRecord
     !coupons.exists?(code: code)
   end
 
+  def coupon_count?
+    coupons.where(status:1).count >= 5
+  end
 end
