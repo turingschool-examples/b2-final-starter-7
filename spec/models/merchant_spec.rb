@@ -3,14 +3,42 @@ require 'rails_helper'
 describe Merchant do
   describe "validations" do
     it { should validate_presence_of :name }
+
+    it "shows that a coupon can be linked to a merchant" do
+      linked_merchant = Merchant.create!(name: "Linked Merchant")
+      Coupon.create!(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 0, merchant_id: linked_merchant.id)
+      foo = Coupon.new(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 0, merchant_id: linked_merchant.id)
+      expect(foo).to_not be_valid
+    end
+
+    # it "should not be able to create more than five active coupons" do
+    #   merchant = Merchant.create!(name: "Eager Merchant")
+    #   coupon_1 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO1", discount_amount: 100, discount_type: 0, status: 0)
+    #   coupon_2 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO2", discount_amount: 100, discount_type: 0, status: 0)
+    #   coupon_3 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO3", discount_amount: 100, discount_type: 0, status: 0)
+    #   coupon_4 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO4", discount_amount: 100, discount_type: 0, status: 0)
+    #   coupon_5 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO5", discount_amount: 100, discount_type: 0, status: 0)
+    #   coupon_6 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO6", discount_amount: 100, discount_type: 0, status: 1)
+    #   coupon_7 = Coupon.new(name: "Foo", unique_code: "BOGO7", discount_amount: 100, discount_type: 0, status: 0, merchant_id: merchant.id)
+    #   require 'pry'; binding.pry
+
+    #   expect(coupon_1).to be_valid
+    #   expect(coupon_2).to be_valid
+    #   expect(coupon_3).to be_valid
+    #   expect(coupon_4).to be_valid
+    #   expect(coupon_5).to be_valid
+    #   expect(coupon_6).to be_valid
+    #   expect(coupon_7).to_not be_valid
+    # end
   end
+
   describe "relationships" do
-    it { should have_many :items }
+    it { should have_many(:items) }
     it { should have_many(:invoice_items).through(:items) }
-    it {should have_many(:invoices).through(:invoice_items)}
+    it { should have_many(:invoices).through(:invoice_items) }
     it { should have_many(:customers).through(:invoices) }
     it { should have_many(:transactions).through(:invoices) }
-
+    it { should have_many(:coupons) }
   end
 
   describe "class methods" do
@@ -164,7 +192,7 @@ describe Merchant do
       expect(@merchant2.enabled_items).to eq([])
     end
 
-    it "disabled_items" do 
+    it "disabled_items" do
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
