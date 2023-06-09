@@ -16,5 +16,6 @@ Rails.application.routes.draw do
   get "/merchants/:id/coupons", to: "coupons#index"
   get "/merchants/:id/coupons/new", to: "coupons#new"
   post "/merchants/:id/coupons/new", to: "coupons#create"
+  get "/merchants/:id/coupons/:id", to: "coupons#show"
 
 end
