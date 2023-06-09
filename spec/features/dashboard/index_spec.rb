@@ -123,6 +123,6 @@ RSpec.describe "merchant dashboard" do
   it "has a link to my coupons index page" do
     expect(page).to have_link("View All Coupons")
     click_link("View All Coupons")
-    expect(current_path).to eq("merchants/#{@merchant1.id}/coupons")
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons")
   end
 end

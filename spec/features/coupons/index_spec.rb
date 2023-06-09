@@ -50,7 +50,6 @@ RSpec.describe "coupons index" do
   end
   # 1. Merchant Coupons Index 
   it "has a link to my coupons index page" do
-    save_and_open_page
     expect(page).to have_content(@coupon1.name)
     expect(page).to have_content(@coupon2.name)
     expect(page).to have_content(@coupon3.name)
