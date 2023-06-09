@@ -3,8 +3,14 @@ require "rails_helper"
 RSpec.describe "merchant dashboard" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
+    @coupon1 = @merchant1.coupons.create!(name: "Ten Percent Off", unique_code: "10%OFF", discount: 1, status: 1)
+    @coupon2 = @merchant1.coupons.create!(name: "Five Percent Off", unique_code: "5%OFF", discount: 1, status: 1)
+    @coupon3 = @merchant1.coupons.create!(name: "Fifteen Percent Off", unique_code: "15%OFF", discount: 1, status: 1)
+    @coupon4 = @merchant1.coupons.create!(name: "Ten Dollars Off", unique_code: "10$OFF", discount: 0, status: 1)
+    @coupon5 = @merchant1.coupons.create!(name: "Twelve Percent Off", unique_code: "12%OFF", discount: 1, status: 0)
 
-    @coupon_1 = Coupon.create!(name: "Coupon 1", unique_code: "10%OFF")
+
+    require 'pry'; binding.pry
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
     @customer_3 = Customer.create!(first_name: "Mariah", last_name: "Carrey")
@@ -119,5 +125,15 @@ RSpec.describe "merchant dashboard" do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+
+  describe "US1  Merchant Coupons Index" do
+    it "I see a link to view all of my coupons When I click this link I'm taken to my coupons index page" do
+      # visit merchant_dashboard_index_path(@merchant1)
+
+      expect(page).to have_link("All My Coupons")
+      click_link("All My Coupons")
+      expect(current_path).to eq(merchant_coupons_index_path(@merchant1))
+    end
   end
 end
