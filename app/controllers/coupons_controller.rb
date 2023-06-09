@@ -7,20 +7,19 @@ class CouponsController < ApplicationController
   end
 
   def create
-    merchant = Merchant.find(params[:id]) 
+    @merchant = Merchant.find(params[:id]) 
     @coupon = Coupon.new(coupon_params)
-    @coupon.merchant_id = merchant.id
-    if merchant.coupons.count < 5 && @coupon.save
-      redirect_to "/merchants/#{merchant.id}/coupons"
-    elsif merchant.coupons.count >= 5
-      redirect_to "/merchants/#{merchant.id}/coupons/new"
+    @coupon.merchant_id = @merchant.id
+    if @merchant.coupons.where(status:1).count >= 5
+      redirect_to "/merchants/#{@merchant.id}/coupons/new"
       flash[:alert] = "Error: Too many coupons"
+    elsif @merchant.coupon_valid?(@coupon) == true && @coupon.save
+      redirect_to "/merchants/#{@merchant.id}/coupons"
     else
-      redirect_to "/merchants/#{merchant.id}/coupons/new"
+      redirect_to "/merchants/#{@merchant.id}/coupons/new"
       flash[:alert] = "Error: Valid data must be entered"
     end
   end
-# need to refactor to include ACTIVE vs inactive coupons
 
   def show 
     @coupon = Coupon.find(params[:id])
