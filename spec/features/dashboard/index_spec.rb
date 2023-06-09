@@ -128,7 +128,7 @@ RSpec.describe "merchant dashboard" do
   describe "US1  Merchant Coupons Index" do
     it "I see a link to view all of my coupons When I click this link I'm taken to my coupons index page" do
       # visit merchant_dashboard_index_path(@merchant1)
-save_and_opem_page
+
       expect(page).to have_link("All My Coupons")
       click_link("All My Coupons")
       expect(current_path).to eq(merchant_coupons_path(@merchant1))

@@ -8,7 +8,10 @@ class Coupon < ApplicationRecord
   belongs_to :merchant 
   has_many :invoices
 
-  enum discount: [:dollars, :percentage]
+  enum discount: [:dollars, :percent]
   enum status:  {deactivated: 0, activated: 1}
 
+  def discount_amount
+    # require 'pry'; binding.pry
+  end
 end

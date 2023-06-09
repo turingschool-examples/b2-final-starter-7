@@ -1,5 +1,6 @@
-<h1> Coupon Index Page </h1>
+<h2> Coupon Index Page </h2>
 
 <% @coupons.each do |coupon| %>
-<p><%= coupon .name %></p>
+<p>Name: <%= coupon .name %></p>
+<p>Amount Off: <%= coupon.amount_off %> <%= coupon.discount %></p>
 <% end %>

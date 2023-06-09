@@ -14,7 +14,7 @@ RSpec.describe "Coupon Index" do
   describe "US1 merchant_coupons_path(@merchant1)" do
     it "I see all of my coupon names including their amount off And each coupon's name is also a link to its show page." do
       visit merchant_coupons_path(@merchant1)
-
+save_and_open_page
       expect(page).to have_content("Coupon Index Page")
       expect(page).to have_content("Ten Percent Off")
     end
