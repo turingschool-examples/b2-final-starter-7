@@ -60,7 +60,6 @@ RSpec.describe "coupons index" do
     expect(page).to_not have_content("Name: #{@coupon2.name}")
     expect(page).to_not have_content("Code: #{@coupon3.code}")
     expect(page).to_not have_content("Name: #{@coupon4.name}")
-# write model test
   end
 # 3. Merchant Coupon Show Page - Percent 
   it "displays a coupon's attributes" do 
