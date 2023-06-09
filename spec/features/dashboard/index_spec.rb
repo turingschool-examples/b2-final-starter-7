@@ -120,15 +120,9 @@ RSpec.describe "merchant dashboard" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
   end
   # 1. Merchant Coupons Index 
-
-# I see a link to view all of my coupons
-# When I click this link
-# I'm taken to my coupons index page
-# Where I see all of my coupon names including their amount off 
-# And each coupon's name is also a link to its show page.
   it "has a link to my coupons index page" do
     expect(page).to have_link("View All Coupons")
     click_link("View All Coupons")
-    expect(current_path).to eq("/coupons")
+    expect(current_path).to eq("merchants/#{@merchant1.id}/coupons")
   end
 end

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "coupons index" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
+    @merchant2 = Merchant.create!(name: "Jolene's Joint")
 
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
@@ -41,18 +42,24 @@ RSpec.describe "coupons index" do
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
     @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, merchant: @merchant1)
-    visit "/coupons"
+    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, merchant: @merchant1)
+    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, merchant: @merchant1)
+    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, merchant: @merchant2)
+
+    visit "merchants/#{@merchant1.id}/coupons"
   end
   # 1. Merchant Coupons Index 
-
-# I see a link to view all of my coupons
-# When I click this link
-# I'm taken to my coupons index page
-# Where I see all of my coupon names including their amount off 
-# And each coupon's name is also a link to its show page.
-  xit "has a link to my coupons index page" do
+  it "has a link to my coupons index page" do
+    save_and_open_page
     expect(page).to have_content(@coupon1.name)
-    expect(page).to have_content(@coupon1.discount)
+    expect(page).to have_content(@coupon2.name)
+    expect(page).to have_content(@coupon3.name)
+    expect(page).to have_content("Amount Off: $#{@coupon1.discount}")
+    expect(page).to have_content("Amount Off: $#{@coupon2.discount}")
+    expect(page).to have_content("Amount Off: $#{@coupon3.discount}")
     expect(page).to have_link("Show #{@coupon1.name}")
+    expect(page).to have_link("Show #{@coupon2.name}")
+    expect(page).to have_link("Show #{@coupon3.name}")
+    expect(page).to_not have_content(@coupon4.name)
   end
 end
