@@ -10,8 +10,11 @@ class CouponsController < ApplicationController
     merchant = Merchant.find(params[:id]) 
     @coupon = Coupon.new(coupon_params)
     @coupon.merchant_id = merchant.id
-    if @coupon.save
+    if merchant.coupons.count < 5 && @coupon.save
       redirect_to "/merchants/#{merchant.id}/coupons"
+    elsif merchant.coupons.count >= 5
+      redirect_to "/merchants/#{merchant.id}/coupons/new"
+      flash[:alert] = "Error: Too many coupons"
     else
       redirect_to "/merchants/#{merchant.id}/coupons/new"
       flash[:alert] = "Error: Valid data must be entered"
