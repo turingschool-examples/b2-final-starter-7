@@ -13,5 +13,5 @@ Rails.application.routes.draw do
     resources :invoices, except: [:new, :destroy]
   end
   get "/", to: "application#welcome"
-  get "/coupons", to: "coupons#index"
+  get "/merchants/:id/coupons", to: "coupons#index"
 end
