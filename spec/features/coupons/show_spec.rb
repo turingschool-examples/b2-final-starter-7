@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "coupons index" do
+RSpec.describe "coupon show page" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Jolene's Joint")

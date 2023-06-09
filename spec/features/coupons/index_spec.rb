@@ -12,6 +12,11 @@ RSpec.describe "coupons index" do
     @customer_5 = Customer.create!(first_name: "Sylvester", last_name: "Nader")
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
+    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 20, code: "20123456789",percent_dollar: "dollar", merchant: @merchant2)
+
     @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2)
     @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2)
     @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2)
@@ -41,13 +46,9 @@ RSpec.describe "coupons index" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 20, code: "20123456789",percent_dollar: "dollar", merchant: @merchant2)
-
     visit "/merchants/#{@merchant1.id}/coupons"
   end
+
   # 1. Merchant Coupons Index 
   it "displays my coupon names, amount off, and links to each coupon show page" do
     expect(page).to have_content(@coupon1.name)
@@ -83,8 +84,8 @@ RSpec.describe "coupons index" do
     expect(page).to have_content("Seven Dollars Off")
   end
   # 2b. Sad Path Testing - valid data input
-  xit "validates form data input" do
-  #code is not unique
+  it "validates form data input" do
+  # code is not unique
     click_link("Create New Coupon")
     fill_in "name", with: "Seven Dollars Off"
     fill_in "code", with: "5123456789"
@@ -125,6 +126,5 @@ RSpec.describe "coupons index" do
     click_button "Submit"
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
     expect(page).to have_content("Error: Too many coupons")
-    end
-  # need to refactor to include ACTIVE vs inactive coupons
+  end
 end

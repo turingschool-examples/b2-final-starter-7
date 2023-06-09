@@ -35,7 +35,7 @@ class Merchant < ApplicationRecord
     .group(:id)
     .order('total_revenue desc')
     .limit(5)
-   end
+  end
 
   def self.top_merchants
     joins(invoices: [:invoice_items, :transactions])
@@ -61,5 +61,13 @@ class Merchant < ApplicationRecord
 
   def disabled_items
     items.where(status: 0)
+  end
+  
+  def coupon_valid?(code)
+    !coupons.exists?(code: code)
+  end
+
+  def coupon_count?
+    coupons.where(status:1).count >= 5
   end
 end
