@@ -73,6 +73,21 @@ RSpec.describe "coupons index" do
     expect(page).to have_field("discount")
     expect(page).to have_field("percent_dollar")
 
+    # fill_in "name", with: "Seven Dollars Off"
+    # fill_in "code", with: "7123456789"
+    # fill_in "discount", with: "not_a_number"
+    # select "$", from: "percent_dollar"
+    # click_button "Submit"
+    # expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+    # expect(page).to have_content("Error: Valid data must be entered")
+    
+    # fill_in "name", with: "Seven Dollars Off"
+    # fill_in "code", with: "7123456789"
+    # fill_in "discount", with: "7"
+    # click_button "Submit"
+    # expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
+    # expect(page).to have_content("Error: Valid data must be entered")
+  
     fill_in "name", with: "Seven Dollars Off"
     fill_in "code", with: "7123456789"
     fill_in "discount", with: "7"

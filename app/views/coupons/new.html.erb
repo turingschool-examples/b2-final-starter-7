@@ -8,7 +8,7 @@
 <%= form.label :discount, "Amount:" %>
 <%= form.text_field :discount, required: true %><br>
 <%= form.label :percent_dollar, "%/$?:" %>
-<%= form.select(:percent_dollar, ["%", "$"]) %>
+<%= form.select(:percent_dollar, ["%", "$"], :include_blank => true, required: true) %>
 
 <%= form.submit "Submit" %>
 <% end %>
