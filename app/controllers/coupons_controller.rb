@@ -23,6 +23,6 @@ class CouponsController < ApplicationController
 
   private
   def coupon_params
-    params.permit(:name, :discount, :code)
+    params.permit(:name, :discount, :code, :percent_dollar)
   end
 end

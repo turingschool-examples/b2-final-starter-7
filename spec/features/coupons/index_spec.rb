@@ -41,10 +41,10 @@ RSpec.describe "coupons index" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", merchant: @merchant1)
-    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", merchant: @merchant1)
-    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", merchant: @merchant1)
-    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, code: "20123456789", merchant: @merchant2)
+    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, code: "20123456789",percent_dollar: "dollar", merchant: @merchant2)
 
     visit "/merchants/#{@merchant1.id}/coupons"
   end
@@ -76,7 +76,7 @@ RSpec.describe "coupons index" do
     fill_in "name", with: "Seven Dollars Off"
     fill_in "code", with: "7123456789"
     fill_in "discount", with: "7"
-    select "$", from: "percent_dollar"
+    select "dollar", from: "percent_dollar"
     click_button "Submit"
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons")
@@ -89,7 +89,7 @@ RSpec.describe "coupons index" do
     fill_in "name", with: "Seven Dollars Off"
     fill_in "code", with: "5123456789"
     fill_in "discount", with: "7"
-    select "$", from: "percent_dollar"
+    select "dollar", from: "percent_dollar"
     click_button "Submit"
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
@@ -98,7 +98,7 @@ RSpec.describe "coupons index" do
     fill_in "name", with: "Seven Dollars Off"
     fill_in "code", with: "7123456789"
     fill_in "discount", with: "not_a_number"
-    select "$", from: "percent_dollar"
+    select "dollar", from: "percent_dollar"
     click_button "Submit"
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
@@ -114,14 +114,14 @@ RSpec.describe "coupons index" do
   end
   # 2c. Sad Path Testing - only 5 coupons allowed
   it "does not allow nore than 5 coupons per merchant" do
-    @coupon4 = Coupon.create!(name: "Six Dollars Off", discount: 6, code: "6123456789", merchant: @merchant1)
-    @coupon5 = Coupon.create!(name: "Eight Dollars Off", discount: 8, code: "8123456789", merchant: @merchant1)
+    @coupon4 = Coupon.create!(name: "Six Dollars Off", discount: 6, code: "6123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon5 = Coupon.create!(name: "Eight Dollars Off", discount: 8, code: "8123456789", percent_dollar: "dollar", merchant: @merchant1)
 
     click_link("Create New Coupon")
     fill_in "name", with: "Seven Dollars Off"
     fill_in "code", with: "7123456789"
     fill_in "discount", with: "7"
-    select "$", from: "percent_dollar"
+    select "dollar", from: "percent_dollar"
     click_button "Submit"
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
     expect(page).to have_content("Error: Too many coupons")
