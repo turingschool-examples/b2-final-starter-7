@@ -46,86 +46,16 @@ RSpec.describe "coupons index" do
     @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", merchant: @merchant1)
     @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, code: "20123456789", merchant: @merchant2)
 
-    visit "/merchants/#{@merchant1.id}/coupons"
+    visit "/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}"
   end
-  # 1. Merchant Coupons Index 
-  it "displays my coupon names, amount off, and links to each coupon show page" do
-    expect(page).to have_content(@coupon1.name)
-    expect(page).to have_content(@coupon2.name)
-    expect(page).to have_content(@coupon3.name)
-    expect(page).to have_content("Amount Off: $#{@coupon1.discount}")
-    expect(page).to have_content("Amount Off: $#{@coupon2.discount}")
-    expect(page).to have_content("Amount Off: $#{@coupon3.discount}")
-    expect(page).to have_link("Show #{@coupon1.name}")
-    expect(page).to have_link("Show #{@coupon2.name}")
-    expect(page).to have_link("Show #{@coupon3.name}")
-    expect(page).to_not have_content(@coupon4.name)
-  end
-  # 2. Merchant Coupon Create 
-  it "can create new coupons" do
-    expect(page).to_not have_content("Seven Dollars Off")
-    expect(page).to have_link("Create New Coupon")
-    click_link("Create New Coupon")
+# 3. Merchant Coupon Show Page 
 
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
-    expect(page).to have_field("name")
-    expect(page).to have_field("code")
-    expect(page).to have_field("discount")
-    expect(page).to have_field("percent_dollar")
+# As a merchant 
+# When I visit a merchant's coupon show page 
+# I see that coupon's name and code 
+# And I see the percent/dollar off value
+# As well as its status (active or inactive)
+# And I see a count of how many times that coupon has been used.
 
-    fill_in "name", with: "Seven Dollars Off"
-    fill_in "code", with: "7123456789"
-    fill_in "discount", with: "7"
-    select "$", from: "percent_dollar"
-    click_button "Submit"
-
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons")
-    expect(page).to have_content("Seven Dollars Off")
-  end
-  # 2b. Sad Path Testing - valid data input
-  xit "validates form data input" do
-  #code is not unique
-    click_link("Create New Coupon")
-    fill_in "name", with: "Seven Dollars Off"
-    fill_in "code", with: "5123456789"
-    fill_in "discount", with: "7"
-    select "$", from: "percent_dollar"
-    click_button "Submit"
-
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
-    expect(page).to have_content("Error: Valid data must be entered")
-  # discount is not an integer
-    fill_in "name", with: "Seven Dollars Off"
-    fill_in "code", with: "7123456789"
-    fill_in "discount", with: "not_a_number"
-    select "$", from: "percent_dollar"
-    click_button "Submit"
-
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
-    expect(page).to have_content("Error: Valid data must be entered")
-  # did not select $ or % 
-    fill_in "name", with: "Seven Dollars Off"
-    fill_in "code", with: "7123456789"
-    fill_in "discount", with: "7"
-    click_button "Submit"
-
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
-    expect(page).to have_content("Error: Valid data must be entered")
-  end
-  # 2c. Sad Path Testing - only 5 coupons allowed
-  it "does not allow nore than 5 coupons per merchant" do
-    @coupon4 = Coupon.create!(name: "Six Dollars Off", discount: 6, code: "6123456789", merchant: @merchant1)
-    @coupon5 = Coupon.create!(name: "Eight Dollars Off", discount: 8, code: "8123456789", merchant: @merchant1)
-
-    click_link("Create New Coupon")
-    fill_in "name", with: "Seven Dollars Off"
-    fill_in "code", with: "7123456789"
-    fill_in "discount", with: "7"
-    select "$", from: "percent_dollar"
-    click_button "Submit"
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
-    expect(page).to have_content("Error: Too many coupons")
-    end
-
-  # ACTIVE vs inactive coupons??
+# (Note: "use" of a coupon should be limited to successful transactions.)
 end
