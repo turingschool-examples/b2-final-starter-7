@@ -112,8 +112,8 @@ RSpec.describe "coupons index" do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
     expect(page).to have_content("Error: Valid data must be entered")
   end
-  # 2c. Sad Path Testing - only 5 coupons allowed
-  it "does not allow nore than 5 coupons per merchant" do
+  # 2c. Sad Path Testing - only 5 active coupons allowed
+  it "does not allow more than 5 active coupons per merchant" do
     @coupon4 = Coupon.create!(name: "Six Dollars Off", discount: 6, code: "6123456789", percent_dollar: "dollar", merchant: @merchant1)
     @coupon5 = Coupon.create!(name: "Eight Dollars Off", discount: 8, code: "8123456789", percent_dollar: "dollar", merchant: @merchant1)
 
@@ -126,6 +126,5 @@ RSpec.describe "coupons index" do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
     expect(page).to have_content("Error: Too many coupons")
     end
-
-  # ACTIVE vs inactive coupons??
+  # need to refactor to include ACTIVE vs inactive coupons
 end

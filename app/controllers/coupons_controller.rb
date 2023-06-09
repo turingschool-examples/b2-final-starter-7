@@ -20,7 +20,7 @@ class CouponsController < ApplicationController
       flash[:alert] = "Error: Valid data must be entered"
     end
   end
-
+# need to refactor to include ACTIVE vs inactive coupons
   private
   def coupon_params
     params.permit(:name, :discount, :code, :percent_dollar)

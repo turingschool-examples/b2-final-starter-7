@@ -12,10 +12,15 @@ RSpec.describe "coupons index" do
     @customer_5 = Customer.create!(first_name: "Sylvester", last_name: "Nader")
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
-    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2)
+    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, code: "20123456789", percent_dollar: "dollar", merchant: @merchant2)
+
+    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon1.id)
     @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2)
-    @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2)
-    @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2)
+    @invoice_3 = Invoice.create!(customer_id: @customer_2.id, status: 2, coupon_id: @coupon1.id)
+    @invoice_4 = Invoice.create!(customer_id: @customer_3.id, status: 2, coupon_id: @coupon1.id)
     @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2)
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 1)
@@ -41,21 +46,22 @@ RSpec.describe "coupons index" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 5, code: "20123456789", percent_dollar: "dollar", merchant: @merchant2)
-
     visit "/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}"
   end
 # 3. Merchant Coupon Show Page 
+  it "displays a coupon's attributes" do 
+    expect(page).to have_content("Name: #{@coupon1.name}")
+    expect(page).to have_content("Code: #{@coupon1.code}")
+    expect(page).to have_content("Discount: $#{@coupon1.discount}")
+    expect(page).to have_content("Status: #{@coupon1.status}")
+    expect(page).to have_content("Times Used:")
 
-# As a merchant 
-# When I visit a merchant's coupon show page 
-# I see that coupon's name and code 
-# And I see the percent/dollar off value
-# As well as its status (active or inactive)
-# And I see a count of how many times that coupon has been used.
+# create an if for dollar vs percent
+
+    expect(page).to_not have_content("Name: #{@coupon2.name}")
+    expect(page).to_not have_content("Code: #{@coupon3.code}")
+    expect(page).to_not have_content("Name: #{@coupon4.name}")
 
 # (Note: "use" of a coupon should be limited to successful transactions.)
+  end
 end
