@@ -155,6 +155,7 @@ describe Merchant do
       @coupon_9 = create(:coupon, status: 0, merchant: @merchant1)
       @coupon_10 = create(:coupon, status: 0, merchant: @merchant2)
     end
+
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4, @item_4])
     end
@@ -192,6 +193,11 @@ describe Merchant do
     it 'disabled_coupons' do 
       expect(@merchant1.disabled_coupons).to eq([@coupon_8, @coupon_9])
       expect(@merchant2.disabled_coupons).to eq([@coupon_10])
+    end
+
+    it '#enabled_limit_reached?' do 
+      expect(@merchant2.enabled_limit_reached?).to be true
+      expect(@merchant1.enabled_limit_reached?).to be false
     end
   end
 end
