@@ -62,14 +62,15 @@ describe "merchant coupons index" do
   end
 
   it "When I click on a coupon name in my coupon index I am taken to that coupons show page" do
-    expect(page).to have_link(@coupon1.name)
+    within("#activated") do
+      expect(page).to have_link(@coupon1.name)
 
-    #make within block
-    click_link "#{@coupon1.name}"
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}")
+      click_link "#{@coupon1.name}"
+      expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}")
+    end
   end
 
-  it "There is a link to create a new coupon on coupon index page" do
+  it "There is a link to create a new coupon on coupon index page, Coupons are created as deactivated by default" do
     click_link "Create New Coupon"
     expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
 
@@ -82,6 +83,9 @@ describe "merchant coupons index" do
     expect(current_path).to eq(merchant_coupons_path(@merchant1))
     within("#deactivated") do
       expect(page).to have_content("Flash Sale 50")
+    end
+    within("#activated") do
+      expect(page).to_not have_content("Flash Sale 50")
     end
     save_and_open_page
   end

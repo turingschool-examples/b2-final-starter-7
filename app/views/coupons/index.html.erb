@@ -14,12 +14,13 @@
         <p>Active Coupons</p>
       </div>
       <ul>
-        <section id="active">
+        <section id="activated">
           <% @merchant.activated_coupons.each do |coupon| %>
             <section id="coupon-<%= coupon.id %>">
               <li>  <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
               <li>  Percentage Discount: %<%= coupon.perc_disc %> </li>
               <li>  Dollar Discount: $<%= coupon.dollar_disc %> </li>
+              </br>
             </section>
           <% end %>
         </section>
