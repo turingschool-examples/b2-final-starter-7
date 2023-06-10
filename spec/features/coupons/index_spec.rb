@@ -5,9 +5,9 @@ describe "merchant coupons index" do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Jewelry")
 
-    @coupon1 = Coupon.create!(status: 0, code: "20off", name: "20 perc off", perc_disc: 20, dollar_disc: 0, kind: 0, merchant_id: @merchant1.id)
-    @coupon2 = Coupon.create!(status: 0, code: "5off", name: "5 dollers off", perc_disc: 0, dollar_disc: 5, kind: 1, merchant_id: @merchant1.id)
-    @coupon3 = Coupon.create!(status: 0, code: "10off", name: "10 dollers off", perc_disc: 0, dollar_disc: 10, kind: 1, merchant_id: @merchant2.id)
+    @coupon1 = Coupon.create!(status: 1, code: "20off", name: "20 perc off", perc_disc: 20, dollar_disc: 0, kind: 0, merchant_id: @merchant1.id)
+    @coupon2 = Coupon.create!(status: 1, code: "5off", name: "5 dollers off", perc_disc: 0, dollar_disc: 5, kind: 1, merchant_id: @merchant1.id)
+    @coupon3 = Coupon.create!(status: 1, code: "10off", name: "10 dollers off", perc_disc: 0, dollar_disc: 10, kind: 1, merchant_id: @merchant2.id)
 
     # @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
     # @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
@@ -59,6 +59,15 @@ describe "merchant coupons index" do
     expect(page).to have_content(@coupon2.name)
 
     expect(page).to have_no_content(@coupon3.name)
+    save_and_open_page
+  end
+
+  it "When I click on a coupon name in my coupon index I am taken to that coupons show page" do
+    expect(page).to have_link(@coupon1.name)
+
+    #make within block
+    click_link "#{@coupon1.name}"
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}")
   end
 
 end
