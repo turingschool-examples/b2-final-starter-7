@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_09_212323) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_10_155343) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "coupons", force: :cascade do |t|
-    t.integer "status"
+    t.integer "status", default: 0
     t.string "code"
-    t.integer "perc_disc"
-    t.integer "dollar_disc"
+    t.integer "perc_disc", default: 0
+    t.integer "dollar_disc", default: 0
     t.bigint "merchant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
