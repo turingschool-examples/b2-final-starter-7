@@ -1,0 +1,19 @@
+<%= render partial: "shared/nav" %>
+
+<div class="row">
+  <div class="col-sm-6 column-header">
+    <p class='mr-auto'>All My Coupons</p>
+  </div>
+</div>
+
+<div class="mr-auto col-sm-6">
+  <ul>
+  <section id="coupons">
+    <% @merchant.coupons.each do |coupon| %>
+      <section id="coupon-<%= coupon.id %>">
+          <li><%= coupon.name %> <%= coupon.discount %>
+      </section>
+    <% end %>
+    </section>
+  </ul>
+</div>
