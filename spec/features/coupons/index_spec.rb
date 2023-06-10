@@ -16,6 +16,9 @@ RSpec.describe "coupons index" do
     @coupon2 = Coupon.create!(name: "Ten Dollars Off", discount: 10, code: "10123456789", percent_dollar: "dollar", merchant: @merchant1)
     @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
     @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 20, code: "20123456789",percent_dollar: "dollar", merchant: @merchant2)
+    @coupon7 = Coupon.create!(name: "Twenty Percent Off", discount: 20, code: "20987654321", percent_dollar: "percent", status: 0, merchant: @merchant1)
+    @coupon8 = Coupon.create!(name: "Seven Dollars Off", discount: 7, code: "7123456789", percent_dollar: "dollar", status: 0, merchant: @merchant1)
+    @coupon9 = Coupon.create!(name: "Seven Percent Off", discount: 7, code: "7987654321", percent_dollar: "percent", status: 0, merchant: @merchant1)
 
     @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2)
     @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2)
@@ -115,8 +118,8 @@ RSpec.describe "coupons index" do
   end
   # 2c. Sad Path Testing - only 5 active coupons allowed
   it "does not allow more than 5 active coupons per merchant" do
-    @coupon4 = Coupon.create!(name: "Six Dollars Off", discount: 6, code: "6123456789", percent_dollar: "dollar", merchant: @merchant1)
-    @coupon5 = Coupon.create!(name: "Eight Dollars Off", discount: 8, code: "8123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon5 = Coupon.create!(name: "Six Dollars Off", discount: 6, code: "6123456789", percent_dollar: "dollar", merchant: @merchant1)
+    @coupon6 = Coupon.create!(name: "Eight Dollars Off", discount: 8, code: "8123456789", percent_dollar: "dollar", merchant: @merchant1)
 
     click_link("Create New Coupon")
     fill_in "name", with: "Seven Dollars Off"
@@ -127,4 +130,18 @@ RSpec.describe "coupons index" do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
     expect(page).to have_content("Error: Too many coupons")
   end
+#   6. Merchant Coupon Index Sorted
+  within "#active" do
+    expect(page).to have_content("#{@coupon1.name}")
+    expect(page).to have_content("#{@coupon2.name}")
+    expect(page).to have_content("#{@coupon3.name}")
+  end
+
+  within "#inactive" do
+    expect(page).to have_content("#{@coupon7.name}")
+    expect(page).to have_content("#{@coupon8.name}")
+    expect(page).to have_content("#{@coupon9.name}")
+  end
+
+  expect(page).to_not have_content("#{@coupon4.name}")
 end
