@@ -3,7 +3,7 @@
 <% @coupons.each do |coupon| %>
 <section id="coupon-<%= coupon.id %>">
 <ul>
-<li>Coupon Name: <%= coupon.name %></li>Amount Off: <%= coupon.amount_off %> <%= coupon.discount %>
+<li>Coupon Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>Amount Off: <%= coupon.amount_off %> <%= coupon.discount %>
 </ul>
 <% end %>
 </section>
