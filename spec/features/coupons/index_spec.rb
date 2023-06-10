@@ -131,7 +131,7 @@ RSpec.describe "coupons index" do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/new")
     expect(page).to have_content("Error: Too many active coupons")
   end
-#   6. Merchant Coupon Index Sorted
+# 6. Merchant Coupon Index Sorted
   it "does sorts coupons by status" do
     within "#active" do
       expect(page).to have_content("#{@coupon1.name}")
@@ -150,5 +150,3 @@ RSpec.describe "coupons index" do
     expect(page).to_not have_content("#{@coupon4.name}")
   end
 end
-
-
