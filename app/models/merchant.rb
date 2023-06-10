@@ -79,4 +79,8 @@ class Merchant < ApplicationRecord
   def disabled_items
     items.where(status: 0)
   end
+
+  def active_coupon_protection?
+    coupons.where("coupons.status = 0").size == 5
+  end
 end

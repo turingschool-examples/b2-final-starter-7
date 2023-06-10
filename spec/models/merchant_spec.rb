@@ -196,5 +196,17 @@ describe Merchant do
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
+
+    it "active_coupon_protection?" do
+      merchant4 = Merchant.create!(name: "Hair Care")
+
+      coupon_1 = merchant4.coupons.create!(name: "Five Dollars", unique_code: "FIVEHC", discount_amount: 5, discount_type: 0, status: 0)
+      coupon_2 = merchant4.coupons.create!(name: "Ten Dollars", unique_code: "TENHC", discount_amount: 10, discount_type: 0, status: 0)
+      coupon_3 = merchant4.coupons.create!(name: "Five Percent", unique_code: "FIVEPRCHC", discount_amount: 5, discount_type: 1, status: 0)
+      coupon_4 = merchant4.coupons.create!(name: "Ten Percent", unique_code: "TENPRCHC", discount_amount: 10, discount_type: 1, status: 0)
+      coupon_5 = merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC", discount_amount: 20, discount_type: 1, status: 0)
+
+      expect(merchant4.active_coupon_protection?).to be(true)
+    end
   end
 end
