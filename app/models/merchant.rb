@@ -1,6 +1,8 @@
 class Merchant < ApplicationRecord
   validates_presence_of :name
+
   has_many :items
+  has_many :coupons
   has_many :invoice_items, through: :items
   has_many :invoices, through: :invoice_items
   has_many :customers, through: :invoices
@@ -60,5 +62,13 @@ class Merchant < ApplicationRecord
 
   def disabled_items
     items.where(status: 0)
+  end
+
+  def activated_coupons
+    coupons.where(status: 1)
+  end
+
+  def deactivated_coupons
+    coupons.where(status: 0)
   end
 end
