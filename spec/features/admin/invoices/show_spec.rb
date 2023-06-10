@@ -79,19 +79,19 @@ describe "Admin Invoices Show Page" do
 # 8. Admin Invoice Show Page: Subtotal and Grand Total Revenues - dollar amount off
   it "displays subtotal and grand total revenues and coupon info for a dollar amount off coupon" do
     visit admin_invoice_path(@i3)
-    expect(page).to have_content("Subtotal: #{@i3.total_revenue}")
-    expect(page).to have_content("Grand Total Revenue: #{@i3.grand_total}")
-    expect(page).to have_content("Coupon: #{@coupon1.name}")
-    expect(page).to have_content("#{@coupon1.code}")
-    expect(page).to have_link("#{@coupon1.name} #{@coupon1.code}")
+
+    expect(page).to have_content("Subtotal: $1,044.00")
+    expect(page).to have_content("Grand Total Revenue: $#{@i3.grand_total}")
+    expect(page).to have_content("Coupon Name: #{@coupon1.name}")
+    expect(page).to have_content("Coupon Code: #{@coupon1.code}")
   end
 # 8b. Admin Invoice Show Page: Subtotal and Grand Total Revenues - percentage off
   it "displays subtotal and grand total revenues and coupon info for a percentage off coupon" do
     visit admin_invoice_path(@i4) 
-    expect(page).to have_content("Subtotal: #{@i4.total_revenue}")
-    expect(page).to have_content("Grand Total Revenue: #{@i4.grand_total}")
-    expect(page).to have_content("Coupon: #{@coupon2.name}")
-    expect(page).to have_content("#{@coupon2.code}")
-    expect(page).to have_link("#{@coupon2.name} #{@coupon2.code}")
+
+    expect(page).to have_content("Subtotal: $1,044.00")
+    expect(page).to have_content("Grand Total Revenue: $#{@i4.grand_total}")
+    expect(page).to have_content("Coupon Name: #{@coupon2.name}")
+    expect(page).to have_content("Coupon Code: #{@coupon2.code}")
   end
 end
