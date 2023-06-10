@@ -5,4 +5,5 @@ class Transaction < ApplicationRecord
   enum result: [:failed, :success]
 
   belongs_to :invoice
+  belongs_to :coupon, optional: true
 end
