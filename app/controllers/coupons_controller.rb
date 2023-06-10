@@ -42,18 +42,7 @@ class CouponsController < ApplicationController
     @coupon.save
     redirect_to "/merchants/#{@merchant.id}/coupons/#{@coupon.id}"
   end
-  # def update
-  #   @merchant = Merchant.find(params[:merchant]) 
-  #   @coupon = Coupon.find(params[:id])
-  #   if params[:deactivate] == "true"
-  #     @coupon.update(status: "inactive")
-  #   elsif params[:activate] == "true"
-  #     @coupon.update(status: "active")
-  #   end
-  #   @coupon.save
-  #   redirect_to "/merchants/#{@merchant.id}/coupons/#{@coupon.id}"
-  # end
-
+  
   private
   def coupon_params
     params.permit(:name, :discount, :code, :percent_dollar)

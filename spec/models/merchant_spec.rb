@@ -183,5 +183,9 @@ describe Merchant do
     it "coupon_count?" do 
       expect(@merchant1.coupon_count?).to eq(false)
     end
+
+    it "check_invoice_status?" do 
+      expect(@merchant1.check_invoice_status?).to eq(false)
+    end
   end
 end
