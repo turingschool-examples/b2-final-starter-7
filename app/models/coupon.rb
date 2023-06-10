@@ -11,7 +11,5 @@ class Coupon < ApplicationRecord
   enum discount: [:dollars, :percent]
   enum status:  {deactivated: 0, activated: 1}
 
-  def discount_amount
-    # require 'pry'; binding.pry
-  end
+
 end

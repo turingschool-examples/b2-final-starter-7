@@ -22,11 +22,4 @@ end
     it { should belong_to :merchant }
     it { should have_many :invoices}
   end
-
-  describe "find amount off" do
-    xit "::discount_amount" do
-
-      expect(@coupon1.discount_amount).to eq("10 Percent")
-    end
-    end
-  end
+end
