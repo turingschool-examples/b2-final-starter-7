@@ -74,17 +74,16 @@ describe "merchant coupons index" do
     click_link "Create New Coupon"
     expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
 
-    fill_in "Name", with: "FlashSale50"
+    fill_in "Name", with: "Flash Sale 50"
     fill_in "Code", with: "flash50"
     fill_in "Percent Discount", with: "50"
-    fill_in "Dollar Discount", with: "50"
-    fill_in "Type", with: "Percentage"
+    select "Percentage", from: "Discount Type"
     click_button "Submit"
 
-    expect(current_path).to eq(merchant_items_path(@merchant1))
+    expect(current_path).to eq(merchant_coupons_path(@merchant1))
 
     within("#disabled") do
-      expect(page).to have_content("Bar Shampoo")
+      expect(page).to have_content("Flash Sale 50")
     end
   end
 end

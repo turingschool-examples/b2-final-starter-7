@@ -1,10 +1,7 @@
 class Coupon < ApplicationRecord
-  validates_presence_of :status, #made default status 0
-                        :code,
+  validates_presence_of :code,
                         :name,
-                        :perc_disc, #make default value 0
-                        :dollar_disc, #make default value 0
-                        :kind
+                        :kind,
                         :merchant_id
 
   belongs_to :merchant
