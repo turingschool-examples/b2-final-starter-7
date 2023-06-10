@@ -63,15 +63,15 @@ class Merchant < ApplicationRecord
     items.where(status: 0)
   end
 
-  def enabled_coupons
+  def active_coupons
     coupons.where(status: 1)
   end
 
-  def disabled_coupons
+  def inactive_coupons
     coupons.where(status: 0)
   end
 
-  def enabled_limit_reached?
+  def active_limit_reached?
     if coupons.where(status: 1).size >= 5
       true
     else

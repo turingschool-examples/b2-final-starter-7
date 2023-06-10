@@ -150,7 +150,7 @@ describe Merchant do
       @coupon_6 = create(:coupon, status: 1, merchant: @merchant1)
       @coupon_7 = create(:coupon, status: 1, merchant: @merchant1)
       
-      #disabled coupons
+      #inactive coupons
       @coupon_8 = create(:coupon, status: 0, merchant: @merchant1)
       @coupon_9 = create(:coupon, status: 0, merchant: @merchant1)
       @coupon_10 = create(:coupon, status: 0, merchant: @merchant2)
@@ -185,19 +185,19 @@ describe Merchant do
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
 
-    it 'enabled_coupons' do 
-      expect(@merchant1.enabled_coupons).to eq([@coupon_6, @coupon_7])
-      expect(@merchant2.enabled_coupons).to eq([@coupon_1, @coupon_2, @coupon_3, @coupon_4, @coupon_5])
+    it 'active_coupons' do 
+      expect(@merchant1.active_coupons).to eq([@coupon_6, @coupon_7])
+      expect(@merchant2.active_coupons).to eq([@coupon_1, @coupon_2, @coupon_3, @coupon_4, @coupon_5])
     end
 
-    it 'disabled_coupons' do 
-      expect(@merchant1.disabled_coupons).to eq([@coupon_8, @coupon_9])
-      expect(@merchant2.disabled_coupons).to eq([@coupon_10])
+    it 'inactive_coupons' do 
+      expect(@merchant1.inactive_coupons).to eq([@coupon_8, @coupon_9])
+      expect(@merchant2.inactive_coupons).to eq([@coupon_10])
     end
 
-    it '#enabled_limit_reached?' do 
-      expect(@merchant2.enabled_limit_reached?).to be true
-      expect(@merchant1.enabled_limit_reached?).to be false
+    it '#active_limit_reached?' do 
+      expect(@merchant2.active_limit_reached?).to be true
+      expect(@merchant1.active_limit_reached?).to be false
     end
   end
 end
