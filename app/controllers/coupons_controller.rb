@@ -1,6 +1,6 @@
 class CouponsController < ApplicationController
   def index
-    @merchant = Merchant.find(params[:id])
+    @merchant = Merchant.find(params[:merchant_id])
   end
 
   def new 
@@ -14,7 +14,7 @@ class CouponsController < ApplicationController
       redirect_to "/merchants/#{@merchant.id}/coupons/new"
       flash[:alert] = "Error: Too many active coupons"
     elsif @merchant.coupon_valid?(@coupon.code) == true && @coupon.save
-      redirect_to "/merchants/#{@merchant.id}/coupons/"
+      redirect_to "/merchants/#{@merchant.id}/coupons"
     else
       redirect_to "/merchants/#{@merchant.id}/coupons/new"
       flash[:alert] = "Error: Valid data must be entered"

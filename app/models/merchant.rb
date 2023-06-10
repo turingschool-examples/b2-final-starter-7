@@ -72,6 +72,6 @@ class Merchant < ApplicationRecord
   end
 
   def check_invoice_status?
-  invoices.where(status:)
+    # invoices.where(status:)
   end
 end
