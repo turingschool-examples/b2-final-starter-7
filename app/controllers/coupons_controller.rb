@@ -12,7 +12,7 @@ class CouponsController < ApplicationController
     @coupon.merchant_id = @merchant.id
     if @merchant.coupon_count? == true
       redirect_to "/merchants/#{@merchant.id}/coupons/new"
-      flash[:alert] = "Error: Too many coupons"
+      flash[:alert] = "Error: Too many active coupons"
     elsif @merchant.coupon_valid?(@coupon.code) == true && @coupon.save
       redirect_to "/merchants/#{@merchant.id}/coupons/"
     else
@@ -29,10 +29,14 @@ class CouponsController < ApplicationController
   def update
     @merchant = Merchant.find(params[:merchant]) 
     @coupon = Coupon.find(params[:id])
-    if params[:deactivate] == "true"
+    if params[:deactivate] == "true" && @merchant.check_invoice_status? == true
       @coupon.update(status: "inactive")
-    elsif
+    elsif params[:activate] == "true" && @merchant.coupon_count? == false
       @coupon.update(status: "active")
+    elsif params[:activate] == "true" && @merchant.coupon_count? == true
+      flash[:alert] = "Error: Too many active coupons"
+    else
+      flash[:alert] = "Error: Coupon cannot be deactivated with pending invoices"
     end
     @coupon.save
     redirect_to "/merchants/#{@merchant.id}/coupons/#{@coupon.id}"
