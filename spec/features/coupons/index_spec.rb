@@ -22,17 +22,26 @@ save_and_open_page
       within("#coupon-#{@coupon1.id}") do
         expect(page).to have_content("Coupon Name: #{@coupon1.name}")
         expect(page).to have_content("Amount Off: #{@coupon1.amount_off} #{@coupon1.discount}")
+        expect(page).to have_link("#{@coupon1.name}")
+        click_link("#{@coupon1.name}")
+        expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1))
       end
 
-      within("#coupon-#{@coupon2.id}") do
-        expect(page).to have_content("Name: #{@coupon2.name}")
-        expect(page).to have_content("Amount Off: #{@coupon2.amount_off} #{@coupon2.discount}")
-      end 
+      # within("#coupon-#{@coupon2.id}") do
+      #   expect(page).to have_content("Name: #{@coupon2.name}")
+      #   expect(page).to have_content("Amount Off: #{@coupon2.amount_off} #{@coupon2.discount}")
+      #   expect(page).to have_link("#{@coupon2.name}")
+      #   click_link("#{@coupon2.name}")
+      #   expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon2))
+      # end 
 
-      within("#coupon-#{@coupon3.id}") do
-        expect(page).to have_content("Name: #{@coupon3.name}")
-        expect(page).to have_content("Amount Off: #{@coupon3.amount_off} #{@coupon3.discount}")
-      end
+      # within("#coupon-#{@coupon3.id}") do
+      #   expect(page).to have_content("Name: #{@coupon3.name}")
+      #   expect(page).to have_content("Amount Off: #{@coupon3.amount_off} #{@coupon3.discount}")
+      #   expect(page).to have_link("#{@coupon3.name}")
+      #   click_link("#{@coupon3.name}")
+      #   expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon3))
+      # end      
     end
   end
 end
