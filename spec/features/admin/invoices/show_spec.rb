@@ -1,14 +1,19 @@
 require "rails_helper"
 
-describe "Admin Invoices Index Page" do
+describe "Admin Invoices Show Page" do
   before :each do
     @m1 = Merchant.create!(name: "Merchant 1")
 
     @c1 = Customer.create!(first_name: "Yo", last_name: "Yoz", address: "123 Heyyo", city: "Whoville", state: "CO", zip: 12345)
     @c2 = Customer.create!(first_name: "Hey", last_name: "Heyz")
+    
+    @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @m1)
+    @coupon2 = Coupon.create!(name: "Five Percent Off", discount: 5, code: "5987654321", percent_dollar: "percent", merchant: @m1)
 
     @i1 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2012-03-25 09:54:09")
     @i2 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: "2012-03-25 09:30:09")
+    @i3 = Invoice.create!(customer_id: @c1.id, status: 2, coupon_id: @coupon1.id, created_at: "2012-03-25 09:54:09")
+    @i4 = Invoice.create!(customer_id: @c1.id, status: 2, coupon_id: @coupon2.id, created_at: "2012-03-25 09:54:09")
 
     @item_1 = Item.create!(name: "test", description: "lalala", unit_price: 6, merchant_id: @m1.id)
     @item_2 = Item.create!(name: "rest", description: "dont test me", unit_price: 12, merchant_id: @m1.id)
@@ -16,6 +21,8 @@ describe "Admin Invoices Index Page" do
     @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
     @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
     @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
+    @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
+    @ii_5 = InvoiceItem.create!(invoice_id: @i4.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
 
     visit admin_invoice_path(@i1)
   end
@@ -68,5 +75,23 @@ describe "Admin Invoices Index Page" do
       expect(current_path).to eq(admin_invoice_path(@i1))
       expect(@i1.status).to eq("completed")
     end
+  end
+# 8. Admin Invoice Show Page: Subtotal and Grand Total Revenues - dollar amount off
+  it "displays subtotal and grand total revenues and coupon info for a dollar amount off coupon" do
+    visit admin_invoice_path(@i3)
+    expect(page).to have_content("Subtotal: #{@i3.total_revenue}")
+    expect(page).to have_content("Grand Total Revenue: #{@i3.grand_total}")
+    expect(page).to have_content("Coupon: #{@coupon1.name}")
+    expect(page).to have_content("#{@coupon1.code}")
+    expect(page).to have_link("#{@coupon1.name} #{@coupon1.code}")
+  end
+# 8b. Admin Invoice Show Page: Subtotal and Grand Total Revenues - percentage off
+  it "displays subtotal and grand total revenues and coupon info for a percentage off coupon" do
+    visit admin_invoice_path(@i4) 
+    expect(page).to have_content("Subtotal: #{@i4.total_revenue}")
+    expect(page).to have_content("Grand Total Revenue: #{@i4.grand_total}")
+    expect(page).to have_content("Coupon: #{@coupon2.name}")
+    expect(page).to have_content("#{@coupon2.code}")
+    expect(page).to have_link("#{@coupon2.name} #{@coupon2.code}")
   end
 end
