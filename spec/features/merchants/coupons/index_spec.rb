@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "merchant coupon index" do
+RSpec.describe "merchant coupon index", type: :feature do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
@@ -94,5 +94,9 @@ RSpec.describe "merchant coupon index" do
       # end
       expect(page).to_not have_content("Coupon Name: #{@coupon_6.name} | Discount Amount: $#{@coupon_6.discount_amount} off")
     end
+  end
+
+  it "has a link to create a new coupon" do
+    click_link("Create New Coupon", href: new_merchant_coupon_path(@merchant1))
   end
 end
