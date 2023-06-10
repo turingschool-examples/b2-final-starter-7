@@ -75,6 +75,7 @@ RSpec.describe "coupon show page" do
     expect(page).to have_content("Status: active")
     expect(page).to have_button("Deactivate")
     click_button "Deactivate"
+
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}")
     expect(page).to have_content("Status: inactive")
   end
