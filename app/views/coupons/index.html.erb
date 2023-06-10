@@ -6,3 +6,18 @@
 <% end %>
 
 <p><%= link_to "Create New Coupon", "/merchants/#{@merchant.id}/coupons/new" %></p>
+
+<div id="active">
+<p><% @merchant.coupons.each do |coupon| %></p>
+  <% if coupon.status == ("active") %>
+    <p><%= coupon.name %></p>
+  <% end %>
+<% end %>
+</div>
+<div id="inactive">
+<p><% @merchant.coupons.each do |coupon| %></p>
+  <% if coupon.status == ("inactive") %>
+    <p><%= coupon.name %></p>
+  <% end %>
+<% end %>
+</div>

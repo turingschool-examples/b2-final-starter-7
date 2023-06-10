@@ -16,7 +16,7 @@ RSpec.describe "coupon show page" do
     @coupon2 = Coupon.create!(name: "Ten Percent Off", discount: 10, code: "10987654321", percent_dollar: "percent", merchant: @merchant1)
     @coupon3 = Coupon.create!(name: "One Dollar Off", discount: 1, code: "1123456789", percent_dollar: "dollar", merchant: @merchant1)
     @coupon4 = Coupon.create!(name: "Twenty Dollars Off", discount: 20, code: "20123456789", percent_dollar: "dollar", merchant: @merchant2)
-    @coupon5 = Coupon.create!(name: "Twenty Percent Off", discount: 7, code: "20987654321", percent_dollar: "dollar", status: 0, merchant: @merchant1)
+    @coupon5 = Coupon.create!(name: "Twenty Percent Off", discount: 20, code: "20987654321", percent_dollar: "percent", status: 0, merchant: @merchant1)
 
     @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon1.id)
     @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon2.id)
