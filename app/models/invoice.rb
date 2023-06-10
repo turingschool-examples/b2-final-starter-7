@@ -16,6 +16,10 @@ class Invoice < ApplicationRecord
   end
 
   def grand_total
-    
+    if coupon.percent_dollar == "dollar"
+      total_revenue - coupon.discount
+    else
+      total_revenue * (1 - coupon.discount / 100.0)
+    end
   end
 end

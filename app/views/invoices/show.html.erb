@@ -16,8 +16,9 @@
   <% else %>
     <p>Subtotal: <%= @invoice.total_revenue %></p>
     <p>Grand Total Revenue: <%= @invoice.grand_total %></p>
+    <p><%= link_to "Coupon: #{@invoice.coupon.name} #{@invoice.coupon.code}", "/merchants/#{@merchant.id}/coupons/#{@invoice.coupon.id}" %></p>
   <% end %>
-  
+
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>
   <br>
