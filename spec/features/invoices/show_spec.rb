@@ -109,7 +109,7 @@ RSpec.describe "invoices show" do
     end
   end
 # 7. Merchant Invoice Show Page: Subtotal and Grand Total Revenues - dollar amount off
-  it "displays subtotal and grand total revenues" do
+  it "displays subtotal and grand total revenues with a dollar amount off coupon" do
     visit merchant_invoice_path(@merchant1, @invoice_9)
     expect(page).to have_content("Subtotal: #{@invoice_9.total_revenue}")
     expect(page).to have_content("Grand Total Revenue: #{@invoice_9.grand_total}")
@@ -118,7 +118,7 @@ RSpec.describe "invoices show" do
     expect(page).to have_link("#{@coupon1.name} #{@coupon1.code}")
   end
   # 7b. Merchant Invoice Show Page: Subtotal and Grand Total Revenues - percentage off
-  it "displays subtotal and grand total revenues" do
+  it "displays subtotal and grand total revenues with a percentage off coupon" do
     visit merchant_invoice_path(@merchant1, @invoice_10)
     expect(page).to have_content("Subtotal: #{@invoice_10.total_revenue}")
     expect(page).to have_content("Grand Total Revenue: #{@invoice_10.grand_total}")
