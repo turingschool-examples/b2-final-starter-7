@@ -1,0 +1,27 @@
+<%= render partial: "shared/nav" %>
+
+<div class="row">
+  <div class="mr-auto col-sm-6">
+    <p class='mr-auto'><%= @merchant.name %>'s Coupon</p>
+  </div>
+  <%# <div class="col-sm-6 column-header">
+    <p class='ml-auto'>Items Ready to Ship</p>
+  </div> %>
+</div>
+
+<div class="mr-auto col-sm-6">
+  <ul>
+    <section id="coupon-<%= @coupon.id %>">
+        <li>Coupon Name: <%= @coupon.name %></li>
+        <li>Coupon Unique Code: <%= @coupon.unique_code %></li>
+        <li>Coupon Status: <%= @coupon.status %></li>
+        <li>Discount Type: <%= @coupon.discount_type %></li>
+        <li>Coupon Used: <%= @coupon.number_of_successful_transactions %> times</li>
+      <% if @coupon.discount_type == "percentage" %>
+        <li>Discount Amount: <%= number_to_percentage(@coupon.discount_amount, precision: 0) %> off</li>
+      <% elsif @coupon.discount_type == "dollars" %>
+        <li>Discount Amount: <%= number_to_currency(@coupon.discount_amount, precision: 0) %> off</li>
+      <% end %>
+    </section>
+  </ul>
+</div>
