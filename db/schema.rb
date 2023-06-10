@@ -17,13 +17,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_09_212323) do
   create_table "coupons", force: :cascade do |t|
     t.integer "status"
     t.string "code"
-    t.integer "percent_disc"
+    t.integer "perc_disc"
     t.integer "dollar_disc"
     t.bigint "merchant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
-    t.integer "type"
+    t.integer "kind"
     t.index ["merchant_id"], name: "index_coupons_on_merchant_id"
   end
 

@@ -2,12 +2,13 @@ class Coupon < ApplicationRecord
   validates_presence_of :status,
                         :code,
                         :name,
-                        :percent_disc,
+                        :perc_disc,
                         :dollar_disc,
-                        :type
+                        :kind
+                        :merchant_id
 
   belongs_to :merchant
   has_many :invoices
   enum status: [:activated, :deactivated]
-  enum type: [:percent, :dollar]
+  enum kind: [:perc, :dollar]
 end
