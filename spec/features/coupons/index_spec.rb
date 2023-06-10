@@ -59,7 +59,6 @@ describe "merchant coupons index" do
     expect(page).to have_content(@coupon2.name)
 
     expect(page).to have_no_content(@coupon3.name)
-    save_and_open_page
   end
 
   it "When I click on a coupon name in my coupon index I am taken to that coupons show page" do
@@ -81,9 +80,9 @@ describe "merchant coupons index" do
     click_button "Submit"
 
     expect(current_path).to eq(merchant_coupons_path(@merchant1))
-
-    within("#disabled") do
+    within("#deactivated") do
       expect(page).to have_content("Flash Sale 50")
     end
+    save_and_open_page
   end
 end

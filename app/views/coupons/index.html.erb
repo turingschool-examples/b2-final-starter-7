@@ -7,12 +7,40 @@
 
   <p><%= link_to "Create New Coupon", new_merchant_coupon_path(@merchant) %></p>
 
-  <div>
-    <% @merchant.activated_coupons.each do |coupon| %>
-      <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
-      Percentage Discount: %<%= coupon.perc_disc %> </br>
-      Dollar Discount: $<%= coupon.dollar_disc %> </br></br>
-    <% end %>
-  </div>
+  <div class="row">
+    <div class="col-sm-6">
 
+      <div class="column-header">
+        <p>Active Coupons</p>
+      </div>
+      <ul>
+        <section id="active">
+          <% @merchant.activated_coupons.each do |coupon| %>
+            <section id="coupon-<%= coupon.id %>">
+              <li>  <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
+              <li>  Percentage Discount: %<%= coupon.perc_disc %> </li>
+              <li>  Dollar Discount: $<%= coupon.dollar_disc %> </li>
+            </section>
+          <% end %>
+        </section>
+      </ul>
+    </div>
+
+    <div class="col-sm-6">
+      <div class="column-header">
+        <p>Deactivated Coupons</p>
+      </div>
+        <ul>
+          <section id="deactivated">
+            <% @merchant.deactivated_coupons.each do |coupon| %>
+              <section id="coupon-<%= coupon.id %>">
+                <li><%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %></li>
+                <li>  Percentage Discount: %<%= coupon.perc_disc %> </li>
+                <li>  Dollar Discount: $<%= coupon.dollar_disc %> </li>
+              </section>
+            <% end %>
+          </section>
+        </ul>
+      </div>
+  </div>
 </body>
