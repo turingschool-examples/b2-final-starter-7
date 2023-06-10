@@ -95,4 +95,48 @@ describe "merchant coupons index" do
       expect(page).to_not have_content("Flash Sale 50")
     end
   end
+
+  it "Cupon code must be unique" do
+    click_link "Create New Coupon"
+    expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+
+    fill_in "Name", with: "Flash Sale 50"
+    fill_in "Code", with: "20off"
+    select "activated", from: "status"
+    fill_in "Percent Discount", with: "50"
+    select "Percentage", from: "kind"
+    click_button "Submit"
+
+    expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+    expect(page).to have_content("Coupon name not unique.")
+  end
+
+  it "Can only have 5 active coupons" do
+    click_link "Create New Coupon"
+    expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+
+    fill_in "Name", with: "Flash 50"
+    fill_in "Code", with: "fla50"
+    select "activated", from: "status"
+    fill_in "Percent Discount", with: "50"
+    select "Percentage", from: "kind"
+    click_button "Submit"
+    expect(current_path).to eq(merchant_coupons_path(@merchant1))
+    within("#activated") do
+      expect(page).to have_content("Flash 50")
+    end
+
+    click_link "Create New Coupon"
+    expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+
+    fill_in "Name", with: "New Activated"
+    fill_in "Code", with: "activatecoup"
+    select "activated", from: "status"
+    fill_in "Percent Discount", with: "50"
+    select "Percentage", from: "kind"
+    click_button "Submit"
+
+    expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+    expect(page).to have_content("Too Many Active Coupons. Set Status to 'deactivated.'")
+  end
 end

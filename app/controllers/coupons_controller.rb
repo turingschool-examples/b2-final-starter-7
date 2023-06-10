@@ -11,17 +11,21 @@ class CouponsController < ApplicationController
   end
 
   def create
-    Coupon.create!(name: params[:name],
-                  code: params[:code],
-                  status: params[:status],
-                  perc_disc: params[:perc_disc],
-                  dollar_disc: params[:dollar_disc],
-                  kind: params[:kind],
-                  merchant: @merchant)
+    coupon = Coupon.new( name: params[:name],
+                code: params[:code],
+                status: params[:status],
+                perc_disc: params[:perc_disc],
+                dollar_disc: params[:dollar_disc],
+                kind: params[:kind],
+                merchant: @merchant)
     if @merchant.activated_coupons.count >= 5
+      redirect_to new_merchant_coupon_path(@merchant)
       flash.notice = "Too Many Active Coupons. Set Status to 'deactivated.'"
-    elsif
+    elsif coupon.save
       redirect_to merchant_coupons_path(@merchant)
+    elsif
+      redirect_to new_merchant_coupon_path(@merchant)
+      flash.notice = "Coupon name not unique."
     end
   end
 
