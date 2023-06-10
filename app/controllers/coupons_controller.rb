@@ -13,11 +13,16 @@ class CouponsController < ApplicationController
   def create
     Coupon.create!(name: params[:name],
                   code: params[:code],
+                  status: params[:status],
                   perc_disc: params[:perc_disc],
                   dollar_disc: params[:dollar_disc],
                   kind: params[:kind],
                   merchant: @merchant)
-    redirect_to merchant_coupons_path(@merchant)
+    if @merchant.activated_coupons.count >= 5
+      flash.notice = "Too Many Active Coupons. Set Status to 'deactivated.'"
+    elsif
+      redirect_to merchant_coupons_path(@merchant)
+    end
   end
 
   def find_merchant

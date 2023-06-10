@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_06_10_155343) do
     t.string "code"
     t.integer "perc_disc", default: 0
     t.integer "dollar_disc", default: 0
-    t.bigint "merchant_id", null: false
+    t.bigint "merchant_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"

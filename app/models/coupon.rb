@@ -3,10 +3,15 @@ class Coupon < ApplicationRecord
                         :name,
                         :kind,
                         :merchant_id
+                        
+  validates :code, uniqueness: true
 
   belongs_to :merchant
   has_many :invoices
   enum status: [:deactivated, :activated]
   enum kind: [:Percentage, :Dollar]
 
+  def self.unique
+
+  end
 end

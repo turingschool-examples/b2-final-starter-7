@@ -91,9 +91,14 @@ describe Merchant do
   end
 
   describe "instance methods" do
+
     before :each do
       @merchant1 = Merchant.create!(name: 'Hair Care')
       @merchant2 = Merchant.create!(name: 'Jewelry')
+
+      @coupon1 = Coupon.create!(status: 0, code: "20off", name: "20 perc off", perc_disc: 20, dollar_disc: 0, kind: 0, merchant_id: @merchant1.id)
+      @coupon2 = Coupon.create!(status: 1, code: "5off", name: "5 dollers off", perc_disc: 0, dollar_disc: 5, kind: 1, merchant_id: @merchant1.id)
+      @coupon3 = Coupon.create!(status: 1, code: "10off", name: "10 dollers off", perc_disc: 0, dollar_disc: 10, kind: 1, merchant_id: @merchant1.id)
 
       @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
       @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
@@ -168,6 +173,14 @@ describe Merchant do
     it "disabled_items" do
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    it "activated_coupons" do
+      expect(@merchant1.activated_coupons).to eq([@coupon2, @coupon3])
+    end
+
+    it "deactivated_coupons" do
+      expect(@merchant1.deactivated_coupons).to eq([@coupon1])
     end
   end
 end
