@@ -12,7 +12,6 @@ describe Merchant do
     it {should have_many(:invoices).through(:invoice_items)}
     it { should have_many(:customers).through(:invoices) }
     it { should have_many(:transactions).through(:invoices) }
-
   end
 
   describe "class methods" do
@@ -82,7 +81,7 @@ describe Merchant do
       @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_9.id)
 
     end
-
+    
     it 'top_merchants' do
       actual = Merchant.top_merchants.map do |result|
         result.name
@@ -90,12 +89,12 @@ describe Merchant do
       expect(actual).to eq([@merchant1.name, @merchant3.name, @merchant4.name, @merchant5.name, @merchant6.name])
     end
   end
-
+  
   describe "instance methods" do
     before :each do
       @merchant1 = Merchant.create!(name: 'Hair Care')
       @merchant2 = Merchant.create!(name: 'Jewelry')
-
+      
       @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
       @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
       @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
@@ -140,7 +139,6 @@ describe Merchant do
       @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
-
     end
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4, @item_4])
@@ -169,6 +167,14 @@ describe Merchant do
     it "disabled_items" do 
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    it 'enabled_limit_reached?' do 
+      coupon_1 = create(:coupon, merchant: @merchant2)
+      coupon_2 = create(:coupon, merchant: @merchant2)
+      coupon_3 = create(:coupon, merchant: @merchant2)
+      coupon_4 = create(:coupon, merchant: @merchant2)
+      coupon_5 = create(:coupon, merchant: @merchant2)
     end
   end
 end

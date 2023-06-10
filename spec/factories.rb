@@ -2,10 +2,11 @@ FactoryBot.define do
   factory :coupon do
     name { Faker::App.name }
     unique_code { Faker::Commerce.promotion_code }
-    percent_discount { Faker::Number.within(range: 1..100) } ||
-    dollar_discount { Faker::Number.decimal(l_digits: 2) }
-    merchant
-    invoice
+    status { Faker::Number.within(range: 0..1) }
+    discount { Faker::Number.decimal(l_digits: 2) }
+    discount_type { Faker::Number.within(range: 0..1) }
+    :merchant
+    :invoice
   end
 
   factory :customer do
@@ -15,8 +16,8 @@ FactoryBot.define do
 
   factory :invoice do
     status {[0,1,2].sample}
-    merchant
-    customer
+    :merchant
+    :customer
   end
 
   factory :merchant do
@@ -27,18 +28,18 @@ FactoryBot.define do
     name {Faker::Coffee.variety}
     description {Faker::Hipster.sentence}
     unit_price {Faker::Number.decimal(l_digits: 2)}
-    merchant
+    :merchant
   end
 
   factory :transaction do
     result {[0,1].sample}
     credit_card_number {Faker::Finance.credit_card}
-    invoice
+    :invoice
   end
 
   factory :invoice_item do
     status {[0,1,2].sample}
-    merchant
-    invoice
+    :merchant
+    :invoice
   end
 end
