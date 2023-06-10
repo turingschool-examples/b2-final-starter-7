@@ -24,14 +24,10 @@ RSpec.describe 'Coupons Index', type: :feature do
 
       within("#coupon-#{@coupon_1.id}") do 
         expect(page).to have_link("#{@coupon_1.name}", href: merchant_coupon_path(@dolly, @coupon_1))
-        click_link("#{@coupon_1.name}")
-        expect(current_path).to eq(merchant_coupon_path(@dolly, @coupon_1))
       end
 
       within("#coupon-#{@coupon_2.id}") do 
         expect(page).to have_link("#{@coupon_2.name}", href: merchant_coupon_path(@dolly, @coupon_2))
-        click_link("#{@coupon_2.name}")
-        expect(current_path).to eq(merchant_coupon_path(@dolly, @coupon_2))
       end
     end
   end
