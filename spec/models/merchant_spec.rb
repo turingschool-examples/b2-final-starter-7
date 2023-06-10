@@ -140,7 +140,20 @@ describe Merchant do
       @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
-
+      
+      #enabled coupons
+      @coupon_1 = create(:coupon, status: 1, merchant: @merchant2)
+      @coupon_2 = create(:coupon, status: 1, merchant: @merchant2)
+      @coupon_3 = create(:coupon, status: 1, merchant: @merchant2)
+      @coupon_4 = create(:coupon, status: 1, merchant: @merchant2)
+      @coupon_5 = create(:coupon, status: 1, merchant: @merchant2)
+      @coupon_6 = create(:coupon, status: 1, merchant: @merchant1)
+      @coupon_7 = create(:coupon, status: 1, merchant: @merchant1)
+      
+      #disabled coupons
+      @coupon_8 = create(:coupon, status: 0, merchant: @merchant1)
+      @coupon_9 = create(:coupon, status: 0, merchant: @merchant1)
+      @coupon_10 = create(:coupon, status: 0, merchant: @merchant2)
     end
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4, @item_4])
@@ -169,6 +182,16 @@ describe Merchant do
     it "disabled_items" do 
       expect(@merchant1.disabled_items).to eq([@item_2, @item_3, @item_4, @item_7, @item_8])
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
+    end
+
+    it 'enabled_coupons' do 
+      expect(@merchant1.enabled_coupons).to eq([@coupon_6, @coupon_7])
+      expect(@merchant2.enabled_coupons).to eq([@coupon_1, @coupon_2, @coupon_3, @coupon_4, @coupon_5])
+    end
+
+    it 'disabled_coupons' do 
+      expect(@merchant1.disabled_coupons).to eq([@coupon_8, @coupon_9])
+      expect(@merchant2.disabled_coupons).to eq([@coupon_10])
     end
   end
 end
