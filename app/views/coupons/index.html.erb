@@ -10,9 +10,9 @@
   <ul>
   <section id="coupons">
     <% @merchant.coupons.each do |coupon| %>
-      <section id="coupon-<%= coupon.id %>">
-          <li><%= coupon.name %> <%= coupon.discount %>
-      </section>
+      <div id="coupon-<%= coupon.id %>">
+        <li><%= link_to coupon.name, "merchants/#{@merchant.id}/coupons/#{coupon.id}" %> <%= coupon.discount %>
+      </div>
     <% end %>
     </section>
   </ul>
