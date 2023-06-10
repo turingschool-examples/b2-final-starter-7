@@ -79,8 +79,20 @@ RSpec.describe "coupon show page" do
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}")
     expect(page).to have_content("Status: inactive")
-    # * Sad Path: 
-    # 1. A coupon cannot be deactivated if there are any pending invoices with that coupon.
+  end
+# 4b. Sad Path: A coupon cannot be deactivated if there are any in progress invoices with that coupon
+  it "cannot deactivate coupons on invoices in progress" do 
+    @invoice_8 = Invoice.create!(customer_id: @customer_1.id, status: 1, coupon_id: @coupon1.id)
+    @ii_7 = InvoiceItem.create!(invoice_id: @invoice_8.id, item_id: @item_4.id, quantity: 3, unit_price: 5, status: 1)
+    @transaction9 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+    
+    expect(page).to have_content("Status: active")
+    expect(page).to have_button("Deactivate")
+    click_button "Deactivate"
+
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}")
+    expect(page).to have_content("Status: active")
+    expect(page).to have_content("Error: Cannot deactive coupons with invoices in progress")
   end
 #   5. Merchant Coupon Activate
   it "can deactivate coupons" do 
