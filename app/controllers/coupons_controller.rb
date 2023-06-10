@@ -13,9 +13,12 @@ class CouponsController < ApplicationController
   def create
     find_merchant
     coupon_to_create = Coupon.new(coupon_params)
-    if @merchant.coupons.where("coupons.status = 0").size == 5
+    ## REFACTOR to live in validations with custom validation?
+    # >>>>>>>>>>>>>>
+    if @merchant.active_coupon_protection?
       redirect_to new_merchant_coupon_path(@merchant)
       flash[:alert] = "Error: Too Many Active Coupons"
+    # <<<<<<<<<<<<<<
     elsif coupon_to_create.save
       redirect_to merchant_coupons_path(@merchant)
     else
