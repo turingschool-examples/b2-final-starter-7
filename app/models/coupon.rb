@@ -9,6 +9,7 @@ class Coupon < ApplicationRecord
 
   belongs_to :merchant
   has_many :invoices
+  has_many :transactions, through: :invoices
   # validates_associated :merchant
   # validate :active_coupon_count
 
@@ -26,5 +27,9 @@ class Coupon < ApplicationRecord
   #   #   end
   #   # end
   # end
+
+  def number_of_successful_transactions
+    transactions.where("result != 0").size
+  end
 
 end
