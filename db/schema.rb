@@ -10,20 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_06_09_224822) do
+ActiveRecord::Schema[7.0].define(version: 2023_06_10_001457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "coupons", force: :cascade do |t|
     t.string "name"
     t.string "unique_code"
-    t.integer "percent_discount"
-    t.float "dollar_discount"
     t.bigint "merchant_id", null: false
     t.bigint "invoice_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "status", default: 1
+    t.float "discount"
+    t.integer "discount_type"
     t.index ["invoice_id"], name: "index_coupons_on_invoice_id"
     t.index ["merchant_id"], name: "index_coupons_on_merchant_id"
   end
