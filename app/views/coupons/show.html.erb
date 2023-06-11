@@ -13,10 +13,17 @@
     <p>Dollar Discount: <%= number_to_currency(@coupon.dollar_disc) %></p>
   <% end %>
   <p>Number of Uses: <%= @coupon.used_transactions %></p>
+
   <% unless @coupon.status == ("deactivated") %>
     <%= form_with(model: @coupon, url: merchant_coupon_path(@merchant, @coupon), method: :patch) do |f| %>
-      <%= f.hidden_field :status, value: "deactivated" %>
       <%= f.submit "Deactivate" %>
     <% end %>
   <% end %>
+  
+  <% unless @coupon.status == ("activated") %>
+    <%= form_with(model: @coupon, url: merchant_coupon_path(@merchant, @coupon), method: :patch) do |f| %>
+      <%= f.submit "Activate" %>
+    <% end %>
+  <% end %>
+
 </body>

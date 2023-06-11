@@ -30,11 +30,11 @@ describe "merchant coupon show page" do
     @customer_5 = Customer.create!(first_name: "Sylvester", last_name: "Nader")
     @customer_6 = Customer.create!(first_name: "Herber", last_name: "Kuhn")
 
-    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-27 14:54:09")
-    @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2, created_at: "2012-03-28 14:54:09")
+    @invoice_1 = Invoice.create!(customer_id: @customer_1.id, status: 1, coupon_id: @coupon3.id, created_at: "2012-03-27 14:54:09")
+    @invoice_2 = Invoice.create!(customer_id: @customer_1.id, status: 2, coupon_id: @coupon1.id, created_at: "2012-03-28 14:54:09")
 
     @invoice_3 = Invoice.create!(customer_id: @customer_2.id, coupon_id: @coupon1.id, status: 2)
-    @invoice_4 = Invoice.create!(customer_id: @customer_3.id, coupon_id: @coupon1.id, status: 2)
+    @invoice_4 = Invoice.create!(customer_id: @customer_3.id, coupon_id: @coupon1.id, status: 1)
     @invoice_5 = Invoice.create!(customer_id: @customer_4.id, coupon_id: @coupon2.id, status: 2) #invoice status 0 cancelled 1 in progress 2 completed
 
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
@@ -50,7 +50,7 @@ describe "merchant coupon show page" do
     @ii_9 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
 
     @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id) #transaction result 0failed 1 success
-    @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_2.id)
+    @transaction2 = Transaction.create!(credit_card_number: 230948, result: 0, invoice_id: @invoice_2.id)#
     @transaction3 = Transaction.create!(credit_card_number: 234092, result: 1, invoice_id: @invoice_3.id)#
     @transaction4 = Transaction.create!(credit_card_number: 230429, result: 1, invoice_id: @invoice_4.id)#
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_5.id)#
@@ -72,8 +72,13 @@ describe "merchant coupon show page" do
     expect(page).to have_content(@coupon1.status)
   end
 
+  #sad path test
   it "shows how many times the coupon has been used" do
+    #below shows successfull transactions cupon was used on (2)
     expect(page).to have_content("Number of Uses: #{@coupon1.used_transactions}")
+    #below shows how many total transactions this coupon is on (3) but one was failed
+    expect(page).to_not have_content("Number of Uses: #{@coupon1.invoices.joins(:transactions).count}")
+
   end
     # * Sad Paths to consider:
     # 1. A coupon cannot be deactivated if there are any pending invoices with that coupon.
@@ -82,12 +87,22 @@ describe "merchant coupon show page" do
   end
 
   it "when button to deactivate is clicked I am taken back to coupon show page and status is 'deactivated'" do
+    visit merchant_coupon_path(@merchant1, @coupon2)
     expect(page).to have_content("Status: activated")
     click_button "Deactivate"
-    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1))
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon2))
     expect(page).to have_content("Status: deactivated")
     expect(page).to_not have_button("Deactivate")
   end
 
+  #sad path test
+  it "cannot deactivate a coupon if on an active invoice" do
+    visit merchant_coupon_path(@merchant1, @coupon3)
+    expect(page).to have_content("Status: activated")
+    click_button "Deactivate"
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon3))
+    expect(page).to have_content("Cannot Deactivate. Coupon on Active Invoice.")
+    expect(page).to have_content("Status: activated")
+    expect(page).to have_button("Deactivate")
+  end
 end
-
