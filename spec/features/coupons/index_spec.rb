@@ -153,7 +153,7 @@ RSpec.describe "coupons index" do
   it "lists the next 3 US holidays" do 
     holidays = HolidayService.new.get_holidays
     expect(page).to have_content("Upcoming Holidays")
-save_and_open_page
+
     within "#upcoming_holidays" do
       expect(page).to have_content("Juneteenth")
       expect(page).to have_content("2023-06-19")

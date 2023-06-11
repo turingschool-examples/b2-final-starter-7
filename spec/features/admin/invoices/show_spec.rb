@@ -79,7 +79,6 @@ describe "Admin Invoices Show Page" do
 # 8. Admin Invoice Show Page: Subtotal and Grand Total Revenues - dollar amount off
   it "displays subtotal and grand total revenues and coupon info for a dollar amount off coupon" do
     visit admin_invoice_path(@i3)
-save_and_open_page
 
     expect(page).to have_content("Subtotal: $1,044.00")
     expect(page).to have_content("Grand Total Revenue: $1,039.00")
@@ -89,7 +88,6 @@ save_and_open_page
 # 8b. Admin Invoice Show Page: Subtotal and Grand Total Revenues - percentage off
   it "displays subtotal and grand total revenues and coupon info for a percentage off coupon" do
     visit admin_invoice_path(@i4) 
-save_and_open_page
 
     expect(page).to have_content("Subtotal: $1,044.00")
     expect(page).to have_content("Grand Total Revenue: $991.80")
