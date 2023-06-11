@@ -81,7 +81,7 @@ describe "Admin Invoices Show Page" do
     visit admin_invoice_path(@i3)
 
     expect(page).to have_content("Subtotal: $1,044.00")
-    expect(page).to have_content("Grand Total Revenue: $#{@i3.grand_total}")
+    expect(page).to have_content("Grand Total Revenue: $1,039.00")
     expect(page).to have_content("Coupon Name: #{@coupon1.name}")
     expect(page).to have_content("Coupon Code: #{@coupon1.code}")
   end
@@ -90,7 +90,7 @@ describe "Admin Invoices Show Page" do
     visit admin_invoice_path(@i4) 
 
     expect(page).to have_content("Subtotal: $1,044.00")
-    expect(page).to have_content("Grand Total Revenue: $#{@i4.grand_total}")
+    expect(page).to have_content("Grand Total Revenue: $991.80")
     expect(page).to have_content("Coupon Name: #{@coupon2.name}")
     expect(page).to have_content("Coupon Code: #{@coupon2.code}")
   end

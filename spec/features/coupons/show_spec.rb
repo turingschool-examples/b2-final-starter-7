@@ -49,6 +49,7 @@ RSpec.describe "coupon show page" do
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 0, invoice_id: @invoice_1.id)
 
     visit "/merchants/#{@merchant1.id}/coupons/#{@coupon1.id}"
+
   end
 # 3. Merchant Coupon Show Page - Dollar 
   it "displays a coupon's attributes" do 

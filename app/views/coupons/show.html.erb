@@ -15,3 +15,5 @@
 <% else %>
   <p><%= button_to "Activate", method: :patch, :merchant => @merchant.id, :activate => true %></p>
 <% end %>
+
+<p><%= link_to "Return to My Coupons", "/merchants/#{@merchant.id}/coupons" %></p>
