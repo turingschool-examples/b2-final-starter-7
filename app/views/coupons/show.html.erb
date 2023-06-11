@@ -25,3 +25,10 @@
     </section>
   </ul>
 </div>
+
+<%= form_with model: @coupon, url: "/merchants/#{@merchant.id}/coupons/#{@coupon.id}", method: :patch, local: true do |f| %>
+  <%= f.hidden_field :merchant_id, value: @merchant.id %>
+  <%#= f.hidden_field :coupon_id, value: @coupon.id %>
+  <%= f.hidden_field :status, value: 1 %>
+  <%= f.submit "Deactivate Coupon" %>
+<% end %>
