@@ -1,6 +1,7 @@
 class CouponsController < ApplicationController
   def index
     @merchant = Merchant.find(params[:merchant_id])
+    @upcoming_holidays = HolidayService.new.get_holidays.take(3)
   end
 
   def new 
@@ -29,7 +30,6 @@ class CouponsController < ApplicationController
   def update
     @merchant = Merchant.find(params[:merchant]) 
     @coupon = Coupon.find(params[:id])
-    # require 'pry'; binding.pry
     if params[:deactivate] == "true" && @merchant.check_invoice_status? == true
       @coupon.update(status: "inactive")
     elsif params[:activate] == "true" && @merchant.coupon_count? == false
