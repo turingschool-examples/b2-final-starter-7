@@ -62,6 +62,7 @@ group :development, :test do
   gem "shoulda-matchers"
   gem "simplecov"
   gem "httparty"
+  gem 'json'
 end
 
 group :development do
