@@ -59,7 +59,8 @@ describe "Admin Invoices Show Page" do
     expect(page).to have_content(@ii_1.status)
     expect(page).to have_content(@ii_2.status)
 
-    expect(page).to_not have_content(@ii_3.quantity)
+    expect(page).to_not have_content("87")
+    # expect(page).to_not have_content(@ii_3.quantity)
     expect(page).to_not have_content("$#{@ii_3.unit_price}")
     expect(page).to_not have_content(@ii_3.status)
   end
@@ -98,7 +99,7 @@ describe "Admin Invoices Show Page" do
     expect(page).to have_content("Coupon Name: #{@coupon2.name}")
     expect(page).to have_content("Coupon Code: #{@coupon2.code}")
   end
-# 8c. Grand Total Revenues - should never be below $0
+# 8c. Sad Path: Grand Total Revenues - should never be below $0
   it "will not display a grand total revenue less than $0" do
     visit admin_invoice_path(@i5) 
 
