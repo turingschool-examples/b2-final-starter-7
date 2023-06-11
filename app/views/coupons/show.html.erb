@@ -6,7 +6,7 @@
   </div>
 
   <p>Code: <%= (@coupon.code) %></p>
-  <p>Status: <%= (@coupon.status) %></p>
+  <p>Status: <%= (@coupon.status) %> <strong></p>
   <% if @coupon.kind = "Percentage" %>
     <p>Percentage Discount: <%= number_to_percentage(@coupon.perc_disc, precision: 0 ) %></p>
   <% elsif @coupon.kind = "Dollar" %>
@@ -14,6 +14,16 @@
   <% end %>
   <p>Number of Uses: <%= @coupon.used_transactions %></p>
 
-  <strong><%= link_to "Update Item", edit_merchant_coupon_path(@merchant, @coupon) %></strong>
+  <% unless @coupon.status == ("deactivated") %>
+    <%= form_with(model: @coupon, url: merchant_coupon_path(@merchant, @coupon), method: :patch) do |f| %>
+      <%= f.submit "Deactivate" %>
+    <% end %>
+  <% end %>
+  
+  <% unless @coupon.status == ("activated") %>
+    <%= form_with(model: @coupon, url: merchant_coupon_path(@merchant, @coupon), method: :patch) do |f| %>
+      <%= f.submit "Activate" %>
+    <% end %>
+  <% end %>
 
 </body>

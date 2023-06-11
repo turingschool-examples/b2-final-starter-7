@@ -1,6 +1,6 @@
 class CouponsController < ApplicationController
-  before_action :find_merchant, only: [:new, :create, :index, :show]
-  before_action :find_coupon, only: [:show]
+  before_action :find_merchant, only: [:new, :create, :index, :show, :edit, :get, :update]
+  before_action :find_coupon, only: [:show, :edit, :get, :update]
 
   def index
   end
@@ -9,6 +9,19 @@ class CouponsController < ApplicationController
   end
 
   def new
+  end
+
+  def update
+    if @coupon.status == "activated" && @coupon.pending_invoices?
+      redirect_to merchant_coupon_path(@merchant, @coupon)
+      flash.notice = "Cannot Deactivate. Coupon on Active Invoice."
+    elsif @coupon.activated?
+      @coupon.deactivated!
+      redirect_to merchant_coupon_path(@merchant, @coupon)
+    else
+      @coupon.activated!
+      redirect_to merchant_coupon_path(@merchant, @coupon)
+    end
   end
 
   def create
@@ -33,12 +46,13 @@ class CouponsController < ApplicationController
   def find_merchant
     @merchant = Merchant.find(params[:merchant_id])
   end
+
   def find_coupon
     @coupon = Coupon.find(params[:id])
   end
 
-private
-# def coupon_params
-#   params.require(:coupon).permit(:status)
-# end
+  private
+  def coupon_params
+    params.permit(:coupon, :id, :name, :code, :perc_disc, :dollar_disc, :kind)
+  end
 end
