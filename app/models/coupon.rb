@@ -12,6 +12,9 @@ class Coupon < ApplicationRecord
   enum kind: [:Percentage, :Dollar]
 
   def used_transactions
-    self.invoices.joins(:transactions).where("transactions.result = 1").count
+    self.invoices
+    .joins(:transactions)
+    .where("transactions.result = 1")
+    .count
   end
 end
