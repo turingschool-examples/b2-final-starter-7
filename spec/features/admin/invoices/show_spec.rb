@@ -9,20 +9,24 @@ describe "Admin Invoices Show Page" do
     
     @coupon1 = Coupon.create!(name: "Five Dollars Off", discount: 5, code: "5123456789", percent_dollar: "dollar", merchant: @m1)
     @coupon2 = Coupon.create!(name: "Five Percent Off", discount: 5, code: "5987654321", percent_dollar: "percent", merchant: @m1)
+    @coupon3 = Coupon.create!(name: "Twenty Dollars Off", discount: 20, code: "20123456789", percent_dollar: "dollar", merchant: @m1)
 
     @i1 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2012-03-25 09:54:09")
     @i2 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: "2012-03-25 09:30:09")
-    @i3 = Invoice.create!(customer_id: @c1.id, status: 2, coupon_id: @coupon1.id, created_at: "2012-03-25 09:54:09")
-    @i4 = Invoice.create!(customer_id: @c1.id, status: 2, coupon_id: @coupon2.id, created_at: "2012-03-25 09:54:09")
+    @i3 = Invoice.create!(customer_id: @c1.id, status: 2, coupon_id: @coupon1.id)
+    @i4 = Invoice.create!(customer_id: @c1.id, status: 2, coupon_id: @coupon2.id)
+    @i5 = Invoice.create!(customer_id: @c1.id, status: 2, coupon_id: @coupon3.id)
 
     @item_1 = Item.create!(name: "test", description: "lalala", unit_price: 6, merchant_id: @m1.id)
     @item_2 = Item.create!(name: "rest", description: "dont test me", unit_price: 12, merchant_id: @m1.id)
+    @item_3 = Item.create!(name: "nest", description: "nest nest nest", unit_price: 10, merchant_id: @m1.id)
 
     @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
     @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
     @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
     @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
     @ii_5 = InvoiceItem.create!(invoice_id: @i4.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
+    @ii_6 = InvoiceItem.create!(invoice_id: @i5.id, item_id: @item_3.id, quantity: 1, unit_price: 10, status: 2)
 
     visit admin_invoice_path(@i1)
   end
@@ -93,5 +97,14 @@ describe "Admin Invoices Show Page" do
     expect(page).to have_content("Grand Total Revenue: $991.80")
     expect(page).to have_content("Coupon Name: #{@coupon2.name}")
     expect(page).to have_content("Coupon Code: #{@coupon2.code}")
+  end
+# 8c. Grand Total Revenues - should never be below $0
+  it "will not display a grand total revenue less than $0" do
+    visit admin_invoice_path(@i5) 
+
+    expect(page).to have_content("Subtotal: $10.00")
+    expect(page).to have_content("Grand Total Revenue: $0.00")
+    expect(page).to have_content("Coupon Name: #{@coupon3.name}")
+    expect(page).to have_content("Coupon Code: #{@coupon3.code}")
   end
 end

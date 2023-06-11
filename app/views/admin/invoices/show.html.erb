@@ -17,7 +17,11 @@
     <p>Total Revenue: <%= number_to_currency(@invoice.total_revenue) %> </p>
   <% else %>
     <p>Subtotal: <%= number_to_currency(@invoice.total_revenue) %> </p>
-    <p>Grand Total Revenue: <%= number_to_currency(@invoice.grand_total) %></p>
+    <% if @invoice.grand_total > 0 %>
+      <p>Grand Total Revenue: <%= number_to_currency(@invoice.grand_total) %></p>
+    <% else %>
+      <p>Grand Total Revenue: $0.00 </p>
+    <% end %>
     <p> Coupon Name: <%= @invoice.coupon.name %> | Coupon Code: <%= @invoice.coupon.code %></p>
   <% end %>
   
