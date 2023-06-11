@@ -12,9 +12,15 @@ class CouponsController < ApplicationController
   end
 
   def create
-    Coupon.create!(name: coupons_params[:name], unique_code: coupons_params[:unique_code], 
-      status: coupons_params[:status], merchant: @merchant, discount: coupons_params[:discount], 
-      discount_type: coupons_params[:discount_type])
+    if @merchant.active_limit_reached?
+      redirect_to new_merchant_coupon_path(@merchant)
+      flash[:alert] = "Coupon could not be saved because you have too many coupons active currently"
+    else
+      Coupon.create!(name: coupons_params[:name], unique_code: coupons_params[:unique_code], 
+        status: coupons_params[:status], merchant: @merchant, discount: coupons_params[:discount], 
+        discount_type: coupons_params[:discount_type])
+      redirect_to merchant_coupons_path(@merchant)
+    end
   end
 
   private
