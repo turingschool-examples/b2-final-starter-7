@@ -10,7 +10,6 @@ RSpec.describe 'New Coupon Form', type: :feature do
   describe 'Form works' do 
     it 'form can be filled in' do 
       visit (new_merchant_coupon_path(@dolly))
-save_and_open_page
 
       expect(page).to have_content("Create New Coupon")
       expect(page).to have_content('Name')
@@ -24,6 +23,10 @@ save_and_open_page
       fill_in(:discount, with: 15)
       select 'Percentage', from: :discount_type
       select 'Inactive', from: :status
+      click_button('Save')
+
+      expect(current_path).to eq(merchant_coupons_path(@dolly))
+      expect(@dolly.coupons.count).to eq(3)
     end
   end
   
