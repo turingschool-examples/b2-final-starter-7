@@ -28,4 +28,11 @@ describe "Admin Merchant Show" do
     expect(current_path).to eq(admin_merchant_path(@m1))
     expect(page).to have_content("Dang Boiii")
   end
+
+# 1b. Merchant Coupons Index on admin/merchant
+  it "has a link to my coupons index page" do
+    expect(page).to have_link("View Merchant's Coupons")
+    click_link("View Merchant's Coupons")
+    expect(current_path).to eq("/merchants/#{@m1.id}/coupons")
+  end
 end
