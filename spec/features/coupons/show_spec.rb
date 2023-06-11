@@ -9,7 +9,7 @@ describe "merchant coupon show page" do
     @coupon2 = Coupon.create!(status: 1, code: "10off", name: "10 dollers off", perc_disc: 0, dollar_disc: 10, kind: 1, merchant_id: @merchant1.id)
     @coupon3 = Coupon.create!(status: 1, code: "15off", name: "15 dollers off", perc_disc: 0, dollar_disc: 15, kind: 1, merchant_id: @merchant1.id)
     @coupon4 = Coupon.create!(status: 1, code: "25off", name: "25 dollers off", perc_disc: 0, dollar_disc: 25, kind: 1, merchant_id: @merchant1.id)
-    @coupon5 = Coupon.create!(status: 0, code: "35off", name: "35 dollers off", perc_disc: 0, dollar_disc: 35, kind: 1, merchant_id: @merchant1.id)
+    @coupon5 = Coupon.create!(status: 0, code: "35off", name: "35 dollers off", perc_disc: 0, dollar_disc: 35, kind: 1, merchant_id: @merchant2.id)
 
     @coupon6 = Coupon.create!(status: 1, code: "100off", name: "100 dollers off", perc_disc: 0, dollar_disc: 100, kind: 1, merchant_id: @merchant2.id)
 
@@ -95,7 +95,7 @@ describe "merchant coupon show page" do
     expect(page).to_not have_button("Deactivate")
   end
 
-  #sad path test
+  #sad path test for deactivating coupon
   it "cannot deactivate a coupon if on an active invoice" do
     visit merchant_coupon_path(@merchant1, @coupon3)
     expect(page).to have_content("Status: activated")
@@ -104,5 +104,19 @@ describe "merchant coupon show page" do
     expect(page).to have_content("Cannot Deactivate. Coupon on Active Invoice.")
     expect(page).to have_content("Status: activated")
     expect(page).to have_button("Deactivate")
+  end
+
+  it "see a button to activate coupon" do
+    visit merchant_coupon_path(@merchant1, @coupon5)
+    expect(page).to have_button("Activate")
+  end
+
+  it "when button to activate is clicked I am taken back to coupon show page and status is 'activated'" do
+    visit merchant_coupon_path(@merchant1, @coupon5)
+    expect(page).to have_content("Status: deactivated")
+    click_button "Activate"
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon5))
+    expect(page).to have_content("Status: activated")
+    expect(page).to_not have_button("Activate")
   end
 end
