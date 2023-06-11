@@ -58,7 +58,7 @@ RSpec.describe 'New Coupon Form', type: :feature do
       coupon5 = create(:coupon, status: 1, merchant: @jermaine)
 
       visit new_merchant_coupon_path(@jermaine)
-
+      
       fill_in(:name, with: 'Ides of March')
       fill_in(:unique_code, with: 'IDES15')
       fill_in(:discount, with: 15)
@@ -69,19 +69,20 @@ RSpec.describe 'New Coupon Form', type: :feature do
       expect(current_path).to eq(merchant_coupons_path(@jermaine))
       expect(@jermaine.coupons.count).to eq(6)
     end
+    
+    it 'throws an error if unique code validation fails' do 
+      coupon1 = create(:coupon, unique_code: 'IDES15', status: 1, merchant: @jermaine)
+      visit new_merchant_coupon_path(@jermaine)
+      
+      fill_in(:name, with: 'Ides of March')
+      fill_in(:unique_code, with: 'IDES15')
+      fill_in(:discount, with: 15)
+      select 'Percentage', from: :discount_type
+      select 'Inactive', from: :status
+      
+      click_button('Save')
+      expect(current_path).to eq(new_merchant_coupon_path(@jermaine))
+      expect(page).to have_content("Unique code already in use. Please choose a different unique code.")
+    end
   end
-  
-  # As a merchant
-  # When I visit my coupon index page
-  # I see a link to create a new coupon.
-  # When I click that link
-  # I am taken to a new page where I see a form to add a new coupon.
-  # When I fill in that form with a name, unique code, an amount, and whether that amount is a percent or a dollar amount
-  # And click the Submit button
-  # I'm taken back to the coupon index page
-  # And I can see my new coupon listed.
-  
-  # Sad Paths to consider:
-  # This Merchant already has 5 active coupons
-  # Coupon code entered is NOT unique
 end
