@@ -9,6 +9,7 @@
   <p>Status: <%= (@coupon.status) %></p>
   <p>Percentage Discount: <%= number_to_percentage(@coupon.perc_disc) %></p>
   <p>Dollar Discount: <%= number_to_currency(@coupon.dollar_disc) %></p>
+  <p>Number of Uses: <%= @coupon.used_transactions %></p>
 
   <strong><%= link_to "Update Item", edit_merchant_coupon_path(@merchant, @coupon) %></strong>
 
