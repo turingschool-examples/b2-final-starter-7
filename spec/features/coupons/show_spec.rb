@@ -18,11 +18,11 @@ RSpec.describe 'Show PAge' do
 
   describe 'coupon stats' do 
     it 'displays name, code, value and status' do 
-      visit merchant_coupon_path(@dolly, @coupon1)
-      expect(page).to have_content(@coupon1.name)
-      expect(page).to have_content("Unique Code: #{@coupon1.code}")
-      expect(page).to have_content("Amount off: #{@coupon1.value}")
-      expect(page).to have_content("Status: #{@coupon1.status}")
+      visit merchant_coupon_path(@dolly, @coupon_1)
+      expect(page).to have_content(@coupon_1.name)
+      expect(page).to have_content("Unique Code: #{@coupon_1.unique_code}")
+      expect(page).to have_content("Discount: #{@coupon_1.discount}")
+      expect(page).to have_content("Status: #{@coupon_1.status}")
     end
   end
 end
