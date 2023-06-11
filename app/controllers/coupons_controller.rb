@@ -12,7 +12,7 @@ class CouponsController < ApplicationController
   end
 
   def create
-    if @merchant.active_limit_reached?
+    if @merchant.active_limit_reached? && coupons_params[:status] == 'Active'
       redirect_to new_merchant_coupon_path(@merchant)
       flash[:alert] = "Coupon could not be saved because you have too many coupons active currently"
     else
