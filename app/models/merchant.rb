@@ -71,4 +71,8 @@ class Merchant < ApplicationRecord
   def deactivated_coupons
     coupons.where(status: 0)
   end
+
+  def max_activated_coupons #totally Redish
+    activated_coupons.count >= 5
+  end
 end
