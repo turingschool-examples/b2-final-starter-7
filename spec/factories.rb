@@ -2,6 +2,11 @@ FactoryBot.define do
   factory :coupon do
     name { Faker::App.name }
     unique_code { Faker::Commerce.promotion_code }
+    status { Faker::Number.within(range: 0..1) } 
+    discount { Faker::Number.decimal(l_digits: 2) }
+    discount_type { Faker::Number.within(range: 0..1) } ||
+    :merchant
+    :invoice
     status { Faker::Number.within(range: 0..1) }
     discount { Faker::Number.decimal(l_digits: 2) }
     discount_type { Faker::Number.within(range: 0..1) }

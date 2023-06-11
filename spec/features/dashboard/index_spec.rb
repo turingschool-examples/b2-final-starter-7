@@ -128,5 +128,4 @@ RSpec.describe "merchant dashboard" do
 
     expect(current_path).to eq(merchant_coupons_path(@merchant1))
   end
-
 end
