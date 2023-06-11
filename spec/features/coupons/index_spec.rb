@@ -149,4 +149,25 @@ RSpec.describe "coupons index" do
 
     expect(page).to_not have_content("#{@coupon4.name}")
   end
+# 9: Holidays API
+  it "lists the next 3 US holidays" do 
+    holidays = HolidayService.new.get_holidays
+    expect(page).to have_content("Upcoming Holidays")
+
+    within "#upcoming_holidays" do
+      expect(page).to have_content("Juneteenth")
+      expect(page).to have_content("2023-06-19")
+      expect(page).to have_content("Independence Day")
+      expect(page).to have_content("2023-07-04")
+      expect(page).to have_content("Labour Day")
+      expect(page).to have_content("2023-09-04")
+
+      expect(page).to have_content(holidays[0][:name])
+      expect(page).to have_content(holidays[0][:date])
+      expect(page).to have_content(holidays[1][:name])
+      expect(page).to have_content(holidays[1][:date])
+      expect(page).to have_content(holidays[2][:name])
+      expect(page).to have_content(holidays[2][:date])
+    end
+  end
 end

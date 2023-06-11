@@ -1,4 +1,9 @@
 FactoryBot.define do
+  factory :holiday do
+    name { "MyString" }
+    date { "2023-06-10" }
+  end
+
   factory :customer do
     first_name {Faker::Name.first_name}
     last_name {Faker::Dessert.variety}
