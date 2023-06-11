@@ -28,24 +28,24 @@ RSpec.describe Coupon, type: :model do
       expect(foo).to_not be_valid
     end
 
-    # it "should not be able to create more than five active coupons" do
-    #   merchant = Merchant.create!(name: "Eager Merchant")
-    #   coupon_1 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO1", discount_amount: 100, discount_type: 0, status: 0)
-    #   coupon_2 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO2", discount_amount: 100, discount_type: 0, status: 0)
-    #   coupon_3 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO3", discount_amount: 100, discount_type: 0, status: 0)
-    #   coupon_4 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO4", discount_amount: 100, discount_type: 0, status: 0)
-    #   coupon_5 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO5", discount_amount: 100, discount_type: 0, status: 0)
-    #   coupon_6 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO6", discount_amount: 100, discount_type: 0, status: 1)
-    #   coupon_7 = Coupon.new(name: "Foo", unique_code: "BOGO7", discount_amount: 100, discount_type: 0, status: 0, merchant_id: merchant.id)
+    xit "should not be able to create more than five active coupons for one specifict merchant" do
+      merchant = Merchant.create!(name: "Eager Merchant")
+      coupon_1 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO1", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_2 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO2", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_3 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO3", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_4 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO4", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_5 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO5", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_6 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO6", discount_amount: 100, discount_type: 0, status: 1)
+      coupon_7 = Coupon.new(name: "Foo", unique_code: "BOGO7", discount_amount: 100, discount_type: 0, status: 0, merchant_id: merchant.id)
 
-    #   expect(coupon_1).to be_valid
-    #   expect(coupon_2).to be_valid
-    #   expect(coupon_3).to be_valid
-    #   expect(coupon_4).to be_valid
-    #   expect(coupon_5).to be_valid
-    #   expect(coupon_6).to be_valid
-    #   expect(coupon_7).to_not be_valid
-    # end
+      expect(coupon_1).to be_valid
+      expect(coupon_2).to be_valid
+      expect(coupon_3).to be_valid
+      expect(coupon_4).to be_valid
+      expect(coupon_5).to be_valid
+      expect(coupon_6).to be_valid
+      expect(coupon_7).to_not be_valid
+    end
   end
 
   describe "relationships" do
@@ -54,7 +54,6 @@ RSpec.describe Coupon, type: :model do
   end
 
   describe "instance methods" do
-
     context "#number_of_successful_transactions" do
       it "returns the number of times a coupon has been used for successful transactions" do
         merchant1 = Merchant.create!(name: "Hair Care")

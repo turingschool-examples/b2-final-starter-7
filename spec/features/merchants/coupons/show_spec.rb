@@ -54,6 +54,16 @@ RSpec.describe "merchant coupon show", type: :feature do
       expect(page).to have_content("Status: #{@coupon_6.status}")
       expect(page).to have_content("Coupon Used: #{@coupon_6.number_of_successful_transactions} times")
     end
+
+    it "has a button to deactivate a coupon" do
+      visit merchant_coupon_path(@merchant2, @coupon_6)
+
+      click_on("Deactivate Coupon")
+      expect(current_path).to eq(merchant_coupon_path(@merchant2, @coupon_6))
+
+      @coupon_6.reload
+      expect(@coupon_6.status).to eq("disabled")
+    end
   end
 
   context "merchant 1" do
