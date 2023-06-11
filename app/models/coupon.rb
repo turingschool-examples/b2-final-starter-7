@@ -17,4 +17,8 @@ class Coupon < ApplicationRecord
     .where("transactions.result = 1")
     .count
   end
+
+  def pending_invoices?
+    self.invoices.where(status: "in_progress").count >= 1
+  end
 end

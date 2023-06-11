@@ -53,8 +53,8 @@ RSpec.describe Coupon, type: :model do
       @invoice_4 = Invoice.create!(customer_id: @customer_3.id, coupon_id: @coupon1.id, status: 2)
       @invoice_5 = Invoice.create!(customer_id: @customer_4.id, coupon_id: @coupon2.id, status: 2) #invoice status 0 cancelled 1 in progress 2 completed
 
-      @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
-      @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2)
+      @invoice_6 = Invoice.create!(customer_id: @customer_5.id, coupon_id: @coupon3.id, status: 1)
+      @invoice_7 = Invoice.create!(customer_id: @customer_6.id, coupon_id: @coupon3.id, status: 2)
 
       @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 0) #invoice item status 0pending 1packaged 2shipped
       @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
@@ -73,9 +73,15 @@ RSpec.describe Coupon, type: :model do
       @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     end
+
     it "can call on its successful transactions" do
       expect(@coupon1.used_transactions).to eq(2)
       expect(@coupon2.used_transactions).to eq(1)
+    end
+
+    it "can find if on pending invoices" do
+      expect(@coupon3.pending_invoices?).to eq(true)
+      expect(@coupon1.pending_invoices?).to eq(false)
     end
   end
 end

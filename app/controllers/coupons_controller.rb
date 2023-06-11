@@ -1,6 +1,6 @@
 class CouponsController < ApplicationController
-  before_action :find_merchant, only: [:new, :create, :index, :show]
-  before_action :find_coupon, only: [:show]
+  before_action :find_merchant, only: [:new, :create, :index, :show, :edit, :get, :update]
+  before_action :find_coupon, only: [:show, :edit, :get, :update]
 
   def index
   end
@@ -9,6 +9,11 @@ class CouponsController < ApplicationController
   end
 
   def new
+  end
+
+  def update
+    @coupon.update!(coupon_params)
+    redirect_to merchant_coupon_path(@merchant, @coupon)
   end
 
   def create
@@ -37,8 +42,8 @@ class CouponsController < ApplicationController
     @coupon = Coupon.find(params[:id])
   end
 
-private
-# def coupon_params
-#   params.require(:coupon).permit(:status)
-# end
+  private
+  def coupon_params
+    params.require(:coupon).permit(:status)
+  end
 end

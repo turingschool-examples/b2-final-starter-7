@@ -59,8 +59,7 @@ describe "merchant coupon show page" do
 
     visit merchant_coupon_path(@merchant1, @coupon1)
   end
-  # And I see a count of how many times that coupon has been used.
-  # (Note: "use" of a coupon should be limited to successful transactions.)
+
   it "shows name of code" do
     expect(page).to have_content(@coupon1.name)
   end
@@ -75,7 +74,20 @@ describe "merchant coupon show page" do
 
   it "shows how many times the coupon has been used" do
     expect(page).to have_content("Number of Uses: #{@coupon1.used_transactions}")
-    save_and_open_page
   end
+    # * Sad Paths to consider:
+    # 1. A coupon cannot be deactivated if there are any pending invoices with that coupon.
+  it "see a button to deactivate coupon" do
+    expect(page).to have_button("Deactivate")
+  end
+
+  it "when button to deactivate is clicked I am taken back to coupon show page and status is 'deactivated'" do
+    expect(page).to have_content("Status: activated")
+    click_button "Deactivate"
+    expect(current_path).to eq(merchant_coupon_path(@merchant1, @coupon1))
+    expect(page).to have_content("Status: deactivated")
+    expect(page).to_not have_button("Deactivate")
+  end
+
 end
 
