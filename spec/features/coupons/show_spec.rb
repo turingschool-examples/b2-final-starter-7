@@ -105,4 +105,5 @@ RSpec.describe "coupon show page" do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon5.id}")
     expect(page).to have_content("Status: active")
   end
+  # sad path - cannot activate a coupon if already has 5 active 
 end
