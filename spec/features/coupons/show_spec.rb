@@ -95,7 +95,7 @@ RSpec.describe "coupon show page" do
     expect(page).to have_content("Status: active")
     expect(page).to have_content("Error: Cannot deactive coupons with invoices in progress")
   end
-#   5. Merchant Coupon Activate
+# 5. Merchant Coupon Activate
   it "can deactivate coupons" do 
     visit "/merchants/#{@merchant1.id}/coupons/#{@coupon5.id}"
     expect(page).to have_content("Status: inactive")
@@ -105,5 +105,19 @@ RSpec.describe "coupon show page" do
     expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon5.id}")
     expect(page).to have_content("Status: active")
   end
-  # sad path - cannot activate a coupon if already has 5 active 
+# 5b. Sad Path: Merchant Coupon cannot be activated if merchant already has 5 active coupons 
+  it "cannot activate a coupon if the merchant already has 5 active coupons" do 
+    @coupon6 = Coupon.create!(name: "Eleven Percent Off", discount: 11, code: "11987654321", percent_dollar: "percent", merchant: @merchant1)
+    @coupon7 = Coupon.create!(name: "Eleven Dollars Off", discount: 11, code: "11123456789", percent_dollar: "dollar", merchant: @merchant1)
+    
+    visit "/merchants/#{@merchant1.id}/coupons/#{@coupon5.id}"
+
+    expect(page).to have_content("Status: inactive")
+    expect(page).to have_button("Activate")
+    click_button "Activate"
+
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/coupons/#{@coupon5.id}")
+    expect(page).to have_content("Error: Too many active coupons")
+    expect(page).to have_content("Status: inactive")
+  end
 end
