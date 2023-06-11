@@ -24,5 +24,10 @@ RSpec.describe 'Show PAge' do
       expect(page).to have_content("Discount: #{@coupon_1.discount}")
       expect(page).to have_content("Status: #{@coupon_1.status}")
     end
+    
+    it 'displays times used' do 
+      visit merchant_coupon_path(@dolly, @coupon_1)
+      expect(page).to have_content("Times Used: #{@coupon_1.times_used}")
+    end
   end
 end
