@@ -32,9 +32,24 @@ class CouponsController < ApplicationController
     end
   end
 
+  def update
+    find_merchant
+    coupon_to_update = Coupon.find(params[:id])
+    ## REFACTOR: use model binding with form and strong params
+    coupon_to_update.update(status: 1)
+    redirect_to "/merchants/#{@merchant.id}/coupons/#{coupon_to_update.id}"
+  end
+
+  def edit
+  end
+
   private
   def find_merchant
     @merchant = Merchant.find(params[:merchant_id])
+  end
+
+  def coupon_params
+    params.require(:coupon).permit(:status)
   end
 
   def coupon_params
