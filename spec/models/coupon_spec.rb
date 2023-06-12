@@ -3,12 +3,18 @@ require 'rails_helper'
 RSpec.describe Coupon, type: :model do
   before(:each) do 
     @merchant = create(:merchant)
-    @coupon_1 = @merchant.coupons.create!(name: '20%', unique_code: '20OFF', discount: 20, discount_type: 0)
-    @coupon_2 = @merchant.coupons.create!(name: '50%', unique_code: '50OFF', discount: 50, discount_type: 1)
+    @customer = create(:customer)
+    @coupon = create(:coupon, merchant: @merchant)
+    @invoice = create(:invoice, coupon: @coupon, customer: @customer)
+    @invoice_2 = create(:invoice, coupon: @coupon, customer: @customer)
+    @invoice_3 = create(:invoice, coupon: @coupon, customer: @customer)
+    @transaction_1 = create(:transaction, invoice: @invoice, result: 1)
+    @transaction_2 = create(:transaction, invoice: @invoice_2, result: 1)
+    @transaction_3 = create(:transaction, invoice: @invoice_3, result: 0)
   end
   describe 'relationships' do 
     it {should belong_to :merchant}
-    it {should belong_to(:invoice).optional }
+    it {should have_many :invoices}
   end
 
   describe 'validations' do 
@@ -18,5 +24,11 @@ RSpec.describe Coupon, type: :model do
   describe 'enums' do 
     it { should define_enum_for :status }
     it { should define_enum_for :discount_type }
+  end
+
+  describe 'instance methods' do 
+    it '#times_used' do 
+      expect(@coupon.times_used).to eq(2)
+    end
   end
 end
