@@ -4,8 +4,7 @@ class CouponsController < ApplicationController
 
   def index; end
 
-  def show
-  end
+  def show; end
 
   def new; end
 
@@ -23,6 +22,10 @@ class CouponsController < ApplicationController
         flash[:alert] = 'Unique code already in use. Please choose a different unique code.'
       end
     end
+  end
+
+  def update
+    require 'pry'; binding.pry
   end
 
   private
