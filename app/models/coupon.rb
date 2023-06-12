@@ -1,8 +1,9 @@
 class Coupon < ApplicationRecord
-  
+
   validates_presence_of :name,
                         :discount_amount,
-                        :discount_type
+                        :discount_type,
+                        :status
 
   validates :discount_amount, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
