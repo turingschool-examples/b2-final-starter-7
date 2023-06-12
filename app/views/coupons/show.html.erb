@@ -4,3 +4,9 @@
 <p>Discount: <%= @coupon.discount %></p>
 <p>Status: <%= @coupon.status %></p>
 <p>Times Used: <%= @coupon.times_used %></p>
+<p><%= form_with url: merchant_coupon_path(@coupon, @merchant), method: :patch, local: true do |f| %> 
+
+<%= f.hidden_field :status, value: 0 %>
+
+<%= f.submit 'Deactivate' %>
+<% end %></p>
