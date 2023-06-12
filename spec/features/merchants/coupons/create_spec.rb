@@ -51,6 +51,8 @@ RSpec.describe "merchant coupon create", type: :feature do
 
         click_button("Create new Coupon")
 
+        coupon_created_with_errors = Coupon.last
+
         expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
         expect(page).to have_content("Error: Unique code has already been taken")
       end
@@ -67,11 +69,12 @@ RSpec.describe "merchant coupon create", type: :feature do
 
         click_button("Create new Coupon")
 
-        expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
-        expect(page).to have_content("Error: Too Many Active Coupons")
+        coupon_created_with_errors = Coupon.last
 
-        ## REFACTOR
-        # need to refactor with correct validations or render nav bar
+        expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
+        expect(page).to have_content("Error: Max Number of Active Coupons Reached: 5")
+        ## REFACTOR with base error message
+        # expect(page).to have_content("#{coupon_created_with_errors.errors.full_messages.to_sentence}")
       end
     end
   end
