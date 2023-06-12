@@ -14,11 +14,7 @@ RSpec.describe Coupon, type: :model do
   end
   describe 'relationships' do 
     it {should belong_to :merchant}
-<<<<<<< HEAD
-    it {should have_many :invoices }
-=======
     it {should have_many :invoices}
->>>>>>> a105dd1515c128ab1c5b70e9adb0bf977201bef5
   end
 
   describe 'validations' do 
