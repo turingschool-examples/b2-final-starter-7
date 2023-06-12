@@ -195,6 +195,17 @@ describe Merchant do
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
       @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
 
+      @merchant4 = Merchant.create!(name: "Hair Care")
+
+      @coupon_1 = @merchant4.coupons.create!(name: "Five Dollars", unique_code: "FIVEHC4", discount_amount: 5, discount_type: 0, status: 0)
+      @coupon_2 = @merchant4.coupons.create!(name: "Ten Dollars", unique_code: "TENHC4", discount_amount: 10, discount_type: 0, status: 0)
+      @coupon_3 = @merchant4.coupons.create!(name: "Five Percent", unique_code: "FIVEPRCHC4", discount_amount: 5, discount_type: 1, status: 0)
+      @coupon_4 = @merchant4.coupons.create!(name: "Ten Percent", unique_code: "TENPRCHC4", discount_amount: 10, discount_type: 1, status: 0)
+      @coupon_5 = @merchant4.coupons.create!(name: "Old", unique_code: "OLDHC4", discount_amount: 20, discount_type: 1, status: 0)
+      @coupon_6 = @merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC64", discount_amount: 20, discount_type: 1, status: 1)
+      @coupon_7 = @merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC74", discount_amount: 20, discount_type: 1, status: 1)
+      @coupon_8 = @merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC84", discount_amount: 20, discount_type: 1, status: 1)
+
     end
     it "can list items ready to ship" do
       expect(@merchant1.ordered_items_to_ship).to eq([@item_1, @item_1, @item_3, @item_4, @item_7, @item_8, @item_4, @item_4])
@@ -225,46 +236,12 @@ describe Merchant do
       expect(@merchant2.disabled_items).to eq([@item_5, @item_6])
     end
 
-    # it "active_coupon_protection?" do
-    #   merchant4 = Merchant.create!(name: "Hair Care")
-
-    #   coupon_1 = merchant4.coupons.create!(name: "Five Dollars", unique_code: "FIVEHC", discount_amount: 5, discount_type: 0, status: 0)
-    #   coupon_2 = merchant4.coupons.create!(name: "Ten Dollars", unique_code: "TENHC", discount_amount: 10, discount_type: 0, status: 0)
-    #   coupon_3 = merchant4.coupons.create!(name: "Five Percent", unique_code: "FIVEPRCHC", discount_amount: 5, discount_type: 1, status: 0)
-    #   coupon_4 = merchant4.coupons.create!(name: "Ten Percent", unique_code: "TENPRCHC", discount_amount: 10, discount_type: 1, status: 0)
-    #   coupon_5 = merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC", discount_amount: 20, discount_type: 1, status: 0)
-
-    #   expect(merchant4.active_coupon_protection?).to be(true)
-    # end
-
     it "#active_coupons" do
-      merchant4 = Merchant.create!(name: "Hair Care")
-
-      coupon_1 = merchant4.coupons.create!(name: "Five Dollars", unique_code: "FIVEHC", discount_amount: 5, discount_type: 0, status: 0)
-      coupon_2 = merchant4.coupons.create!(name: "Ten Dollars", unique_code: "TENHC", discount_amount: 10, discount_type: 0, status: 0)
-      coupon_3 = merchant4.coupons.create!(name: "Five Percent", unique_code: "FIVEPRCHC", discount_amount: 5, discount_type: 1, status: 0)
-      coupon_4 = merchant4.coupons.create!(name: "Ten Percent", unique_code: "TENPRCHC", discount_amount: 10, discount_type: 1, status: 0)
-      coupon_5 = merchant4.coupons.create!(name: "Old", unique_code: "OLDHC", discount_amount: 20, discount_type: 1, status: 0)
-      coupon_6 = merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC6", discount_amount: 20, discount_type: 1, status: 1)
-      coupon_7 = merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC7", discount_amount: 20, discount_type: 1, status: 1)
-      coupon_8 = merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC8", discount_amount: 20, discount_type: 1, status: 1)
-
-      expect(merchant4.active_coupons).to eq([coupon_1, coupon_2, coupon_3, coupon_4, coupon_5])
+      expect(@merchant4.active_coupons).to eq([@coupon_1, @coupon_2, @coupon_3, @coupon_4, @coupon_5])
     end
 
     it "#inactive_coupons" do
-      merchant4 = Merchant.create!(name: "Hair Care")
-
-      coupon_1 = merchant4.coupons.create!(name: "Five Dollars", unique_code: "FIVEHC", discount_amount: 5, discount_type: 0, status: 0)
-      coupon_2 = merchant4.coupons.create!(name: "Ten Dollars", unique_code: "TENHC", discount_amount: 10, discount_type: 0, status: 0)
-      coupon_3 = merchant4.coupons.create!(name: "Five Percent", unique_code: "FIVEPRCHC", discount_amount: 5, discount_type: 1, status: 0)
-      coupon_4 = merchant4.coupons.create!(name: "Ten Percent", unique_code: "TENPRCHC", discount_amount: 10, discount_type: 1, status: 0)
-      coupon_5 = merchant4.coupons.create!(name: "Old", unique_code: "OLDHC", discount_amount: 20, discount_type: 1, status: 0)
-      coupon_6 = merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC6", discount_amount: 20, discount_type: 1, status: 1)
-      coupon_7 = merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC7", discount_amount: 20, discount_type: 1, status: 1)
-      coupon_8 = merchant4.coupons.create!(name: "Deactivated", unique_code: "OLDHC8", discount_amount: 20, discount_type: 1, status: 1)
-
-      expect(merchant4.inactive_coupons).to eq([coupon_6, coupon_7, coupon_8])
+      expect(@merchant4.inactive_coupons).to eq([@coupon_6, @coupon_7, @coupon_8])
     end
   end
 end
