@@ -11,25 +11,52 @@ describe Merchant do
       expect(foo).to_not be_valid
     end
 
-    xit "should not be able to create more than five active coupons" do
+    it "should not be able to create more than five active coupons for one merchant" do
       merchant = Merchant.create!(name: "Eager Merchant")
       coupon_1 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO1", discount_amount: 100, discount_type: 0, status: 0)
       coupon_2 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO2", discount_amount: 100, discount_type: 0, status: 0)
       coupon_3 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO3", discount_amount: 100, discount_type: 0, status: 0)
       coupon_4 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO4", discount_amount: 100, discount_type: 0, status: 0)
       coupon_5 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO5", discount_amount: 100, discount_type: 0, status: 0)
-      coupon_6 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO6", discount_amount: 100, discount_type: 0, status: 1)
-      # require 'pry'; binding.pry
-      coupon_7 = Coupon.new(name: "Foo", unique_code: "BOGO7", discount_amount: 100, discount_type: 0, status: 0, merchant_id: merchant.id)
-      # coupon_7 = Coupon.new(name: "Foo", unique_code: "BOGO7", discount_amount: 100, discount_type: 0, status: 0, merchant_id: merchant.id)
+      coupon_6 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO6", discount_amount: 100, discount_type: 0, status: 1) # inactive
+      coupon_7 = merchant.coupons.create(name: "Foo", unique_code: "BOGO7", discount_amount: 100, discount_type: 0, status: 0)
 
-      expect(coupon_1).to be_valid
-      expect(coupon_2).to be_valid
-      expect(coupon_3).to be_valid
-      expect(coupon_4).to be_valid
-      expect(coupon_5).to be_valid
-      expect(coupon_6).to be_valid
-      expect(coupon_7).to_not be_valid
+      expect(coupon_7.errors.full_messages.to_sentence).to eq("Max Number of Active Coupons Reached: 5")
+      expect(coupon_7.save).to eq(false)
+    end
+
+    it "should not be able to update a coupon to active when there are already five active coupons for one merchant" do
+      merchant = Merchant.create!(name: "Eager Merchant")
+      coupon_1 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO1", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_2 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO2", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_3 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO3", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_4 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO4", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_5 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO5", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_6 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO6", discount_amount: 100, discount_type: 0, status: 1) # inactive
+
+      expect(coupon_6.update(status: "enabled")).to be(false)
+      expect(Coupon.all.size).to eq(6)
+    end
+
+    it "should not be able to create more than five active coupons for one merchant even if there is another merchant with 5 coupons" do
+      merchant = Merchant.create!(name: "Eager Merchant")
+      coupon_1 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO1", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_2 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO2", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_3 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO3", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_4 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO4", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_5 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO5", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_6 = merchant.coupons.create!(name: "Foo", unique_code: "BOGO6", discount_amount: 100, discount_type: 0, status: 1) # inactive
+      coupon_7 = merchant.coupons.create(name: "Foo", unique_code: "BOGO7", discount_amount: 100, discount_type: 0, status: 0)
+
+      merchant2 = Merchant.create!(name: "Standard Merchant")
+      coupon_11 = merchant2.coupons.create!(name: "Foo", unique_code: "BOGOA1", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_12 = merchant2.coupons.create!(name: "Foo", unique_code: "BOGOA2", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_13 = merchant2.coupons.create!(name: "Foo", unique_code: "BOGOA3", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_14 = merchant2.coupons.create!(name: "Foo", unique_code: "BOGOA4", discount_amount: 100, discount_type: 0, status: 0)
+      coupon_15 = merchant2.coupons.create!(name: "Foo", unique_code: "BOGOA5", discount_amount: 100, discount_type: 0, status: 0)
+
+      expect(coupon_7.errors.full_messages.to_sentence).to eq("Max Number of Active Coupons Reached: 5")
+      expect(merchant2.coupons.size).to eq(5)
     end
   end
 

@@ -1,43 +1,56 @@
 class CouponsController < ApplicationController
-  before_action :find_merchant, only: [:index]
+  before_action :find_merchant#, only: [:index, :new, :edit, :show]
 
   def index
-    find_merchant
     @coupons = @merchant.coupons
   end
 
   def show
-    find_merchant
     @coupon = Coupon.find(params[:id])
   end
 
-  def new
-    find_merchant
-  end
+  def new; end
 
   def create
-    find_merchant
     coupon_to_create = Coupon.new(coupon_params)
-    ## REFACTOR to live in validations with custom validation?
-    # >>>>>>>>>>>>>>
     if @merchant.active_coupon_protection?
       redirect_to new_merchant_coupon_path(@merchant)
-      flash[:alert] = "Error: Too Many Active Coupons"
-    # <<<<<<<<<<<<<<
+      ## REFACTOR with base error message, this would be more applicable if the merchant could manually choose the status,
+      ## but since it defaults to 0 it is somewhat moot
+      # flash[:alert] = "Error: #{error_message(coupon_to_create.errors)}"
+      # flash[:error] = "Error: #{coupon_to_create.errors.full_messages.to_sentence}"
+      flash[:alert] = "Error: Max Number of Active Coupons Reached: 5"
     elsif coupon_to_create.save
       redirect_to merchant_coupons_path(@merchant)
     else
       redirect_to new_merchant_coupon_path(@merchant)
       flash[:alert] = "Error: #{error_message(coupon_to_create.errors)}"
+      # flash[:alert] = "Error: Max Number of Active Coupons Reached: 5"
     end
   end
 
   def update
-    find_merchant
     coupon_to_update = Coupon.find(params[:id])
-    ## REFACTOR: use model binding with form and strong params
-    coupon_to_update.update(status: 1)
-    redirect_to "/merchants/#{@merchant.id}/coupons/#{coupon_to_update.id}"
+    ## Refactor later with @merchant.active_coupon_protection? or separate helper method
+    if params[:commit] == "Deactivate Coupon"
+      coupon_to_update.update(status: 1)
+      # Potential Helper Method >>>>>
+      if coupon_to_update.save
+        redirect_to merchant_coupon_path(@merchant, coupon_to_update)
+      else
+        redirect_to merchant_coupon_path(@merchant, coupon_to_update)
+        flash[:alert] = "Error: #{error_message(coupon_to_update.errors)}"
+      end
+      # Potential Helper Method <<<<<
+    else
+      coupon_to_update.update(status: 0)
+      if coupon_to_update.save
+        redirect_to merchant_coupon_path(@merchant, coupon_to_update)
+      else
+        redirect_to merchant_coupon_path(@merchant, coupon_to_update)
+        flash[:alert] = "Error: #{error_message(coupon_to_update.errors)}"
+      end
+    end
   end
 
   def edit
@@ -49,10 +62,7 @@ class CouponsController < ApplicationController
   end
 
   def coupon_params
-    params.require(:coupon).permit(:status)
-  end
-
-  def coupon_params
     params.permit(:name, :unique_code, :discount_amount, :discount_type, :merchant_id)
+    # params.require(:coupon).permit(:id, :name, :unique_code, :discount_amount, :discount_type, :merchant_id)
   end
 end

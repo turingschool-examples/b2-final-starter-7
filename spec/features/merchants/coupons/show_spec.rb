@@ -16,7 +16,7 @@ RSpec.describe "merchant coupon show", type: :feature do
     @coupon_7 = @merchant2.coupons.create!(name: "Tenner", unique_code: "TENNC", discount_amount: 100, discount_type: 0, status: 0)
     @coupon_8 = @merchant2.coupons.create!(name: "Millionaire", unique_code: "MILLIONNC", discount_amount: 1_000_000, discount_type: 0, status: 0)
     @coupon_9 = @merchant2.coupons.create!(name: "Five Percent", unique_code: "FIVEPRCNC", discount_amount: 5, discount_type: 1, status: 0)
-    @coupon_10 = @merchant2.coupons.create!(name: "Ten Percent", unique_code: "TENPRCNC", discount_amount: 10, discount_type: 1, status: 0)
+    @coupon_10 = @merchant2.coupons.create!(name: "Ten Percent", unique_code: "TENPRCNC", discount_amount: 10, discount_type: 1, status: 1) # inactive
 
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
@@ -55,14 +55,28 @@ RSpec.describe "merchant coupon show", type: :feature do
       expect(page).to have_content("Coupon Used: #{@coupon_6.number_of_successful_transactions} times")
     end
 
-    it "has a button to deactivate a coupon" do
+    it "has a button to deactivate a coupon if coupon is active" do
       visit merchant_coupon_path(@merchant2, @coupon_6)
+
+      expect(@coupon_6.status).to eq("enabled")
 
       click_on("Deactivate Coupon")
       expect(current_path).to eq(merchant_coupon_path(@merchant2, @coupon_6))
 
       @coupon_6.reload
       expect(@coupon_6.status).to eq("disabled")
+    end
+
+    it "has a button to deactivate a coupon if coupon is inactive" do
+      visit merchant_coupon_path(@merchant2, @coupon_10)
+
+      expect(@coupon_10.status).to eq("disabled")
+
+      click_on("Activate Coupon")
+      expect(current_path).to eq(merchant_coupon_path(@merchant2, @coupon_10))
+
+      @coupon_10.reload
+      expect(@coupon_10.status).to eq("enabled")
     end
   end
 
