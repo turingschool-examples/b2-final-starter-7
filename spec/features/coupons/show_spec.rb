@@ -46,4 +46,21 @@ RSpec.describe 'Show PAge' do
       expect(page).to have_content("Times Used: 2")
     end 
   end
+
+  describe 'Merchant Coupon Deactivate' do 
+    it 'has a button to deactivate coupon' do 
+      visit merchant_coupon_path(@dolly) 
+      expect(page).to have_button('Deactivate')
+    end
+  end
 end
+
+# As a merchant
+# When I visit one of my active coupon's show pages
+# I see a button to deactivate that coupon
+# When I click that button
+# I'm taken back to the coupon show page
+# And I can see that its status is now listed as 'inactive'.
+
+# Sad Paths to consider:
+# A coupon cannot be deactivated if there are any pending invoices with that coupon.
