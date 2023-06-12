@@ -11,17 +11,28 @@
   </div> %>
 </div>
 
-<div class="mr-auto col-sm-6">
-  <ul>
-    <section id="<%= @merchant.id %>-coupons">
-      <p><% @coupons.each do |coupon| %>
-        <% if coupon.discount_type == "percentage" %>
-          <li>Coupon Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %> | Discount Amount: <%= number_to_percentage(coupon.discount_amount, precision: 0) %> off</li>
-        <% elsif coupon.discount_type == "dollars" %>
-          <li>Coupon Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %> | Discount Amount: <%= number_to_currency(coupon.discount_amount, precision: 0) %> off</li>
-        <% end %>
+<div id="inactive-coupons">
+  <h4>Inactive Coupons</h4>
+  <p>
+    <% @merchant.inactive_coupons.each do |coupon| %>
+      <% if coupon.discount_type == "percentage" %>
+        <li>Coupon Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %> | Discount Amount: <%= number_to_percentage(coupon.discount_amount, precision: 0) %> off</li>
+      <% elsif coupon.discount_type == "dollars" %>
+        <li>Coupon Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %> | Discount Amount: <%= number_to_currency(coupon.discount_amount, precision: 0) %> off</li>
       <% end %>
-      </p>
-    </section>
-  </ul>
+    <% end %>
+  </p>
+</div>
+
+<div id="active-coupons">
+  <h4>Active Coupons</h4>
+  <p>
+    <% @merchant.active_coupons.each do |coupon| %>
+      <% if coupon.discount_type == "percentage" %>
+        <li>Coupon Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %> | Discount Amount: <%= number_to_percentage(coupon.discount_amount, precision: 0) %> off</li>
+      <% elsif coupon.discount_type == "dollars" %>
+        <li>Coupon Name: <%= link_to "#{coupon.name}", merchant_coupon_path(@merchant, coupon) %> | Discount Amount: <%= number_to_currency(coupon.discount_amount, precision: 0) %> off</li>
+      <% end %>
+    <% end %>
+  </p>
 </div>

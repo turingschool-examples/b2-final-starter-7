@@ -14,7 +14,7 @@
   <br>
   <%= f.select :discount_type, options_for_select(["dollars", "percentage"]) %>
   <%= f.hidden_field :merchant_id, value: @merchant.id %>
-  <%= f.hidden_field :status, value: 0 %>
+  <%= f.hidden_field :status, value: "enabled" %>
   <br>
   <%= f.submit "Create new Coupon" %>
 <% end %>

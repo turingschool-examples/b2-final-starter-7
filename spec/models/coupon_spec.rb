@@ -5,26 +5,27 @@ RSpec.describe Coupon, type: :model do
     it { should validate_presence_of(:name).on(:create) }
     it { should validate_presence_of(:discount_amount).on(:create) }
     it { should validate_presence_of(:discount_type).on(:create) }
+    it { should validate_presence_of(:status).on(:create) }
     it { should validate_numericality_of(:discount_amount).on(:create) }
 
     it "validates the uniqueness of a unique code for dollar discount type" do
       merchant = Merchant.create!(name: "Test Merchant")
-      Coupon.create!(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 0, merchant_id: merchant.id)
-      foo = Coupon.new(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 0, merchant_id: merchant.id)
+      Coupon.create!(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 0, status: 0, merchant_id: merchant.id)
+      foo = Coupon.new(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 0, status: 0, merchant_id: merchant.id)
       expect(foo).to_not be_valid
     end
 
     it "validates the uniqueness of a unique code for percentage discount type" do
       merchant = Merchant.create!(name: "Test Merchant")
-      Coupon.create!(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 1, merchant_id: merchant.id)
-      foo = Coupon.new(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 1, merchant_id: merchant.id)
+      Coupon.create!(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 1, status: 0, merchant_id: merchant.id)
+      foo = Coupon.new(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 1, status: 0, merchant_id: merchant.id)
       expect(foo).to_not be_valid
     end
 
     it "validates the discount amount is greater than 0" do
       merchant = Merchant.create!(name: "Test Merchant")
-      Coupon.create!(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 0, merchant_id: merchant.id)
-      foo = Coupon.new(name: "Foo", unique_code: "BOGO50", discount_amount: 0, discount_type: 0, merchant_id: merchant.id)
+      Coupon.create!(name: "Foo", unique_code: "BOGO", discount_amount: 100, discount_type: 0, status: 0, merchant_id: merchant.id)
+      foo = Coupon.new(name: "Foo", unique_code: "BOGO50", discount_amount: 0, discount_type: 0, status: 0, merchant_id: merchant.id)
       expect(foo).to_not be_valid
     end
   end

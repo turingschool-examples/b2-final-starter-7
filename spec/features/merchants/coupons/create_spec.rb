@@ -27,8 +27,11 @@ RSpec.describe "merchant coupon create", type: :feature do
         expect(current_path).to eq(merchant_coupons_path(@merchant1))
 
         new_coupon = Coupon.last
+        # @merchant1.reload
 
-        within "##{@merchant1.id}-coupons" do
+        visit merchant_coupons_path(@merchant1)
+
+        within "#active-coupons" do
           expect(page).to have_content("Coupon Name: #{new_coupon.name} | Discount Amount: 50% off")
         end
 
