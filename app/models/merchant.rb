@@ -10,30 +10,8 @@ class Merchant < ApplicationRecord
   has_many :transactions, through: :invoices
   has_many :coupons
 
-  # validate :max_coupons_have_not_been_reached
-  # validates :active_coupon_count, length: { maximum: 5 }
-
   enum status: [:enabled, :disabled]
 
-  # def max_coupons_have_not_been_reached
-  #   return unless active_coupon_protection? # nothing to validate
-  #   errors.add_to_base("Max Number of Acitve Coupons Reached: 5") unless merchant.active_coupon_count < merchant.maximum_amount_of_coupons
-  # end
-
-  # def active_coupon_count
-  #   coupons.where("status = 0").size
-  # end
-
-  # def maximum_amount_of_coupons
-  #   5
-  # end
-
-  # validate do
-  #   if self.active_coupon_count >= 5
-  #     errors.add(:base, "Too Many Active Coupons") if self.active_coupon_protection? == true
-  #     return
-  #   end
-  # end
 
   def favorite_customers
     transactions.joins(invoice: :customer)
@@ -89,7 +67,11 @@ class Merchant < ApplicationRecord
     items.where(status: 0)
   end
 
-  def active_coupon_protection?
-    coupons.where("coupons.status = 0").size >= 5
+  def active_coupons
+    coupons.where(status: "enabled")
+  end
+
+  def inactive_coupons
+    coupons.where(status: "disabled")
   end
 end
