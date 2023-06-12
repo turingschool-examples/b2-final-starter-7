@@ -4,9 +4,6 @@
   <div class="mr-auto col-sm-6">
     <p class='mr-auto'><%= @merchant.name %>'s Coupon</p>
   </div>
-  <%# <div class="col-sm-6 column-header">
-    <p class='ml-auto'>Items Ready to Ship</p>
-  </div> %>
 </div>
 
 <div class="mr-auto col-sm-6">
@@ -26,9 +23,14 @@
   </ul>
 </div>
 
-<%= form_with model: @coupon, url: "/merchants/#{@merchant.id}/coupons/#{@coupon.id}", method: :patch, local: true do |f| %>
-  <%= f.hidden_field :merchant_id, value: @merchant.id %>
-  <%#= f.hidden_field :coupon_id, value: @coupon.id %>
-  <%= f.hidden_field :status, value: 1 %>
-  <%= f.submit "Deactivate Coupon" %>
+<% if @coupon.status == "enabled" %>
+  <%= form_with url: merchant_coupon_path(@merchant, @coupon), method: :patch, local: true do |f| %>
+    <%= f.hidden_field :status, value: "disabled" %>
+    <%= f.submit "Deactivate Coupon" %>
+  <% end %>
+<% elsif @coupon.status == "disabled" %>
+  <%= form_with url: merchant_coupon_path(@merchant, @coupon), method: :patch, local: true do |f| %>
+    <%= f.hidden_field :status, value: "enabled" %>
+    <%= f.submit "Activate Coupon" %>
+  <% end %>
 <% end %>
