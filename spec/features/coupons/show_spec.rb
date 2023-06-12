@@ -49,7 +49,7 @@ RSpec.describe 'Show PAge' do
 
   describe 'Merchant Coupon Deactivate' do 
     it 'has a button to deactivate coupon' do 
-      visit merchant_coupon_path(@dolly) 
+      visit merchant_coupon_path(@dolly, @coupon_1) 
       expect(page).to have_button('Deactivate')
     end
   end
