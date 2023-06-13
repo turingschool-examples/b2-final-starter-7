@@ -48,4 +48,12 @@ RSpec.describe "merchant coupon index", type: :feature do
       expect(page).to have_content(@coupon_1.name)
     end
   end
+
+  it "shows the upcoming 3 US holidays" do
+    within "#upcoming-holidays" do
+      expect(page).to have_content("Juneteenth")
+      expect(page).to have_content("Independence Day")
+      expect(page).to have_content("Labor Day")
+    end
+  end
 end
