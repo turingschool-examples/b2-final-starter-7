@@ -25,12 +25,15 @@ class CouponsController < ApplicationController
   end
 
   def update
-    require 'pry'; binding.pry
+    coupon = Coupon.find(params[:id])
+    merchant = Merchant.find(params[:merchant_id])
+    coupon.update!(status: 0)
+    redirect_to "/merchants/#{merchant.id}/coupons/#{coupon.id}"
   end
 
   private
   def coupons_params
-    params.permit(:unique_code, :name, :status, :merchant_id, :discount, :discount_type)
+    params.permit(:id, :unique_code, :name, :status, :merchant_id, :discount, :discount_type)
   end
   
   def find_coupon
