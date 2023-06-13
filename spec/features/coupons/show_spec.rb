@@ -13,7 +13,7 @@ RSpec.describe 'Show PAge' do
   before(:each) do 
     @dolly = create(:merchant)
     @coupon_1 = create(:coupon, merchant: @dolly, status: 1)
-    @coupon_2 = create(:coupon, merchant: @dolly)
+    @coupon_2 = create(:coupon, merchant: @dolly, status: 0)
 
     #times used set up
     @merchant = create(:merchant)
@@ -57,9 +57,28 @@ RSpec.describe 'Show PAge' do
       visit merchant_coupon_path(@dolly, @coupon_1) 
       expect(@coupon_1.status).to eq('Active')
       expect(page).to have_content("Status: Active")
-      click_button('Deactivate')
+      click_button('Deactivate Coupon')
       expect(current_path).to eq("/merchants/#{@dolly.id}/coupons/#{@coupon_1.id}")
+      @coupon_1.reload
       expect(page).to have_content("Status: Inactive")
+    end
+  end
+  
+  describe 'Merchant Coupon Activate' do 
+    it 'has a button to Activate coupon' do 
+      visit merchant_coupon_path(@dolly, @coupon_2) 
+      expect(page).to have_button('Activate Coupon')
+    end
+    
+    it 'Activate button updates status, redirect to show page, status is updated' do 
+      visit merchant_coupon_path(@dolly, @coupon_2) 
+      expect(@coupon_2.status).to eq('Inactive')
+      expect(page).to have_content("Status: Inactive")
+      click_button('Activate Coupon')
+      @coupon_2.reload
+      expect(current_path).to eq("/merchants/#{@dolly.id}/coupons/#{@coupon_2.id}")
+      expect(@coupon_2.status).to eq('Active')
+      expect(page).to have_content("Status: Active")
     end
   end
 end
