@@ -4,11 +4,14 @@ describe "Admin Invoices Index Page" do
   before :each do
     @m1 = Merchant.create!(name: "Merchant 1")
 
+    @coupon = @m1.coupons.create!(name: "$5", unique_code: "FIVEHC", discount_amount: 5, discount_type: 0, status: 0)
+
     @c1 = Customer.create!(first_name: "Yo", last_name: "Yoz", address: "123 Heyyo", city: "Whoville", state: "CO", zip: 12345)
     @c2 = Customer.create!(first_name: "Hey", last_name: "Heyz")
 
     @i1 = Invoice.create!(customer_id: @c1.id, status: 2, created_at: "2012-03-25 09:54:09")
     @i2 = Invoice.create!(customer_id: @c2.id, status: 1, created_at: "2012-03-25 09:30:09")
+    @i3 = Invoice.create!(customer_id: @c1.id, status: 2, coupon_id: @coupon.id, created_at: "2012-02-25 09:30:09")
 
     @item_1 = Item.create!(name: "test", description: "lalala", unit_price: 6, merchant_id: @m1.id)
     @item_2 = Item.create!(name: "rest", description: "dont test me", unit_price: 12, merchant_id: @m1.id)
@@ -16,6 +19,9 @@ describe "Admin Invoices Index Page" do
     @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 12, unit_price: 2, status: 0)
     @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
     @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
+    @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_1.id, quantity: 87, unit_price: 12, status: 2)
+
+    @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @i3.id)
 
     visit admin_invoice_path(@i1)
   end
@@ -54,7 +60,8 @@ describe "Admin Invoices Index Page" do
   end
 
   it "should display the total revenue the invoice will generate" do
-    expect(page).to have_content("Total Revenue: $#{@i1.sub_total}")
+    expect(page).to have_content("Sub-Total: $30.00")
+    # expect(page).to have_content("Sub-Total: $#{@i1.sub_total}")
 
     expect(page).to_not have_content(@i2.sub_total)
   end
@@ -68,5 +75,16 @@ describe "Admin Invoices Index Page" do
       expect(current_path).to eq(admin_invoice_path(@i1))
       expect(@i1.status).to eq("completed")
     end
+  end
+
+  it "should have the name of the coupon that was applied and see sub-total and grand total for the invoice" do
+    visit admin_invoice_path(@i3)
+
+    expect(page).to have_content("Sub-Total: $1,044.00")
+    # expect(page).to have_content(@i3.sub_total)
+    expect(page).to have_content("Coupon Name: #{@i3.coupon.name} || Coupon Code: #{@i3.coupon.unique_code}")
+    expect(page).to have_content("Grand Total: $1,039.00")
+    ## not sure why these don't work here but do work in the invoice show spec
+    # expect(page).to have_content(@i3.grand_total_revenue)
   end
 end
