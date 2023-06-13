@@ -5,6 +5,8 @@ RSpec.describe "invoices show" do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Jewelry")
 
+    @coupon_1 = @merchant1.coupons.create!(name: "Five Dollars Off", unique_code: "FIVEHC", discount_amount: 5, discount_type: 0, status: 0)
+
     @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id, status: 1)
     @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @merchant1.id)
     @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @merchant1.id)
@@ -31,6 +33,7 @@ RSpec.describe "invoices show" do
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2)
 
     @invoice_8 = Invoice.create!(customer_id: @customer_6.id, status: 1)
+    @invoice_9 = Invoice.create!(customer_id: @customer_6.id, status: 1, coupon_id: @coupon_1.id)
 
     @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
     @ii_2 = InvoiceItem.create!(invoice_id: @invoice_2.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 2)
@@ -42,6 +45,7 @@ RSpec.describe "invoices show" do
     @ii_9 = InvoiceItem.create!(invoice_id: @invoice_7.id, item_id: @item_4.id, quantity: 1, unit_price: 1, status: 1)
     @ii_10 = InvoiceItem.create!(invoice_id: @invoice_8.id, item_id: @item_5.id, quantity: 1, unit_price: 1, status: 1)
     @ii_11 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_8.id, quantity: 12, unit_price: 6, status: 1)
+    @ii_12 = InvoiceItem.create!(invoice_id: @invoice_9.id, item_id: @item_1.id, quantity: 12, unit_price: 6, status: 1)
 
     @transaction1 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_1.id)
     @transaction2 = Transaction.create!(credit_card_number: 230948, result: 1, invoice_id: @invoice_2.id)
@@ -51,6 +55,7 @@ RSpec.describe "invoices show" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+    @transaction9 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_9.id)
   end
 
   it "shows the invoice information" do
@@ -79,10 +84,10 @@ RSpec.describe "invoices show" do
 
   end
 
-  it "shows the total revenue for this invoice" do
+  it "shows the sub-total revenue for this invoice" do
     visit merchant_invoice_path(@merchant1, @invoice_1)
 
-    expect(page).to have_content(@invoice_1.total_revenue)
+    expect(page).to have_content(@invoice_1.sub_total)
   end
 
   it "shows a select field to update the invoice status" do
@@ -98,6 +103,14 @@ RSpec.describe "invoices show" do
     within("#current-invoice-status") do
       expect(page).to_not have_content("in progress")
     end
+  end
+
+  it "shows the coupon discount and total after discount for this invoice" do
+    visit merchant_invoice_path(@merchant1, @invoice_9)
+
+    expect(page).to have_content(@invoice_9.sub_total)
+    expect(page).to have_link("#{@invoice_9.coupon.name} || #{@invoice_9.coupon.unique_code}", href: merchant_coupon_path(@merchant1, @coupon_1))
+    expect(page).to have_content(@invoice_9.grand_total_revenue)
   end
 
 end

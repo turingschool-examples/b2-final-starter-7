@@ -40,7 +40,7 @@
     <ul>
       <% @merchants.top_merchants.each do |m| %>
         <section id="toppy-<%= m.id %>">
-          <li><%= link_to "#{m.name}", admin_merchant_path(m) %> - <%= number_to_currency(m.total_revenue) %> in sales</li>
+          <li><%= link_to "#{m.name}", admin_merchant_path(m) %> - <%= number_to_currency(m.sub_total) %> in sales</li>
         </section>
         <% if m.best_day.present? %>
           <section id="top-<%= m.id %>">

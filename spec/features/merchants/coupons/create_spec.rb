@@ -27,7 +27,6 @@ RSpec.describe "merchant coupon create", type: :feature do
         expect(current_path).to eq(merchant_coupons_path(@merchant1))
 
         new_coupon = Coupon.last
-        # @merchant1.reload
 
         visit merchant_coupons_path(@merchant1)
 
@@ -45,7 +44,7 @@ RSpec.describe "merchant coupon create", type: :feature do
 
     context "sad path: non-unique code" do
       it "has a form to create a new coupon and flashes error for uniquesness" do
-        coupon_6 = @merchant1.coupons.create!(name: "New Coupon", unique_code: "HALFOFFHC", discount_amount: 50, discount_type: 1, status: 1)
+        @coupon_6 = @merchant1.coupons.create!(name: "New Coupon", unique_code: "HALFOFFHC", discount_amount: 50, discount_type: 1, status: 1)
 
         fill_in(:name, with: "New Coupon")
         fill_in(:unique_code, with: "HALFOFFHC")
@@ -54,7 +53,7 @@ RSpec.describe "merchant coupon create", type: :feature do
 
         click_button("Create new Coupon")
 
-        coupon_created_with_errors = Coupon.last
+        @coupon_created_with_errors = Coupon.last
 
         expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
         expect(page).to have_content("Error: Unique code has already been taken")
@@ -63,7 +62,7 @@ RSpec.describe "merchant coupon create", type: :feature do
 
     context "sad path: too many active coupons" do
       it "has a form to create a new coupon and flashes error for too many acitive coupons" do
-        coupon_6 = @merchant1.coupons.create!(name: "New Coupon", unique_code: "HALFOFFHC", discount_amount: 50, discount_type: 1, status: 0)
+        @coupon_6 = @merchant1.coupons.create!(name: "New Coupon", unique_code: "HALFOFFHC", discount_amount: 50, discount_type: 1, status: 0)
 
         fill_in(:name, with: "New Coupon")
         fill_in(:unique_code, with: "SUMMER25HC")
@@ -72,7 +71,7 @@ RSpec.describe "merchant coupon create", type: :feature do
 
         click_button("Create new Coupon")
 
-        coupon_created_with_errors = Coupon.last
+        @coupon_created_with_errors = Coupon.last
 
         expect(current_path).to eq(new_merchant_coupon_path(@merchant1))
         expect(page).to have_content("Error: Max Number of Active Coupons Reached: 5")
