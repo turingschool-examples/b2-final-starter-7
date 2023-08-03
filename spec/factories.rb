@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :customer do
-    first_name {Faker::Name.first_name}
-    last_name {Faker::Dessert.variety}
+    first_name {Faker::JapaneseMedia::Naruto.character}
+    last_name {Faker::JapaneseMedia::Naruto.eye}
   end
 
   factory :invoice do
@@ -11,14 +11,14 @@ FactoryBot.define do
   end
 
   factory :merchant do
-    name {Faker::Space.galaxy}
+    name {Faker::Science.scientist}
     invoices
     items
   end
 
   factory :item do
-    name {Faker::Coffee.variety}
-    description {Faker::Hipster.sentence}
+    name {Faker::Games::Zelda.item}
+    description {Faker::Hacker.say_something_smart}
     unit_price {Faker::Number.decimal(l_digits: 2)}
     merchant
   end
