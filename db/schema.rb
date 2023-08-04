@@ -26,9 +26,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_03_221150) do
   end
 
   create_table "discounts", force: :cascade do |t|
-    t.integer "percentage"
-    t.integer "threshold"
-    t.bigint "merchant_id"
+    t.integer "percentage", null: false
+    t.integer "threshold", null: false
+    t.bigint "merchant_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["merchant_id"], name: "index_discounts_on_merchant_id"

@@ -1,0 +1,37 @@
+<%= render partial: "shared/nav" %>
+
+<div class="row">
+  <div class="col-sm-6 column-header">
+    <p class='mr-auto'>Discounts</p>
+  </div>
+  <div class="col-sm-6 column-header">
+    <p class='ml-auto'>[blank]</p>
+  </div>
+</div>
+
+<div class="mr-auto col-sm-6">
+  <table class="table">
+    <tr>
+      <td>ID</td>
+      <td>Discount %</td>
+      <td>Qty required</td>
+    </tr>
+    <% @merchant.discounts.each do |discount| %>
+      <tr id="discount_<%= discount.id %>">
+        <td><%= link_to "#{discount.id}", merchant_discount_path(@merchant.id, discount.id) %></td>
+        <td><%= discount.percentage %></td>
+        <td><%= discount.threshold %></td>
+      </tr>
+    <% end %>
+  </table>
+</div>
+
+<div class="ml-auto col-sm-6">
+  <ul>
+    <section>
+      <p>
+        <li>[blank]</li>
+      </p>
+    </section>
+  </ul>
+</div>
