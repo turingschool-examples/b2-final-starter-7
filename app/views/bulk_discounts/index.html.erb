@@ -3,6 +3,8 @@
       <% @bulk_discounts.each do |discount|%>
             <li><%= discount.percentage_discount %>% OFF <%= discount.quantity_threshold %> OR MORE OF ONE ITEM
             View <%= link_to "#{discount.tag}", merchant_bulk_discount_path(@merchant, discount.id) %>
+            <br>
+            <%= button_to "delete #{discount.tag}",merchant_bulk_discount_path(@merchant, discount.id), method: :delete %>
             </li>
         <% end %>
       </p>

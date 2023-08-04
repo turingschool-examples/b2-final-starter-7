@@ -74,4 +74,14 @@ RSpec.describe "merchant dashboard" do
       end
     end
   end
+
+  describe "User Story 3" do
+    it "displays a link to delete a particular bulk discount" do
+      within("#bulk_discounts") do
+        expect(page).to have_button("delete #{@bulk_discount1.tag}")
+        click_button("delete #{@bulk_discount3.tag}")
+        expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bulk_discount3))
+      end
+    end
+  end
 end
