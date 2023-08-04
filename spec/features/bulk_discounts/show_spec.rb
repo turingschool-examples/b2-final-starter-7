@@ -7,7 +7,7 @@ RSpec.describe "Bulk Discount show page" do
     visit merchant_bulk_discount_path(@merchant1, @bulk_discount1.id)
   end
   
-  #US 1
+  #US 4
   it "shows the discounts information" do
     save_and_open_page
     within("#discount_show_page") do
