@@ -9,7 +9,7 @@ RSpec.describe "Bulk Discount show page" do
   
   #US 4
   it "shows the discounts information" do
-    save_and_open_page
+
     within("#discount_show_page") do
       expect(page).to have_content("#{@bulk_discount1.percentage_discount}% will be take off the total if this discount is applied")
       expect(page).to have_content("#{@bulk_discount1.tag} is the shorthand of this discount")
