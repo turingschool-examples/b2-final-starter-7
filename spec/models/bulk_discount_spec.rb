@@ -5,6 +5,8 @@ RSpec.describe BulkDiscount, type: :model do
     it { should validate_presence_of :name }
     it { should validate_presence_of :percentage }
     it { should validate_presence_of :quantity }
+    it { should validate_numericality_of(:percentage).is_greater_than(0) }
+    it { should validate_numericality_of(:percentage).is_less_than(1.0) }
   end
   describe "relationships" do
     it { belong_to :merchant }
@@ -14,11 +16,7 @@ RSpec.describe BulkDiscount, type: :model do
     before :each do
       @merchant1 = Merchant.create!(name: 'Hair Care')
       @merchant2 = Merchant.create!(name: 'Jewelry')
-      @merchant3 = Merchant.create!(name: 'Office Space')
-      @merchant4 = Merchant.create!(name: 'The Office')
-      @merchant5 = Merchant.create!(name: 'Office Improvement')
-      @merchant6 = Merchant.create!(name: 'Pens & Stuff')
-
+      
       @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id)
       @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 10, merchant_id: @merchant1.id)
       @item_3 = Item.create!(name: "Brush", description: "This brushes your hair", unit_price: 5, merchant_id: @merchant1.id)
