@@ -57,6 +57,16 @@ RSpec.describe "discount show" do
           expect(page).to have_content("#{@discount_1.threshold}")
         end
       end
+
+      it "US5.a Then I see a link to edit the bulk discount" do
+        #
+      end
+      it "US5.b When I click this link Then I am taken to a new page with a form to edit the discount And I see that the discounts current attributes are pre-poluated in the form" do
+        #
+      end
+      it "US5.c When I change any/all of the information and click submit Then I am redirected to the bulk discount's show page And I see that the discount's attributes have been updated" do
+        #
+      end
     end
   end
 end
