@@ -1,0 +1,32 @@
+<%= render partial: "shared/nav" %>
+
+<div class="row">
+  <div class="col-sm-6 column-header">
+    <p class='mr-auto'>Edit Bulk Discount Details</p>
+  </div>
+  <div class="col-sm-6 column-header">
+    <p class='ml-auto'>[blank]</p>
+  </div>
+</div>
+
+<div class="mr-auto col-sm-6">
+  <p>
+    <%= form_with model: @discount, url: merchant_discount_path, local: true, id: "discount_edit_form" do |form| %>
+      <%= form.label :percentage %>
+      <%= form.text_field :percentage, value: @discount.percentage %>
+      <%= form.label :threshold %>
+      <%= form.text_field :threshold, value: @discount.threshold %>
+      <%= form.submit %>
+    <% end %>
+  </p>
+</div>
+
+<div class="ml-auto col-sm-6">
+  <ul>
+    <section>
+      <p>
+        <li>[blank]</li>
+      </p>
+    </section>
+  </ul>
+</div>

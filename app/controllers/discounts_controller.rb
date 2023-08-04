@@ -4,18 +4,18 @@ class DiscountsController < ApplicationController
   end
   
   def show
-    @merchant = Merchant.find(params[:merchant_id])
+    @merchant = Merchant.find(params[:merchant_id]) # Required for the pre-build header to function correctly
     @discount = @merchant.discounts.find(params[:id])
     
   end
 
   def new
     @discount = Discount.new
-    @merchant = Merchant.find(params[:merchant_id])
+    @merchant = Merchant.find(params[:merchant_id]) # Required for the pre-build header to function correctly
   end
 
   def create
-    @merchant = Merchant.find(params[:merchant_id])
+    @merchant = Merchant.find(params[:merchant_id]) # Required for the pre-build header to function correctly
     @discount = @merchant.discounts.new(discount_params)
     if @discount.save
       flash[:notice] = "Bulk discount was successfully created."
@@ -25,9 +25,26 @@ class DiscountsController < ApplicationController
       render :new
     end
   end
+  
+  def edit
+    @merchant = Merchant.find(params[:merchant_id]) # Required for the pre-build header to function correctly
+    @discount = @merchant.discounts.find(params[:id])
+  end
+
+  def update
+    @merchant = Merchant.find(params[:merchant_id])
+    @discount = @merchant.discounts.find(params[:id])
+    if @discount.update(discount_params)
+      flash.notice = "Bulk discount updated"
+      redirect_to merchant_discount_path(@merchant, @discount)
+    else
+      flash.notice = "Invalid information.  Please try again."
+      render :edit
+    end
+  end
 
   def destroy
-    @merchant = Merchant.find(params[:merchant_id])
+    @merchant = Merchant.find(params[:merchant_id]) # Required for the pre-build header to function correctly
     discount = @merchant.discounts.find(params[:id])
     discount.destroy
     redirect_to merchant_discounts_path(@merchant), notice: "Discount was successfully deleted."
