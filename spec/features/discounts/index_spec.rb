@@ -1,13 +1,8 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+require "rails_helper"
 
-Rake::Task["csv_load:all"].invoke
-@merchant1 = Merchant.create!(name: "Josie's Hair Care")
+RSpec.describe "discount index" do
+  before :each do
+    @merchant1 = Merchant.create!(name: "Josie's Hair Care")
 
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
@@ -49,3 +44,29 @@ Rake::Task["csv_load:all"].invoke
     @discount_2 = Discount.create!(merchant_id: @merchant1.id, percentage: "15", threshold: 15)
     @discount_3 = Discount.create!(merchant_id: @merchant1.id, percentage: "20", threshold: 20)
     @discounts = [@discount_1, @discount_2, @discount_3]
+
+    visit merchant_discounts_path(@merchant1.id)
+  end
+  
+  describe "Final Solo Project: " do
+    describe "As a merchant, when I visit bulk discounts index" do 
+      it "Then I see a link to create a new discount.  When I click this link Then I am taken to a new page where I see a form to add a new bulk discount" do
+        expect(page).to have_link("Create new bulk discount")
+        click_link("Create new bulk discount")
+        expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
+        expect(page).to have_css("#discount_create_form")
+      end
+      it "When I fill in the form with valid data Then I am redirected back to the bulk discount index And I see my new bulk discount listed" do
+        visit new_merchant_discount_path(@merchant1.id)
+        within "#discount_create_form" do
+          fill_in "Percentage", with: "30"
+          fill_in "Threshold", with: "100"
+          click_button "Create Discount"
+        end
+        expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts")
+        expect(page).to have_content("30")
+        expect(page).to have_content("100")
+      end
+    end
+  end
+end
