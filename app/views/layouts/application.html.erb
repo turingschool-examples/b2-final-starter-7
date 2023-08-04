@@ -16,7 +16,7 @@
       <h1>Kaina's Esty Shop</h1>
       <div class="container">
         <% flash.each do |type, notice| %>
-          <h5 class="text-info" style="background-color: yellow"><b><%= notice %></b></h5>
+          <h5 id="flash_message" class="text-info" style="background-color: yellow"><b><%= notice %></b></h5>
         <% end %>
       </div>
       <div class="container">
