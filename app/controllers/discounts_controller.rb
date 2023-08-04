@@ -2,10 +2,12 @@ class DiscountsController < ApplicationController
   def index
     @merchant = Merchant.find(params[:merchant_id])
   end
+
   def new
     @discount = Discount.new
     @merchant = Merchant.find(params[:merchant_id])
   end
+
   def create
     @merchant = Merchant.find(params[:merchant_id])
     @discount = @merchant.discounts.new(discount_params)
@@ -16,6 +18,13 @@ class DiscountsController < ApplicationController
       flash[:alert] = "Invalid information, please try again."
       render :new
     end
+  end
+
+  def destroy
+    @merchant = Merchant.find(params[:merchant_id])
+    discount = @merchant.discounts.find(params[:id])
+    discount.destroy
+    redirect_to merchant_discounts_path(@merchant), notice: "Discount was successfully deleted."
   end
 
   private
