@@ -9,4 +9,27 @@ RSpec.describe BulkDiscount, type: :model do
   describe "relationships" do
     it { belong_to :merchant }
   end
+
+  describe "instance methods" do
+    before :each do
+      @merchant1 = Merchant.create!(name: 'Hair Care')
+      @merchant2 = Merchant.create!(name: 'Jewelry')
+      @merchant3 = Merchant.create!(name: 'Office Space')
+      @merchant4 = Merchant.create!(name: 'The Office')
+      @merchant5 = Merchant.create!(name: 'Office Improvement')
+      @merchant6 = Merchant.create!(name: 'Pens & Stuff')
+
+      @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id)
+      @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 10, merchant_id: @merchant1.id)
+      @item_3 = Item.create!(name: "Brush", description: "This brushes your hair", unit_price: 5, merchant_id: @merchant1.id)
+
+      @bulk_discount1 = BulkDiscount.create!(name: "10% off 10 items", percentage: 0.1, quantity: 10, merchant_id: @merchant1.id)
+      @bulk_discount2 = BulkDiscount.create!(name: "20% off 15 items", percentage: 0.2, quantity: 15, merchant_id: @merchant1.id)
+    end
+
+    it "can convert a decimal to a percent" do
+      expect(@bulk_discount1.decimal_to_percentage).to eq(10.0)
+      expect(@bulk_discount2.decimal_to_percentage).to eq(20.0)
+    end
+  end
 end
