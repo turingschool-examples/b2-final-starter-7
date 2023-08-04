@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "merchant dashboard" do
+RSpec.describe "Bulk discounts index" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
@@ -78,9 +78,11 @@ RSpec.describe "merchant dashboard" do
   describe "User Story 3" do
     it "displays a link to delete a particular bulk discount" do
       within("#bulk_discounts") do
-        expect(page).to have_button("delete #{@bulk_discount1.tag}")
+        expect(page).to have_button("delete #{@bulk_discount3.tag}")
         click_button("delete #{@bulk_discount3.tag}")
-        expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bulk_discount3))
+        expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
+        expect(page).to have_button("delete #{@bulk_discount1.tag}")
+        expect(page).to_not have_content("delete #{@bulk_discount3.tag}")
       end
     end
   end
