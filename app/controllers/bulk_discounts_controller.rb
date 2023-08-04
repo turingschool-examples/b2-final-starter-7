@@ -10,7 +10,6 @@ class BulkDiscountsController < ApplicationController
 
   def create
     @merchant = Merchant.find(params[:merchant_id])
-    require 'pry'; binding.pry
     if BulkDiscount.new(bulk_discount_params)
       new_discount = BulkDiscount.create(bulk_discount_params)
       new_discount.save
