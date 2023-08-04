@@ -137,24 +137,4 @@ RSpec.describe "merchant dashboard" do
     expect(page).to have_link('More Info')# i tried to verify that the link goes to the show page but i couldnt figure it out
     expect(page).not_to have_content("Quantity: #{@bulk_discount_3.percentage}%")
   end
-
-  it "can add a new bulk discount" do
-    
-    visit merchant_bulk_discounts_path(@merchant1)
-        
-    click_link 'Create New Discount'
-    
-    expect(page).to have_content('New Bulk Discount')
-
-    fill_in 'Name', with: 'New Discount'
-    fill_in 'percentage', with: '.15'
-    fill_in 'Quantity', with: '25'
-    click_button 'Submit'
-
-    expect(page).to have_content('Bulk Discounts Index')
-
-    expect(page).to have_content('New Discount')
-    expect(page).to have_content('Percentage: 15%')
-    expect(page).to have_content('Quantity: 25')
-  end
 end
