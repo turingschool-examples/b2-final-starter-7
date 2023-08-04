@@ -28,8 +28,8 @@ RSpec.describe BulkDiscount, type: :model do
     end
 
     it "can convert a decimal to a percent" do
-      expect(@bulk_discount1.decimal_to_percentage).to eq(10.0)
-      expect(@bulk_discount2.decimal_to_percentage).to eq(20.0)
+      expect(@bulk_discount1.decimal_to_percentage).to eq("10%")
+      expect(@bulk_discount2.decimal_to_percentage).to eq("20%")
     end
   end
 end

@@ -6,6 +6,6 @@ class BulkDiscount < ApplicationRecord
   belongs_to :merchant
 
   def decimal_to_percentage
-    percentage * 100
+    "#{(percentage * 100).to_i}%"
   end
 end
