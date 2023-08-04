@@ -134,7 +134,7 @@ RSpec.describe "merchant dashboard" do
     expect(page).to have_content('Bulk Discounts Index')
     expect(page).to have_content("Percentage: " + @bulk_discount_1.decimal_to_percentage)
     expect(page).to have_content("Quantity: #{@bulk_discount_1.quantity}")
-    expect(page).to have_link('More Info')# i tried to verify that the link goes to the show page but i couldnt figure it out
-    expect(page).not_to have_content("Quantity: #{@bulk_discount_3.percentage}%")
+    expect(page).not_to have_content("Quantity: #{@bulk_discount_3.name}%")
+    expect(page).to have_link("Discount Info", :href=>merchant_bulk_discount_path(@merchant1, @bulk_discount_1))
   end
 end
