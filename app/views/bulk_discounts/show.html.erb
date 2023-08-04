@@ -1,0 +1,7 @@
+<section id ="discount_show_page">
+      <p> <%=@merchant.name%>'s Discount
+      <li><%= @discount.tag%> is the shorthand of this discount</li>
+      <li><%= @discount.percentage_discount%>% will be take off the total if this discount is applied</li>
+      <li>If the consumer buys <%= @discount.quantity_threshold%> or more items, the discount is applied</li>
+      </p>
+</section>
