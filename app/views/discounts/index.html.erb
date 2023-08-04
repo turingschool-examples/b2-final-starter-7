@@ -2,7 +2,7 @@
 
 <div class="row">
   <div class="col-sm-6 column-header">
-    <p class='mr-auto'>Discounts</p>
+    <p class='mr-auto'>Bulk Discounts</p>
   </div>
   <div class="col-sm-6 column-header">
     <p class='ml-auto'>[blank]</p>
@@ -24,6 +24,9 @@
       </tr>
     <% end %>
   </table>
+  <p>
+    <%= link_to "Create new bulk discount", new_merchant_discount_path(@merchant.id) %>
+  </p>
 </div>
 
 <div class="ml-auto col-sm-6">

@@ -137,12 +137,12 @@ RSpec.describe "merchant dashboard" do
         click_link "See all discounts"
 
         expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts")
-        save_and_open_page
+        
         (0..2).each do |i|
           within("#discount_#{@discounts[i].id}") do
-            #expect(page).to have_link("#{@discounts[i].id}", href: "/merchants/#{@merchant1.id}/discounts/#{@discounts[i].id}")
-            #expect(page).to have_content(@discounts[i].percentage)
-            #expect(page).to have_content(@discounts[i].threshold)
+            expect(page).to have_link("#{@discounts[i].id}", href: "/merchants/#{@merchant1.id}/discounts/#{@discounts[i].id}")
+            expect(page).to have_content(@discounts[i].percentage)
+            expect(page).to have_content(@discounts[i].threshold)
           end
         end
       end
