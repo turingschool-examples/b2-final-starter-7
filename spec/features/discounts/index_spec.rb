@@ -50,13 +50,13 @@ RSpec.describe "discount index" do
   
   describe "Final Solo Project: " do
     describe "As a merchant, when I visit bulk discounts index" do 
-      it "Then I see a link to create a new discount.  When I click this link Then I am taken to a new page where I see a form to add a new bulk discount" do
+      it "US2.a Then I see a link to create a new discount.  When I click this link Then I am taken to a new page where I see a form to add a new bulk discount" do
         expect(page).to have_link("Create new bulk discount")
         click_link("Create new bulk discount")
         expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts/new")
         expect(page).to have_css("#discount_create_form")
       end
-      it "When I fill in the form with valid data Then I am redirected back to the bulk discount index And I see my new bulk discount listed" do
+      it "US2.b When I fill in the form with valid data Then I am redirected back to the bulk discount index And I see my new bulk discount listed" do
         visit new_merchant_discount_path(@merchant1.id)
         within "#discount_create_form" do
           fill_in "Percentage", with: "30"
@@ -66,6 +66,21 @@ RSpec.describe "discount index" do
         expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts")
         expect(page).to have_content("30")
         expect(page).to have_content("100")
+      end
+
+      it "US3.a Then next to each bulk discount I see a link to delete it" do
+        within "#discount_#{@discount_1.id}" do
+          expect(page).to have_link("Delete Discount")
+        end
+      end
+      it "US3.b When I click this link Then I am redirected back to the bulk discounts index page And I no longer see the discount listed" do
+        within "#discount_#{@discount_1.id}" do
+          click_link("Delete Discount")
+        end
+
+        expect(current_path).to eq(merchant_discounts_path(@merchant1.id))
+        expect(page).to_not have_css("#discount_#{@discount_1.id}")
+        expect(page).to have_css("#discount_#{@discount_2.id}")
       end
     end
   end
