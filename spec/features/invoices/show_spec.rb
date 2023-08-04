@@ -111,7 +111,6 @@ RSpec.describe "invoices show" do
     describe "As a merchant When I visit my merchant invoice show page" do
       it "US6.a Then I see the total revenue for my merchant from this invoice (not including discounts).  And I see the total discounted revenue for my merchant from this invoice which includes bulk discounts in the calculation" do
         visit merchant_invoice_path(@merchant1, @invoice_1)
-        save_and_open_page
         within "#total_revenue" do
           expect(page).to have_content(@invoice_1.total_revenue)
         end
