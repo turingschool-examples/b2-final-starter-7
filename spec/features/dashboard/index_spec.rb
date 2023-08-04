@@ -40,6 +40,11 @@ RSpec.describe "merchant dashboard" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
+    @bulk_discount1 = BulkDiscount.create!(merchant_id: @merchant1.id, percentage_discount: 20, quantity_threshold: 10, tag: "20% off")
+    @bulk_discount2 = BulkDiscount.create!(merchant_id: @merchant1.id, percentage_discount: 10, quantity_threshold: 5, tag: "10% off")
+    @bulk_discount3 = BulkDiscount.create!(merchant_id: @merchant1.id, percentage_discount: 50, quantity_threshold: 40, tag: "50% off")
+
+
     visit merchant_dashboard_index_path(@merchant1)
   end
 
@@ -118,5 +123,28 @@ RSpec.describe "merchant dashboard" do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+
+  describe "User Story 1" do
+    it "shows a link to this merchants discounts" do
+      #save_and_open_page
+      expect(page).to have_link("Discounts")
+      click_on("Discounts")
+      expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
+      within("#bulk_discounts") do
+        expect(page).to have_content(@bulk_discount1.percentage_discount)
+        expect(page).to have_content(@bulk_discount1.quantity_threshold)
+        expect(page).to have_content(@bulk_discount1.tag)
+        expect(page).to have_content(@bulk_discount2.percentage_discount)
+        expect(page).to have_content(@bulk_discount2.quantity_threshold)
+        expect(page).to have_content(@bulk_discount3.percentage_discount)
+        expect(page).to have_content(@bulk_discount3.quantity_threshold)
+
+        expect(page).to have_link("View #{@bulk_discount1.tag}")
+        click_on("View #{@bulk_discount1.tag}")
+        expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bulk_discount1.id))
+      end
+      
+    end
   end
 end
