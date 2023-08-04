@@ -59,13 +59,61 @@ RSpec.describe "discount show" do
       end
 
       it "US5.a Then I see a link to edit the bulk discount" do
-        #
+        within "#discount_#{@discount_1.id}" do
+          expect(page).to have_link("Edit Discount")
+        end
       end
       it "US5.b When I click this link Then I am taken to a new page with a form to edit the discount And I see that the discounts current attributes are pre-poluated in the form" do
-        #
+        within "#discount_#{@discount_1.id}" do
+          click_link("Edit Discount")
+        end
+        expect(current_path).to eq("/merchants/#{@merchant_1.id}/discounts/#{@discount_1.id}")
+        expect(page).to have_css("#discount_edit_form")
+        within("#discount_edit_form") do
+          expect(find_field("quantity").value).to eq("#{@discount_1.quantity}")
+          expect(find_field("threshold").value).to eq("#{@discount_1.threshold}")
+        end
       end
       it "US5.c When I change any/all of the information and click submit Then I am redirected to the bulk discount's show page And I see that the discount's attributes have been updated" do
-        #
+        visit "/merchants/#{@merchant_1.id}/discounts/#{@discount_1.id}"
+        within("#discount_edit_form") do
+          fill_in "quantity", with: "1000"
+          fill_in"threshold", with: "50"
+          click_button "Update discount"
+        end
+
+        expect(current_path).to eq("/merchants/#{@merchant_1}/discounts/#{@discount_1}")
+        within "#flash_message" do
+          expect(page).to have_content("Bulk discount updated")
+        end
+        within "#discount_details" do
+          expect(page).to have_content("#{@discount_1.id}")
+          expect(page).to_not have_content("#{@discount_1.percentage}")
+          expect(page).to_not have_content("#{@discount_1.threshold}")
+          expect(page).to have_content("1000")
+          expect(page).to have_content("50")
+        end
+      end
+      it "US5.c.sad_path should not allow invalid entries" do
+        visit "/merchants/#{@merchant_1.id}/discounts/#{@discount_1.id}"
+        within("#discount_edit_form") do
+          fill_in "quantity", with: "text"
+          click_button "Update discount"
+        end
+
+        expect(current_path).to eq("/merchants/#{@merchant_1}/discounts/#{@discount_1}")
+        within "#flash_message" do
+          expect(page).to have_content("Invalid information.  Please try again")
+        end
+        within("#discount_edit_form") do
+          fill_in "threshold", with: "-50"
+          click_button "Update discount"
+        end
+
+        expect(current_path).to eq("/merchants/#{@merchant_1}/discounts/#{@discount_1}")
+        within "#flash_message" do
+          expect(page).to have_content("Invalid information.  Please try again")
+        end
       end
     end
   end
