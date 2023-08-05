@@ -109,7 +109,6 @@ RSpec.describe "discount index" do
         expect(page).to have_css("#discount_#{@discount_2.id}")
       end
       it "US9 I see a section with a header of 'Upcoming Holidays' In this section the name and date of the next 3 upcoming US holidays are listed." do
-        save_and_open_page
         expect(page).to have_content("Upcoming Holidays")
         within "#upcoming_holidays" do
           expect(page).to have_content("Labor Day")
