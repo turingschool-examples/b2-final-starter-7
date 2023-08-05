@@ -67,4 +67,24 @@ describe "Bulk Discounts" do
       end
     end
   end
+
+
+  #2: Merchant Bulk Discount Create
+  describe "As a merchant" do
+    describe "When I visit my bulk discounts index" do
+      describe "Then I see a link to create a new discount" do
+        describe "When I click this link" do
+          describe "Then I am taken to a new page where I see a form to add a new bulk discount" do
+            describe "When I fill in the form with valid data" do
+              describe "Then I am redirected back to the bulk discount index" do
+                it "And I see my new bulk discount listed" do
+
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 end
