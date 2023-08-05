@@ -23,7 +23,13 @@ class  BulkDiscountsController < ApplicationController
       flash.notice = "Please complete all fields to continue."
       render :new
     end
+  end
 
+  def destroy
+    @merchant = Merchant.find(params[:merchant_id])
+    BulkDiscount.find(params[:id]).destroy
+    flash.notice = "Your Discount Has Been Deleted"
+    redirect_to merchant_bulk_discounts_path(@merchant)
   end
 
   private
