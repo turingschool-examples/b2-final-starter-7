@@ -44,7 +44,10 @@ describe "Bulk Discounts" do
               describe "percentage discount and quantity thresholds" do
                 it "And each bulk discount listed includes a link to its show page" do
 
-                  
+                  visit merchant_dashboard_index_path(@m1)
+
+                  click_link "View My Discounts"
+
                 end
               end
             end
