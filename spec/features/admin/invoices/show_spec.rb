@@ -26,53 +26,68 @@ describe "Admin Invoices Index Page" do
     visit admin_invoice_path(@i1)
   end
 
-  it "should display the id, status and created_at" do
-    expect(page).to have_content("Invoice ##{@i1.id}")
-    expect(page).to have_content("Created on: #{@i1.created_at.strftime("%A, %B %d, %Y")}")
+  describe "Pre-baked tests" do
+    it "should display the id, status and created_at" do
+      expect(page).to have_content("Invoice ##{@i1.id}")
+      expect(page).to have_content("Created on: #{@i1.created_at.strftime("%A, %B %d, %Y")}")
 
-    expect(page).to_not have_content("Invoice ##{@i2.id}")
+      expect(page).to_not have_content("Invoice ##{@i2.id}")
+    end
+
+    it "should display the customers name and shipping address" do
+      expect(page).to have_content("#{@c1.first_name} #{@c1.last_name}")
+      expect(page).to have_content(@c1.address)
+      expect(page).to have_content("#{@c1.city}, #{@c1.state} #{@c1.zip}")
+
+      expect(page).to_not have_content("#{@c2.first_name} #{@c2.last_name}")
+    end
+
+    it "should display all the items on the invoice" do
+      expect(page).to have_content(@item_1.name)
+      expect(page).to have_content(@item_2.name)
+
+      expect(page).to have_content(@ii_1.quantity)
+      expect(page).to have_content(@ii_2.quantity)
+
+      expect(page).to have_content("$#{@ii_1.unit_price}")
+      expect(page).to have_content("$#{@ii_2.unit_price}")
+
+      expect(page).to have_content(@ii_1.status)
+      expect(page).to have_content(@ii_2.status)
+
+      expect(page).to_not have_content(@ii_3.quantity)
+      expect(page).to_not have_content("$#{@ii_3.unit_price}")
+      expect(page).to_not have_content(@ii_3.status)
+    end
+
+    it "should display the total revenue the invoice will generate" do
+      expect(page).to have_content("Total Revenue: $#{@i1.total_revenue}")
+
+      expect(page).to_not have_content(@i2.total_revenue)
+    end
+
+    it "should have status as a select field that updates the invoices status" do
+      within("#status-update-#{@i1.id}") do
+        select("cancelled", :from => "invoice[status]")
+        expect(page).to have_button("Update Invoice")
+        click_button "Update Invoice"
+
+        expect(current_path).to eq(admin_invoice_path(@i1))
+        expect(@i1.status).to eq("completed")
+      end
+    end
   end
-
-  it "should display the customers name and shipping address" do
-    expect(page).to have_content("#{@c1.first_name} #{@c1.last_name}")
-    expect(page).to have_content(@c1.address)
-    expect(page).to have_content("#{@c1.city}, #{@c1.state} #{@c1.zip}")
-
-    expect(page).to_not have_content("#{@c2.first_name} #{@c2.last_name}")
-  end
-
-  it "should display all the items on the invoice" do
-    expect(page).to have_content(@item_1.name)
-    expect(page).to have_content(@item_2.name)
-
-    expect(page).to have_content(@ii_1.quantity)
-    expect(page).to have_content(@ii_2.quantity)
-
-    expect(page).to have_content("$#{@ii_1.unit_price}")
-    expect(page).to have_content("$#{@ii_2.unit_price}")
-
-    expect(page).to have_content(@ii_1.status)
-    expect(page).to have_content(@ii_2.status)
-
-    expect(page).to_not have_content(@ii_3.quantity)
-    expect(page).to_not have_content("$#{@ii_3.unit_price}")
-    expect(page).to_not have_content(@ii_3.status)
-  end
-
-  it "should display the total revenue the invoice will generate" do
-    expect(page).to have_content("Total Revenue: $#{@i1.total_revenue}")
-
-    expect(page).to_not have_content(@i2.total_revenue)
-  end
-
-  it "should have status as a select field that updates the invoices status" do
-    within("#status-update-#{@i1.id}") do
-      select("cancelled", :from => "invoice[status]")
-      expect(page).to have_button("Update Invoice")
-      click_button "Update Invoice"
-
-      expect(current_path).to eq(admin_invoice_path(@i1))
-      expect(@i1.status).to eq("completed")
+  describe "Final Solo Project: " do
+    describe "As an admin When I visit an admin invoice show page" do
+      it "Then I see the total revenue from this invoice (not including discounts) And I see the total discounted revenue from this invoice which includes bulk discounts in the calculation" do
+        save_and_open_page
+        within "#total_revenue" do
+          expect(page).to have_content(@i1.total_revenue)
+        end
+        within "#discounted_revenue" do
+          expect(page).to have_content(@i1.discounted_revenue)
+        end
+      end
     end
   end
 end
