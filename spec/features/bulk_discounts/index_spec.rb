@@ -79,4 +79,47 @@ RSpec.describe "Bulk Discounts Index Page" do
     click_button "Add New Discount"
     expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
   end
+
+  describe "delete button" do
+    it "has a button next to each bulk discount to delete it" do
+      within "#discount-#{@discount_1.id}" do
+      expect(page).to have_button("Delete")
+      end
+
+      within "#discount-#{@discount_2.id}" do
+      expect(page).to have_button("Delete")
+      end
+
+      within "#discount-#{@discount_3.id}" do
+      expect(page).to have_button("Delete")
+      end
+    end
+
+    it "removes the discount from the index page" do
+      expect(page).to have_content(@discount_3.id)
+      within "#discount-#{@discount_3.id}" do
+        click_button "Delete"
+      end
+
+      expect(page).to_not have_content(@discount_3.id)
+    end
+
+    it "redirects the user back to the bulk discounts index page and displays flash notice" do
+      within "#discount-#{@discount_3.id}" do
+        click_button "Delete"
+      end
+
+      expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
+      expect(page).to have_content("Your Discount Has Been Deleted")
+    end
+  end 
 end
+
+# 3: Merchant Bulk Discount Delete
+
+# As a merchant
+# When I visit my bulk discounts index
+# Then next to each bulk discount I see a link to delete it
+# When I click this link
+# Then I am redirected back to the bulk discounts index page
+# And I no longer see the discount listed
