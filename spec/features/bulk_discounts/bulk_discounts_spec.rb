@@ -4,36 +4,6 @@ describe "Bulk Discounts" do
   before :each do
     @m1 = Merchant.create!(name: "Merchant 1")
     @discount1 = @m1.bulk_discounts.create!(name: "20 percent off", percentage: 20, quantity_threshold: 10 )
-    @discount2 = @m1.bulk_discounts.create!(name: "10 percent off", percentage: 10, quantity_threshold: 5 )
-
-    @c1 = Customer.create!(first_name: "Bilbo", last_name: "Baggins")
-    @c2 = Customer.create!(first_name: "Frodo", last_name: "Baggins")
-    @c3 = Customer.create!(first_name: "Samwise", last_name: "Gamgee")
-    @c4 = Customer.create!(first_name: "Aragorn", last_name: "Elessar")
-    @c5 = Customer.create!(first_name: "Arwen", last_name: "Undomiel")
-    @c6 = Customer.create!(first_name: "Legolas", last_name: "Greenleaf")
-
-    @i1 = Invoice.create!(customer_id: @c1.id, status: 2)
-    @i2 = Invoice.create!(customer_id: @c1.id, status: 2)
-    @i3 = Invoice.create!(customer_id: @c2.id, status: 2)
-    @i4 = Invoice.create!(customer_id: @c3.id, status: 2)
-    @i5 = Invoice.create!(customer_id: @c4.id, status: 2)
-
-    @t1 = Transaction.create!(invoice_id: @i1.id, credit_card_number: 00000, credit_card_expiration_date: 00000, result: 1)
-    @t2 = Transaction.create!(invoice_id: @i2.id, credit_card_number: 00000, credit_card_expiration_date: 00000, result: 1)
-    @t3 = Transaction.create!(invoice_id: @i3.id, credit_card_number: 00000, credit_card_expiration_date: 00000, result: 1)
-    @t4 = Transaction.create!(invoice_id: @i4.id, credit_card_number: 00000, credit_card_expiration_date: 00000, result: 1)
-    @t5 = Transaction.create!(invoice_id: @i5.id, credit_card_number: 00000, credit_card_expiration_date: 00000, result: 1)
-
-    @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @m1.id)
-    @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 8, merchant_id: @m1.id)
-    @item_3 = Item.create!(name: "Brush", description: "This takes out tangles", unit_price: 5, merchant_id: @m1.id)
-
-    @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
-    @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 1, unit_price: 8, status: 0)
-    @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 2)
-    @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 1)
-
   end
 
   #1: Merchant Bulk Discounts Index
@@ -52,7 +22,7 @@ describe "Bulk Discounts" do
 
                   expect(current_path).to eq(merchant_bulk_discounts_path(@m1))
 
-                  bulk_discounts = [@discount1, @discount2]
+                  bulk_discounts = [@discount1]
 
                   bulk_discounts.each do |discount|
                     expect(page).to have_link(discount.name)
@@ -90,7 +60,7 @@ describe "Bulk Discounts" do
                   fill_in "Quantity threshold", with: 100
 
                   click_button "Submit"
-                  save_and_open_page
+
                   expect(current_path).to eq(merchant_bulk_discounts_path(@m1))
                   expect(page).to have_content("50 percent off")
                   expect(page).to have_content("50")
@@ -112,13 +82,20 @@ describe "Bulk Discounts" do
         describe "When I click this button" do
           describe "Then I am redirected back to the bulk discounts index page" do
             it "And I no longer see the discount listed" do
+
+              visit merchant_bulk_discounts_path(@m1)
               
+              click_button "Delete"
+
+              expect(page).to_not have_content(@discount1.name)
+              expect(page).to_not have_content(@discount1.percentage)
+              expect(page).to_not have_content(@discount1.quantity_threshold)
+
+              expect(current_path).to eq(merchant_bulk_discounts_path(@m1))
             end
           end
         end
       end
     end
   end
-
-
 end
