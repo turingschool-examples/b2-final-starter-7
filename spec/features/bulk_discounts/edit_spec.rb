@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Bulk Discount Show Page" do
+RSpec.describe "Bulk Discounts Edit Page" do
   before do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
@@ -44,24 +44,68 @@ RSpec.describe "Bulk Discount Show Page" do
     @discount_2 = @merchant1.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 15)
     @discount_3 = @merchant1.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 25)
 
-    visit merchant_bulk_discount_path(@merchant1, @discount_1)
+    visit edit_merchant_bulk_discount_path(@merchant1, @discount_1)
   end
 
-  it "displays the bulk discount's quantity threshold and percentage discount" do
-    expect(page).to have_content("Percentage Discount: 10% OFF")
-    expect(page).to have_content("Quantity Threshold: 10 or more items")
-    expect(page).to_not have_content("Percentage Discount: 20% OFF")
-    
-    visit merchant_bulk_discount_path(@merchant1, @discount_2)
-    expect(page).to have_content("Percentage Discount: 20% OFF")
-    expect(page).to have_content("Quantity Threshold: 15 or more items")
-    expect(page).to_not have_content("Percentage Discount: 10% OFF")
+  describe "form" do
+    it "has auto-populated fields to edit bulk discount attributes" do
+      expect(page).to have_content("Edit Discount")
+      expect(page).to have_field("Percentage discount", with: @discount_1.percentage_discount)
+      expect(page).to have_field("Quantity threshold", with: @discount_1.quantity_threshold)
+      expect(page).to have_button("Update")
+    end
   end
 
-  it "has a button to edit the bulk discount" do
-    expect(page).to have_link("Edit")
+  describe "successful form submission" do
+    it "redirects to the bulk discount show page and shows a flash message" do
+      fill_in "Percentage discount", with: "5"
+      fill_in "Quantity threshold", with: "12"
+      click_button "Update"
 
-    click_link "Edit"
-    expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @discount_1))
+      @discount_1.reload
+
+      expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount_1))
+      expect(page).to have_content("Discount #{@discount_1.id} has been successfully updated!")
+    end
+
+    it "displays the newly updated bulk discount information" do
+      expect(@discount_1.percentage_discount).to eq(10)
+      expect(@discount_1.quantity_threshold).to eq(10)
+
+      fill_in "Percentage discount", with: "5"
+      fill_in "Quantity threshold", with: "12"
+      click_button "Update"
+
+      @discount_1.reload
+
+      expect(@discount_1.percentage_discount).to eq(5)
+      expect(@discount_1.quantity_threshold).to eq(12)
+      expect(page).to have_content("Percentage Discount: 5% OFF")
+      expect(page).to have_content("Quantity Threshold: 12 or more items")
+    end
   end
-end
+
+  describe "unsuccessful form submission" do
+    it "loads the edit page again" do
+      fill_in "Percentage discount", with: ""
+      fill_in "Quantity threshold", with: ""
+      click_button "Update"
+
+      expect(page).to have_content("Edit Discount")
+      expect(page).to have_field("Percentage discount")
+      expect(page).to have_field("Quantity threshold")
+    end
+
+    it "displays a message to notify user of failed edit" do
+      fill_in "Percentage discount", with: ""
+      fill_in "Quantity threshold", with: ""
+      click_button "Update"
+
+      expect(page).to have_content("Enter valid updates to continue.")
+    end
+  end
+end 
+
+# INCLUDE EDGE CASE TESTING FOR INVALID UPDATE ENTRIES
+
+# ADD EDGE CASE TESTING FOR SQL INJECTION ATTACK
