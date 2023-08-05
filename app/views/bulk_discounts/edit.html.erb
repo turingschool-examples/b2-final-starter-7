@@ -1,0 +1,13 @@
+<%= render partial: "shared/nav" %>
+
+
+<div class="row">Edit Discount <%= @bulk_discount.id %> </p>
+</div>
+
+<%= form_with model: @bulk_discount, url: merchant_bulk_discount_path(@merchant, @bulk_discount) do |f| %>
+  <%= f.label :percentage_discount %>
+  <%= f.text_field :percentage_discount %>
+  <%= f.label :quantity_threshold %>
+  <%= f.text_field :quantity_threshold %>
+  <%= f.submit "Update" %>
+<% end %>
