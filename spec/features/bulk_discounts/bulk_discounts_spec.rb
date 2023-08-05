@@ -103,4 +103,22 @@ describe "Bulk Discounts" do
       end
     end
   end
+
+  #3: Merchant Bulk Discount Delete
+
+  describe "As a merchant" do
+    describe "When I visit my bulk discounts index" do
+      describe "Then next to each bulk discount I see a button to delete it" do
+        describe "When I click this button" do
+          describe "Then I am redirected back to the bulk discounts index page" do
+            it "And I no longer see the discount listed" do
+              
+            end
+          end
+        end
+      end
+    end
+  end
+
+
 end
