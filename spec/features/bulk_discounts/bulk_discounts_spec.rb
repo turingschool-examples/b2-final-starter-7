@@ -125,6 +125,27 @@ describe "Bulk Discounts" do
                 describe "Then I am redirected to the bulk discount's show page" do
                   it "And I see that the discount's attributes have been updated" do
 
+                    visit merchant_bulk_discount_path(@m1, @discount1)
+
+                    click_link "Edit Discount"
+
+                    expect(current_path).to eq(edit_merchant_bulk_discount_path(@m1, @discount1))
+                    expect(page).to have_content(@discount1.name)
+                    expect(page).to have_content(@discount1.percentage)
+                    expect(page).to have_content(@discount1.quantity_threshold)
+
+                    fill_in "Name", with: "25 Percent off christmas special"
+                    fill_in "Percentage", with: 25
+                    fill_in "Quantity Threshold", with: 6
+
+
+                    click_button "Submit"
+
+                    expect(current_path).to eq(merchant_bulk_discount_path(@m1, @discount1))
+
+                    expect(page).to have_content("20 Percent off christmas special")
+                    expect(page).to have_content(25)
+                    expect(page).to have_content(6)
                   end
                 end
               end
