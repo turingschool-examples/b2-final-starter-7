@@ -83,6 +83,18 @@ describe "Bulk Discounts" do
 
                   click_link "Create a New Discount"
 
+                  expect(current_path).to eq(new_merchant_bulk_discount_path(@m1))
+
+                  fill_in "Name", with: "50 percent off"
+                  fill_in "Percentage", with: 50
+                  fill_in "Quantity threshold", with: 100
+
+                  click_button "Submit"
+                  save_and_open_page
+                  expect(current_path).to eq(merchant_bulk_discounts_path(@m1))
+                  expect(page).to have_content("50 percent off")
+                  expect(page).to have_content("50")
+                  expect(page).to have_content("100")
                 end
               end
             end
