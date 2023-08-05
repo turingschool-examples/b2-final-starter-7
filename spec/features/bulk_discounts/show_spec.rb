@@ -9,11 +9,20 @@ RSpec.describe "bulk discount show", type: :feature do
     @bulk_discount_3 = BulkDiscount.create!(name: "Spring Fling", percentage: 0.30, quantity: 100, merchant_id: @merchant2.id)
   end
 
-  it "can show all of a merchants discounts" do
+  it "can show specific merchants discounts" do
     visit merchant_bulk_discount_path(@merchant1, @bulk_discount_1)
 
     expect(page).to have_content(@bulk_discount_1.name)
     expect(page).to have_content(@bulk_discount_1.decimal_to_percentage)
     expect(page).to have_content(@bulk_discount_1.quantity)
-  end  
+  end
+
+  it "can edit a bulk discount" do
+    visit merchant_bulk_discount_path(@merchant1, @bulk_discount_1)
+    expect(page).to have_link("Edit Discount")
+
+    click_link "Edit Discount"
+
+  expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @bulk_discount_1))
+  end
 end
