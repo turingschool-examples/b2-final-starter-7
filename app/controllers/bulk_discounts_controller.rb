@@ -9,11 +9,10 @@ class BulkDiscountsController < ApplicationController
   end
 
   def create
-    @merchant = Merchant.find(params[:merchant_id])
     if BulkDiscount.new(bulk_discount_params)
       new_discount = BulkDiscount.create(bulk_discount_params)
       new_discount.save
-      redirect_to merchant_bulk_discounts_path(@merchant)
+      redirect_to merchant_bulk_discounts_path(params[:merchant_id])
     else
       flash[:notice] = "Bulk Discount needs to have all information"
       redirect_to new_merchant_bulk_discount_path(@merchant)
@@ -27,6 +26,18 @@ class BulkDiscountsController < ApplicationController
   def destroy
     BulkDiscount.find(params[:id]).destroy
     redirect_to merchant_bulk_discounts_path(params[:merchant_id])
+  end
+
+  def update
+    #require 'pry'; binding.pry
+    discount = BulkDiscount.find(params[:id])
+    discount.update(bulk_discount_params)
+    redirect_to merchant_bulk_discount_path(params[:merchant_id], params[:id])
+  end
+
+  def edit
+    #require 'pry'; binding.pry
+    @discount = BulkDiscount.find(params[:id])
   end
 
   private
