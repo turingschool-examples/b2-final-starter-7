@@ -29,14 +29,12 @@ class BulkDiscountsController < ApplicationController
   end
 
   def update
-    #require 'pry'; binding.pry
     discount = BulkDiscount.find(params[:id])
     discount.update(bulk_discount_params)
     redirect_to merchant_bulk_discount_path(params[:merchant_id], params[:id])
   end
 
   def edit
-    #require 'pry'; binding.pry
     @discount = BulkDiscount.find(params[:id])
   end
 
