@@ -84,7 +84,7 @@ describe "Bulk Discounts" do
             it "And I no longer see the discount listed" do
 
               visit merchant_bulk_discounts_path(@m1)
-              
+
               click_button "Delete"
 
               expect(page).to_not have_content(@discount1.name)
@@ -95,6 +95,20 @@ describe "Bulk Discounts" do
             end
           end
         end
+      end
+    end
+  end
+
+  #4: Merchant Bulk Discount Show
+  describe "As a merchant" do
+    describe "When I visit my bulk discount show page" do
+      it "Then I see the bulk discount's quantity threshold and percentage discount" do
+
+        visit merchant_bulk_discount_path(@m1, @discount1)
+
+        expect(page).to have_content(@discount1.name)
+        expect(page).to have_content(@discount1.percentage)
+        expect(page).to have_content(@discount1.quantity_threshold)
       end
     end
   end
