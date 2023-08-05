@@ -14,4 +14,13 @@ class InvoiceItem < ApplicationRecord
     invoice_ids = InvoiceItem.where("status = 0 OR status = 1").pluck(:invoice_id)
     Invoice.order(created_at: :asc).find(invoice_ids)
   end
+
+  def best_discount_id
+    item.merchant.discounts
+        .where('discounts.threshold <= ?', quantity)
+        .order('discounts.percentage DESC')
+        .pluck('discounts.id')
+        .first
+  end
+  
 end
