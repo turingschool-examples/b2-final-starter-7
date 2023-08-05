@@ -10,3 +10,7 @@
   <p><%= discount.percentage_discount %>% OFF
   when you buy <%= discount.quantity_threshold %> or more of an item</p>
 <% end %>
+
+<br>
+
+<p><%= button_to "Add New Discount", new_merchant_bulk_discount_path(@merchant), method: :get %></p>

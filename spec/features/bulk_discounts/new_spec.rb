@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Bulk Discounts Index Page" do
+RSpec.describe "Bulk Discounts New Page" do
   before do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
@@ -44,39 +44,64 @@ RSpec.describe "Bulk Discounts Index Page" do
     @discount_2 = @merchant1.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 15)
     @discount_3 = @merchant1.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 25)
 
-    visit merchant_bulk_discounts_path(@merchant1)
+    visit new_merchant_bulk_discount_path(@merchant1)
   end
 
-  it "displays all the merchant's bulk discounts" do
-    expect(page).to have_content("My Bulk Discounts")
-
-    expect(page).to have_content(@discount_1.id)
-    expect(page).to have_content(@discount_2.id)
-    expect(page).to have_content(@discount_3.id)
+  it "has a form to add a new bulk discount" do
+    expect(page).to have_content("Add New Discount")
+    expect(page).to have_field("Percentage discount")
+    expect(page).to have_field("Quantity threshold")
+    expect(page).to have_button("Submit")
   end
   
-  it "displays the percentage discount and quantity threshold for each discount" do
-    expect(page).to have_content("10% OFF")
-    expect(page).to have_content("20% OFF")
-    expect(page).to have_content("30% OFF")
-    expect(page).to have_content("10 or more of an item")
-    expect(page).to have_content("15 or more of an item")
-    expect(page).to have_content("25 or more of an item")
-  end
-
-  it "each listed discount is a link to its show page" do
-    click_link("Discount #{@discount_1.id}")
-    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount_1))
+  describe "successful form submission" do
+    it "redirects to the bulk discount index and displays a flash message" do
+      fill_in "Percentage discount", with: "35"
+      fill_in "Quantity threshold", with: "30"
+      click_button "Submit"
+      expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
+      expect(page).to have_content("New Discount Successfully Created!")
+    end
     
-    visit merchant_bulk_discounts_path(@merchant1)
-    click_link("Discount #{@discount_2.id}")
-    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount_2))
+    it "displays the newly created discount" do
+      visit merchant_bulk_discounts_path(@merchant1)
+      expect(page).to_not have_content("35% OFF")
+      
+      visit new_merchant_bulk_discount_path(@merchant1)
+      fill_in "Percentage discount", with: "35"
+      fill_in "Quantity threshold", with: "30"
+      click_button "Submit"
+      
+      expect(page).to have_content("35% OFF")
+      expect(page).to have_content("30 or more of an item")
+    end
+  end
+  
+  describe "unsuccessful form submission" do
+    it "renders the creation form again" do
+      click_button "Submit"
+
+      expect(page).to have_content("Add New Discount")
+      expect(page).to have_field("Percentage discount")
+      expect(page).to have_field("Quantity threshold")
+      expect(page).to have_button("Submit")
+    end
+    
+    it "displays a flash message to notify user" do
+      click_button "Submit"
+
+      expect(page).to have_content("Please complete all fields to continue.")
+    end
   end
 
-  it "has a button to create a new discount" do
-    expect(page).to have_button("Add New Discount")
+  describe "submission of unaccepted characters" do
+    xit "automatically corrects commonly predicted user entries" do
+      fill_in "Percentage discount", with: "35%"
+      fill_in "Quantity threshold", with: "30"
+      click_button "Submit"
 
-    click_button "Add New Discount"
-    expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
+      # expect
+    end
   end
 end
+# ADD EDGE CASES HERE FOR FILLING IN FORM WITH WRONG DATA TYPES
