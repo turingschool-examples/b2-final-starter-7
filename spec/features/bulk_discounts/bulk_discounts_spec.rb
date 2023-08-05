@@ -4,6 +4,20 @@ describe "Bulk Discounts" do
   before :each do
     @m1 = Merchant.create!(name: "Merchant 1")
     @discount1 = @m1.bulk_discounts.create!(name: "20 percent off", percentage: 20, quantity_threshold: 10 )
+    @item1 = @m1.items.create(name: "Item 1", description: "Description for Item 1", unit_price: 10.0)
+    @item2 = @m1.items.create(name: "Item 2", description: "Description for Item 2", unit_price: 15.0)
+    @item3 = @m1.items.create(name: "Item 3", description: "Description for Item 3", unit_price: 20.0)
+
+    @customer = Customer.create(first_name: "John", last_name: "Doe", address: "123 Main St", city: "Anytown", state: "CA", zip: 12345)
+    @invoice = Invoice.create(customer: @customer, status: 1) # Assuming status 1 is for "completed" invoices
+
+    @invoice.invoice_items.create(item: @item1, quantity: 2, unit_price: @item1.unit_price)
+    @invoice.invoice_items.create(item: @item2, quantity: 1, unit_price: @item2.unit_price)
+    @invoice.invoice_items.create(item: @item3, quantity: 3, unit_price: @item3.unit_price)
+
+    @transaction1 = Transaction.create(credit_card_number: 1234567812345678, credit_card_expiration_date: "08/25", result: 1, invoice: @invoice)
+    @transaction2 = Transaction.create(credit_card_number: 8765432187654321, credit_card_expiration_date: "12/24", result: 1, invoice: @invoice)
+    @transaction3 = Transaction.create(credit_card_number: 5678123456781234, credit_card_expiration_date: "06/23", result: 1, invoice: @invoice)
   end
 
   #1: Merchant Bulk Discounts Index
@@ -155,4 +169,18 @@ describe "Bulk Discounts" do
       end
     end
   end
+
+  #6: Merchant Invoice Show Page: Total Revenue and Discounted Revenue
+
+  describe "As a merchant" do
+    describe "When I visit my merchant invoice show page" do
+      describe "Then I see the total revenue for my merchant from this invoice (not including discounts)" do
+        it "And I see the total discounted revenue for my merchant from this invoice which includes bulk discounts in the calculation" do
+
+        end
+      end
+    end
+  end
 end
+
+
