@@ -128,22 +128,22 @@ describe "Bulk Discounts" do
                     visit merchant_bulk_discount_path(@m1, @discount1)
 
                     click_link "Edit Discount"
-
                     expect(current_path).to eq(edit_merchant_bulk_discount_path(@m1, @discount1))
-                    expect(page).to have_content(@discount1.name)
-                    expect(page).to have_content(@discount1.percentage)
-                    expect(page).to have_content(@discount1.quantity_threshold)
+                    expect(page).to have_field("Name", with: @discount1.name)
+                    expect(page).to have_field("Percentage", with: @discount1.percentage)
+                    expect(page).to have_field("Quantity threshold", with: @discount1.quantity_threshold)
 
                     fill_in "Name", with: "25 Percent off christmas special"
                     fill_in "Percentage", with: 25
-                    fill_in "Quantity Threshold", with: 6
+                    fill_in "Quantity threshold", with: 6
 
 
                     click_button "Submit"
 
+                    save_and_open_page
                     expect(current_path).to eq(merchant_bulk_discount_path(@m1, @discount1))
 
-                    expect(page).to have_content("20 Percent off christmas special")
+                    expect(page).to have_content("25 Percent off christmas special")
                     expect(page).to have_content(25)
                     expect(page).to have_content(6)
                   end

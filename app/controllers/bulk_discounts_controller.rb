@@ -27,7 +27,27 @@ class BulkDiscountsController < ApplicationController
     redirect_to merchant_bulk_discounts_path(@merchant)
   end
 
+  def edit
+    @merchant = Merchant.find(params[:merchant_id])
+    @bulk_discount = BulkDiscount.find(params[:id])
+  end
+
+  def update
+    @merchant = Merchant.find(params[:merchant_id])
+    @bulk_discount = BulkDiscount.find(params[:id])
+
+    if @bulk_discount.update(update_bulk_discount_params)
+      redirect_to merchant_bulk_discount_path(@merchant, @bulk_discount), notice: "#{@bulk_discount.name} was successfully updated."
+    else
+      render :edit
+    end
+  end
+
   private
+
+  def update_bulk_discount_params
+    params.require(:bulk_discount).permit(:name, :percentage, :quantity_threshold)
+  end
 
   def bulk_discount_params
     params.permit(:name, :percentage, :quantity_threshold)
