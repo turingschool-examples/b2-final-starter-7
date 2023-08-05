@@ -118,7 +118,7 @@ RSpec.describe "merchant dashboard" do
       expect(page).to_not have_link("#{@item_3.invoice_ids}")
       
       click_link("#{@item_1.invoice_ids}", match: :first)
-      save_and_open_page
+      
       expect(current_path).to eq("/merchants/#{@merchant1.id}/invoices/#{@invoice_1.id}")
     end
 

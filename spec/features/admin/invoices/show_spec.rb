@@ -80,7 +80,6 @@ describe "Admin Invoices Index Page" do
   describe "Final Solo Project: " do
     describe "As an admin When I visit an admin invoice show page" do
       it "Then I see the total revenue from this invoice (not including discounts) And I see the total discounted revenue from this invoice which includes bulk discounts in the calculation" do
-        save_and_open_page
         within "#total_revenue" do
           expect(page).to have_content(@i1.total_revenue)
         end
