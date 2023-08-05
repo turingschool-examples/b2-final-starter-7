@@ -79,6 +79,10 @@ describe "Bulk Discounts" do
               describe "Then I am redirected back to the bulk discount index" do
                 it "And I see my new bulk discount listed" do
 
+                  visit merchant_bulk_discounts_path(@m1)
+
+                  click_link "Create a New Discount"
+
                 end
               end
             end
