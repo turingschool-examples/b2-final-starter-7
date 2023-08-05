@@ -81,8 +81,8 @@ RSpec.describe "discount show" do
       it "US5.c When I change any/all of the information and click submit Then I am redirected to the bulk discount's show page And I see that the discount's attributes have been updated" do
         visit "/merchants/#{@merchant1.id}/discounts/#{@discount_1.id}/edit"
         within("#discount_edit_form") do
-          fill_in "discount[percentage]", with: "999"
-          fill_in"discount[threshold]", with: "50"
+          fill_in "discount[percentage]", with: "50"
+          fill_in"discount[threshold]", with: "999"
           click_button "Update Discount"
         end
         
@@ -92,10 +92,14 @@ RSpec.describe "discount show" do
         end
         within "#discount_details" do
           expect(page).to have_content("#{@discount_1.id}")
-          expect(page).to_not have_content("#{@discount_1.percentage}")
-          expect(page).to_not have_content("#{@discount_1.threshold}")
-          expect(page).to have_content("999")
-          expect(page).to have_content("50")
+          within "#percentage_#{@discount_1.id}" do
+            expect(page).to_not have_content("#{@discount_1.percentage}")
+            expect(page).to have_content("50")
+          end
+          within "#threshold_#{@discount_1.id}" do
+            expect(page).to_not have_content("#{@discount_1.threshold}")
+            expect(page).to have_content("999")
+          end
         end
       end
       it "US5.d.sad_path should not allow invalid entries" do
