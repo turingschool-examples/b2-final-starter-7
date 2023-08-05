@@ -3,6 +3,8 @@ require "rails_helper"
 describe "Bulk Discounts" do
   before :each do
     @m1 = Merchant.create!(name: "Merchant 1")
+    @discount1 = @m1.bulk_discounts.create!(name: "20 percent off", percentage: 20, quantity_threshold: 10 )
+    @discount2 = @m1.bulk_discounts.create!(name: "10 percent off", percentage: 10, quantity_threshold: 5 )
 
     @c1 = Customer.create!(first_name: "Bilbo", last_name: "Baggins")
     @c2 = Customer.create!(first_name: "Frodo", last_name: "Baggins")
@@ -48,6 +50,15 @@ describe "Bulk Discounts" do
 
                   click_link "View My Discounts"
 
+                  expect(current_path).to eq(merchant_bulk_discounts_path(@m1))
+
+                  bulk_discounts = [@discount1, @discount2]
+
+                  bulk_discounts.each do |discount|
+                    expect(page).to have_link(discount.name)
+                    expect(page).to have_content(discount.percentage)
+                    expect(page).to have_content(discount.quantity_threshold)
+                  end
                 end
               end
             end
