@@ -5,3 +5,9 @@
       <li>If the consumer buys <%= @discount.quantity_threshold%> or more items, the discount is applied</li>
       </p>
 </section>
+
+<br>
+
+<section id ="edit_discount">
+      <p><%= link_to "Edit this discount", edit_merchant_bulk_discount_path(@discount.merchant.id, @discount.id) %> </p>
+</section>
