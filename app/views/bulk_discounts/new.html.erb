@@ -6,9 +6,9 @@
   </div>
 
   <%= form_with url: merchant_bulk_discounts_path, method: :post do |form| %>
-  <%= form.label :percentage_discount %>
-  <%= form.text_field :percentage_discount %>
-  <%= form.label :quantity_threshold %>
-  <%= form.text_field :quantity_threshold %>
+  <p><%= form.label :percentage_discount %>
+  <%= form.text_field :percentage_discount %>%</p>
+  <p><%= form.label :quantity_threshold %>
+  <%= form.text_field :quantity_threshold %> or more items</p>
   <%= form.submit "Submit" %>
 <% end %>
