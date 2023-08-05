@@ -27,6 +27,7 @@
         <th class="th1">Quantity</th>
         <th class="th1">Unit Price</th>
         <th class="th1">Status</th>
+        <th class="th1">Applicable Discounts</th>
       </tr>
     </thead>
 
@@ -42,7 +43,10 @@
                 <%= f.select :status, Invoice.statuses.keys, selected: "#{@invoice.status}" %>
                 <%= f.submit 'Update Invoice' %>
               <% end %>
-              </td>
+            </td>
+            <td id="discount_for_<%= i.id %>">
+              <%= link_to i.best_discount_id, merchant_discount_path(@merchant.id, i.best_discount_id) %>
+            </td>
           </tr>
         </section>
       <% end %>
