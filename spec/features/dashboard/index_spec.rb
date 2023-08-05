@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "merchant dashboard" do
   before :each do
-    @merchant1 = Merchant.create!(name: "Josie's Hair Care")
+    @merchant1 = Merchant.create!(name: "Hair Care")
 
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
@@ -116,8 +116,9 @@ RSpec.describe "merchant dashboard" do
       expect(page).to have_link("#{@item_1.invoice_ids}")
       expect(page).to have_link("#{@item_2.invoice_ids}")
       expect(page).to_not have_link("#{@item_3.invoice_ids}")
-
+      
       click_link("#{@item_1.invoice_ids}", match: :first)
+      
       expect(current_path).to eq("/merchants/#{@merchant1.id}/invoices/#{@invoice_1.id}")
     end
 

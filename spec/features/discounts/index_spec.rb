@@ -67,6 +67,31 @@ RSpec.describe "discount index" do
         expect(page).to have_content("30")
         expect(page).to have_content("100")
       end
+      it "US2.b SAD PATH.1 When I fill in the form with invalid data (percentage) Then I am redirected back to the bulk discount new And I see a flash message that says 'Invalid information, please try again.'" do
+        visit new_merchant_discount_path(@merchant1.id)
+        within "#discount_create_form" do
+          fill_in "Percentage", with: "text"
+          fill_in "Threshold", with: "100"
+          click_button "Create Discount"
+        end
+        expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts")
+        within "#flash_message" do
+          expect(page).to have_content("Invalid information, please try again.")
+        end
+      end
+
+      it "US2.b SAD PATH.2 When I fill in the form with invalid data (threshold) Then I am redirected back to the bulk discount new And I see a flash message that says 'Invalid information, please try again.'" do
+        visit new_merchant_discount_path(@merchant1.id)
+        within "#discount_create_form" do
+          fill_in "Percentage", with: "30"
+          fill_in "Threshold", with: "-100"
+          click_button "Create Discount"
+        end
+        expect(current_path).to eq("/merchants/#{@merchant1.id}/discounts")
+        within "#flash_message" do
+          expect(page).to have_content("Invalid information, please try again.")
+        end
+      end
 
       it "US3.a Then next to each bulk discount I see a link to delete it" do
         within "#discount_#{@discount_1.id}" do
