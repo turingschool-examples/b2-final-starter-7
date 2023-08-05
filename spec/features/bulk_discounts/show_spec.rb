@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Bulk Discounts Index Page" do
+RSpec.describe "Bulk Discount Show Page" do
   before do
     @merchant1 = Merchant.create!(name: "Hair Care")
 
@@ -43,74 +43,17 @@ RSpec.describe "Bulk Discounts Index Page" do
     @discount_1 = @merchant1.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 10)
     @discount_2 = @merchant1.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 15)
     @discount_3 = @merchant1.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 25)
-
-    visit merchant_bulk_discounts_path(@merchant1)
   end
 
-  it "displays all the merchant's bulk discounts" do
-    expect(page).to have_content("My Bulk Discounts")
-
-    expect(page).to have_content(@discount_1.id)
-    expect(page).to have_content(@discount_2.id)
-    expect(page).to have_content(@discount_3.id)
-  end
-  
-  it "displays the percentage discount and quantity threshold for each discount" do
-    expect(page).to have_content("10% OFF")
-    expect(page).to have_content("20% OFF")
-    expect(page).to have_content("30% OFF")
-    expect(page).to have_content("10 or more of an item")
-    expect(page).to have_content("15 or more of an item")
-    expect(page).to have_content("25 or more of an item")
-  end
-
-  it "each listed discount is a link to its show page" do
-    click_link("Discount #{@discount_1.id}")
-    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount_1))
+  it "displays the bulk discount's quantity threshold and percentage discount" do
+    visit merchant_bulk_discount_path(@merchant1, @discount_1)
+    expect(page).to have_content("Percentage Discount: 10% OFF")
+    expect(page).to have_content("Quantity Threshold: 10 or more items")
+    expect(page).to_not have_content("Percentage Discount: 20% OFF")
     
-    visit merchant_bulk_discounts_path(@merchant1)
-    click_link("Discount #{@discount_2.id}")
-    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @discount_2))
+    visit merchant_bulk_discount_path(@merchant1, @discount_2)
+    expect(page).to have_content("Percentage Discount: 20% OFF")
+    expect(page).to have_content("Quantity Threshold: 15 or more items")
+    expect(page).to_not have_content("Percentage Discount: 10% OFF")
   end
-
-  it "has a button to create a new discount" do
-    expect(page).to have_button("Add New Discount")
-
-    click_button "Add New Discount"
-    expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
-  end
-
-  describe "delete button" do
-    it "has a button next to each bulk discount to delete it" do
-      within "#discount-#{@discount_1.id}" do
-      expect(page).to have_button("Delete")
-      end
-
-      within "#discount-#{@discount_2.id}" do
-      expect(page).to have_button("Delete")
-      end
-
-      within "#discount-#{@discount_3.id}" do
-      expect(page).to have_button("Delete")
-      end
-    end
-
-    it "removes the discount from the index page" do
-      expect(page).to have_content(@discount_3.id)
-      within "#discount-#{@discount_3.id}" do
-        click_button "Delete"
-      end
-
-      expect(page).to_not have_content(@discount_3.id)
-    end
-
-    it "redirects the user back to the bulk discounts index page and displays flash notice" do
-      within "#discount-#{@discount_3.id}" do
-        click_button "Delete"
-      end
-
-      expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
-      expect(page).to have_content("Your Discount Has Been Deleted")
-    end
-  end 
 end
