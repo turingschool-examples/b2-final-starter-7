@@ -32,7 +32,7 @@
     </thead>
 
     <tbody>
-      <% @invoice.invoice_items.each do |i| %>
+    <% @invoice.invoice_items.each do |i| %>
         <section id="the-status-<%= i.id %>">
           <tr class="tr">
             <td style="text-align:center"><%= i.item.name %></td>
@@ -44,8 +44,10 @@
                 <%= f.submit 'Update Invoice' %>
               <% end %>
             </td>
-            <td id="discount_for_<%= i.id %>">
-              <%= link_to i.best_discount_id, merchant_discount_path(@merchant.id, i.best_discount_id) %>
+            <td id="discount_for_<%= i.id %>" style="text-align:center">
+              <% if i.best_discount_id.present? %>
+                <%= link_to i.best_discount_id, merchant_discount_path(@merchant, i.best_discount_id) %>
+              <% end %>
             </td>
           </tr>
         </section>

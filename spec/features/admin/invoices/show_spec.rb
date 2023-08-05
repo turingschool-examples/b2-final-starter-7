@@ -17,6 +17,12 @@ describe "Admin Invoices Index Page" do
     @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 6, unit_price: 1, status: 1)
     @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_2.id, quantity: 87, unit_price: 12, status: 2)
 
+    @discount_1 = Discount.create!(merchant_id: @m1.id, percentage: "10", threshold: 10)
+    @discount_2 = Discount.create!(merchant_id: @m1.id, percentage: "15", threshold: 15)
+    @discount_3 = Discount.create!(merchant_id: @m1.id, percentage: "20", threshold: 20)
+    @discount_4 = Discount.create!(merchant_id: @m1.id, percentage: "5", threshold: 5)
+    @discounts = [@discount_1, @discount_2, @discount_3, @discount_4]
+
     visit admin_invoice_path(@i1)
   end
 
