@@ -102,7 +102,7 @@ RSpec.describe "discount show" do
           end
         end
       end
-      it "US5.d.sad_path should not allow invalid entries" do
+      it "US5.d.SAD PATH should not allow invalid entries" do
         visit "/merchants/#{@merchant1.id}/discounts/#{@discount_1.id}/edit"
         within("#discount_edit_form") do
           fill_in "discount[percentage]", with: "text"

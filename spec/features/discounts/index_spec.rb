@@ -49,7 +49,7 @@ RSpec.describe "discount index" do
   end
   
   describe "Final Solo Project: " do
-    describe "As a merchant, when I visit bulk discounts index" do 
+    describe "As a merchant, when I visit bulk discounts index page" do 
       it "US2.a Then I see a link to create a new discount.  When I click this link Then I am taken to a new page where I see a form to add a new bulk discount" do
         expect(page).to have_link("Create new bulk discount")
         click_link("Create new bulk discount")
@@ -107,6 +107,15 @@ RSpec.describe "discount index" do
         expect(page).to have_content("Discount was successfully deleted.")
         expect(page).to_not have_css("#discount_#{@discount_1.id}")
         expect(page).to have_css("#discount_#{@discount_2.id}")
+      end
+      it "US9 I see a section with a header of 'Upcoming Holidays' In this section the name and date of the next 3 upcoming US holidays are listed." do
+        save_and_open_page
+        expect(page).to have_content("Upcoming Holidays")
+        within "#upcoming_holidays" do
+          expect(page).to have_content("Labor Day")
+          expect(page).to have_content("Columbus Day")
+          expect(page).to have_content("Veterans Day")
+        end
       end
     end
   end
