@@ -10,6 +10,7 @@ RSpec.describe BulkDiscount, type: :model do
   end
   describe "relationships" do
     it { belong_to :merchant }
+    it { belong_to(:invoice_item).optional}
   end
 
   describe "instance methods" do
@@ -19,7 +20,7 @@ RSpec.describe BulkDiscount, type: :model do
       
       @item_1 = Item.create!(name: "Shampoo", description: "This washes your hair", unit_price: 10, merchant_id: @merchant1.id)
       @item_2 = Item.create!(name: "Conditioner", description: "This makes your hair shiny", unit_price: 10, merchant_id: @merchant1.id)
-      @item_3 = Item.create!(name: "Brush", description: "This brushes your hair", unit_price: 5, merchant_id: @merchant1.id)
+      @item_3 = Item.create!(name: "Brush", description: "This brushes your hair", unit_price: 15, merchant_id: @merchant1.id)
 
       @bulk_discount1 = BulkDiscount.create!(name: "10% off 10 items", percentage: 0.1, quantity: 10, merchant_id: @merchant1.id)
       @bulk_discount2 = BulkDiscount.create!(name: "20% off 15 items", percentage: 0.2, quantity: 15, merchant_id: @merchant1.id)
@@ -28,6 +29,11 @@ RSpec.describe BulkDiscount, type: :model do
     it "can convert a decimal to a percent" do
       expect(@bulk_discount1.decimal_to_percentage).to eq("10%")
       expect(@bulk_discount2.decimal_to_percentage).to eq("20%")
+    end
+   
+    it "can find the best discount for an invoice item" do
+      expect(@item_1.best_discount(10)).to eq(@bulk_discount1)
+      expect(@item_3.best_discount(15)).to eq(@bulk_discount2)
     end
   end
 end
