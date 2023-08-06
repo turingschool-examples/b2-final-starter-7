@@ -19,4 +19,11 @@ class Item < ApplicationRecord
     .order("money desc", "created_at desc")
     .first&.created_at&.to_date
   end
+
+  def best_discount(quantity)
+    merchant.bulk_discounts
+    .where('quantity <= ?', quantity)
+    .order(percentage: :desc)
+    .first
+  end
 end

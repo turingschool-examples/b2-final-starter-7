@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "merchant dashboard" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
+    @merchant2 = Merchant.create!(name: "Jewelry Jar")
 
     @customer_1 = Customer.create!(first_name: "Joey", last_name: "Smith")
     @customer_2 = Customer.create!(first_name: "Cecilia", last_name: "Jones")
@@ -39,6 +40,10 @@ RSpec.describe "merchant dashboard" do
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_6.id)
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
+
+    @bulk_discount_1 = BulkDiscount.create!(name: "Fire Sale", percentage: 0.1, quantity: 10, merchant_id: @merchant1.id)
+    @bulk_discount_2 = BulkDiscount.create!(name: "Going Out of Business", percentage: 0.25, quantity: 20, merchant_id: @merchant1.id)
+    @bulk_discount_3 = BulkDiscount.create!(name: "Spring Fling", percentage: 0.30, quantity: 100, merchant_id: @merchant2.id)
 
     visit merchant_dashboard_index_path(@merchant1)
   end
@@ -118,5 +123,18 @@ RSpec.describe "merchant dashboard" do
 
   it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
     expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
+  end
+
+  it "shows a link to the merchant's bulk discounts index" do
+    expect(page).to have_link("bulk discounts")
+
+    click_link "bulk discounts"
+    
+    expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1)) 
+    expect(page).to have_content('Bulk Discounts Index')
+    expect(page).to have_content("Percentage: " + @bulk_discount_1.decimal_to_percentage)
+    expect(page).to have_content("Quantity: #{@bulk_discount_1.quantity}")
+    expect(page).not_to have_content("Quantity: #{@bulk_discount_3.name}%")
+    expect(page).to have_link("Discount Info", :href=>merchant_bulk_discount_path(@merchant1, @bulk_discount_1))
   end
 end

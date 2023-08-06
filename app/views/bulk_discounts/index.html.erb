@@ -1,0 +1,19 @@
+<h1>Bulk Discounts Index</h1>
+
+<%= link_to "Create New Discount", new_merchant_bulk_discount_path(@merchant), class: "create-new-discount-link" %>
+
+<% if @bulk_discounts.present? %>
+  <div class="bulk-discounts-list">
+    <% @bulk_discounts.each do |bulk_discount| %>
+      <div class="bulk-discount-item">
+        <h2><%= bulk_discount.name %></h2>
+        <p>Percentage: <%= bulk_discount.decimal_to_percentage %></p>
+        <p>Quantity: <%= bulk_discount.quantity %></p>
+        <p><%= link_to "Discount Info", merchant_bulk_discount_path(@merchant, bulk_discount) %></p>
+        <p><%= link_to "Delete", merchant_bulk_discount_path(merchant_id: bulk_discount.merchant_id, id: bulk_discount.id), method: :delete, data: { turbo_method: :delete, turbo_confirm: "Are you sure?" } %></p>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No bulk discounts found for this merchant.</p>
+<% end %>
