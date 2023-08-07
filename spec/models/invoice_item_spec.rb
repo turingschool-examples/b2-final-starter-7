@@ -89,7 +89,6 @@ RSpec.describe InvoiceItem, type: :model do
         expect(@ii_6.original_price).to eq(3680)
         expect(@ii_7.original_price).to eq(65)
         expect(@ii_8.original_price).to eq(1600)
-
       end
     end
 
