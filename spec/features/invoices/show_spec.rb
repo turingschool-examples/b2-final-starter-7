@@ -29,7 +29,6 @@ RSpec.describe "invoices show" do
     @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2)
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2)
-
     @invoice_8 = Invoice.create!(customer_id: @customer_6.id, status: 1)
 
     @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
@@ -51,6 +50,13 @@ RSpec.describe "invoices show" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 0, invoice_id: @invoice_6.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_7.id)
     @transaction8 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_8.id)
+
+
+    @discount_1 = @merchant1.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 5)
+    @discount_2 = @merchant1.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10)
+    @discount_3 = @merchant1.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 20)
+    @discount_4 = @merchant2.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 10)
+    @discount_5 = @merchant2.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 20)
   end
 
   it "shows the invoice information" do
@@ -104,5 +110,23 @@ RSpec.describe "invoices show" do
     visit merchant_invoice_path(@merchant1, @invoice_1)
     
     expect(page).to have_content(@invoice_1.total_discounted_revenue)
+  end
+
+  it "has a link to the discount associated with each invoice item" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+    within("#the-status-#{@ii_1.id}") do
+      expect(page).to have_link("Discount #{@discount_1.id}")
+    end
+
+    within("#the-status-#{@ii_11.id}") do
+      expect(page).to have_link("Discount #{@discount_2.id}")
+    end
+  end
+
+  it "does not display a discount link next to invoice item if none were eligible" do
+    visit merchant_invoice_path(@merchant1, @invoice_2)
+    within("#the-status-#{@ii_2.id}") do
+      expect(page).to_not have_link
+    end
   end
 end

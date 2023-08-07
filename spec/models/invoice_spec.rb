@@ -40,8 +40,6 @@ RSpec.describe Invoice, type: :model do
       @discount_3 = @merchant1.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 25)
       @discount_4 = @merchant2.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 20)
       @discount_5 = @merchant2.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 30)
-      
-
     end
 
     describe "#total_revenue" do
