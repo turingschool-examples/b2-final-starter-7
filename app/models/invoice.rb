@@ -17,20 +17,20 @@ class Invoice < ApplicationRecord
 
   def revenue_discounted
 
-    @total = 0.0
+    total = 0.0
 
     invoice_items.each do |item|
 
       cost = item.unit_price
 
-      best_discount = bulk_discounts.where("quantity_threshold <= ?", item.quantity).order(quantity_threshold: :desc).first
+      best_discount = bulk_discounts.where("quantity_threshold <= ?", item.quantity).order(percentage_discount: :desc).first
 
       if best_discount 
         cost -= (cost * (best_discount.percentage_discount / 100.0))
       end 
       
-      @total += cost * item.quantity
+      total += cost * item.quantity
     end 
-    @total
+    total
   end
 end
