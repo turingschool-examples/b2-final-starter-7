@@ -11,9 +11,9 @@ describe "Bulk Discounts" do
     @customer = Customer.create(first_name: "John", last_name: "Doe", address: "123 Main St", city: "Anytown", state: "CA", zip: 12345)
     @invoice = Invoice.create(customer: @customer, status: 1) # Assuming status 1 is for "completed" invoices
 
-    @invoice.invoice_items.create(item: @item1, quantity: 2, unit_price: @item1.unit_price)
-    @invoice.invoice_items.create(item: @item2, quantity: 1, unit_price: @item2.unit_price)
-    @invoice.invoice_items.create(item: @item3, quantity: 3, unit_price: @item3.unit_price)
+    @invoice.invoice_items.create(item: @item1, quantity: 10, unit_price: @item1.unit_price)
+    @invoice.invoice_items.create(item: @item2, quantity: 5, unit_price: @item2.unit_price)
+    @invoice.invoice_items.create(item: @item3, quantity: 20, unit_price: @item3.unit_price)
 
     @transaction1 = Transaction.create(credit_card_number: 1234567812345678, credit_card_expiration_date: "08/25", result: 1, invoice: @invoice)
     @transaction2 = Transaction.create(credit_card_number: 8765432187654321, credit_card_expiration_date: "12/24", result: 1, invoice: @invoice)
@@ -119,7 +119,7 @@ describe "Bulk Discounts" do
       it "Then I see the bulk discount's quantity threshold and percentage discount" do
 
         visit merchant_bulk_discount_path(@m1, @discount1)
-
+        save_and_open_page
         expect(page).to have_content(@discount1.name)
         expect(page).to have_content(@discount1.percentage)
         expect(page).to have_content(@discount1.quantity_threshold)
@@ -151,10 +151,8 @@ describe "Bulk Discounts" do
                     fill_in "Percentage", with: 25
                     fill_in "Quantity threshold", with: 6
 
-
                     click_button "Submit"
 
-                    save_and_open_page
                     expect(current_path).to eq(merchant_bulk_discount_path(@m1, @discount1))
 
                     expect(page).to have_content("25 Percent off christmas special")
@@ -176,11 +174,11 @@ describe "Bulk Discounts" do
     describe "When I visit my merchant invoice show page" do
       describe "Then I see the total revenue for my merchant from this invoice (not including discounts)" do
         it "And I see the total discounted revenue for my merchant from this invoice which includes bulk discounts in the calculation" do
-
+          visit merchant_invoice_path(@m1, @invoice)
+          save_and_open_page
+          # expect(page).to have_content()
         end
       end
     end
   end
 end
-
-
