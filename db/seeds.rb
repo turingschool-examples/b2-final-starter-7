@@ -12,7 +12,7 @@ InvoiceItem.destroy_all
 Merchant.destroy_all
 Transaction.destroy_all
 
-if Rails.env.development?
+#if Rails.env.development?
   @merchant1 = Merchant.create!(name: "Hair Care")
   @merchant2 = Merchant.create!(name: "Jewelry")
 
@@ -89,7 +89,7 @@ if Rails.env.development?
   @discounts = [@discount_1, @discount_2, @discount_3, @discount_4]
 
 elsif Rails.env.production?
-  Rake::Task["csv_load:all"].invoke
+  #Rake::Task["csv_load:all"].invoke
 else
   # If not development or production
 end
