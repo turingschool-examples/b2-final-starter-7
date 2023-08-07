@@ -91,5 +91,5 @@ Transaction.destroy_all
 # elsif Rails.env.production?
 #   Rake::Task["csv_load:all"].invoke
 # else
-#   # If not development or production
+#   #If not development or production
 # end
