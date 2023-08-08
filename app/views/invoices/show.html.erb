@@ -60,7 +60,7 @@
 
 <p>Invoice item ID# <%= invoice_item.id %>
 <% if invoice_item.discount%>
-  <%=link_to "View Discount ##{invoice_item.discount} that was applied to this invoice item",merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.discount) %>
+  <%=link_to "View discount ##{invoice_item.discount} that was applied to this invoice item",merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.discount) %>
 <% else%>
   No discount was applied to this invoice item
   <% end %>

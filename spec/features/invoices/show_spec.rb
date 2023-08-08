@@ -98,6 +98,7 @@ RSpec.describe "invoices show" do
     within("#current-invoice-status") do
       expect(page).to_not have_content("in progress")
     end
+
   end
 
   #US 6
@@ -117,7 +118,18 @@ RSpec.describe "invoices show" do
 
   #US 7
   it "Shows all the discounts that were applied to each invoice item and a link to that merchant's discount's show page" do
+    
+    bulk_discount1 = BulkDiscount.create!(merchant_id:
+    @merchant1.id, percentage_discount: 20, quantity_threshold: 10, tag: "20% off")
+    
+    visit merchant_invoice_path(@merchant1, @invoice_1)
 
+    expect(page).to have_content("Invoice item ID# #{@ii_1.id} No discount was applied to this invoice item")
+    expect(page).to have_content("Invoice item ID# #{@ii_11.id} View discount ##{bulk_discount1.id} that was applied to this invoice item")
+    click_link("View discount ##{bulk_discount1.id} that was applied to this invoice item")
+
+    #The current path should be the merchant discount show page
+    expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, bulk_discount1))
   end
 
 end
