@@ -30,6 +30,16 @@ class DiscountsController < ApplicationController
     redirect_to merchant_discounts_path(@merchant)
   end
 
+  def update
+    if @discount.update(discount_params)
+      redirect_to merchant_discount_path(@merchant, @discount)
+      flash[:success] = "Discount Successfully Updated!"
+    else
+      flash[:danger] = "Discount Not Updated: Fields cannot be empty"
+      redirect_to edit_merchant_discount_path(@merchant, @discount)
+    end
+  end
+  
 private
 
   def discount_params
