@@ -20,7 +20,7 @@ class Invoice < ApplicationRecord
     total = 0.0
 
     invoice_items.each do |item|
-
+      
       cost = item.unit_price
 
 
@@ -38,7 +38,6 @@ class Invoice < ApplicationRecord
   end
 
   def discount_finder
-
 
     invoice_items.select("invoice_items.*, (SELECT id FROM bulk_discounts WHERE quantity_threshold <= invoice_items.quantity ORDER BY percentage_discount DESC LIMIT 1) AS discount")
 
