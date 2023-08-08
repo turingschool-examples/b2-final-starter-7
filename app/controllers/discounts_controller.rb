@@ -1,5 +1,5 @@
 class DiscountsController < ApplicationController
-  before_action :find_merchant_and_discount, only: [:show]
+  before_action :find_merchant_and_discount, only: [:show, :destroy]
   before_action :find_merchant, only: [:index, :new, :create]
 
   #this helps dry right?
@@ -23,6 +23,11 @@ class DiscountsController < ApplicationController
       flash[:danger] = "Discount Not created: Required information missing"
       render :new
     end
+  end
+
+  def destroy
+    @discount.destroy
+    redirect_to merchant_discounts_path(@merchant)
   end
 
 private
