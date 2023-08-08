@@ -9,7 +9,7 @@
   <%= link_to "Add New Discount", new_merchant_discount_path(@merchant) %>
   <ul id="discount-list">
     <% @merchant.discounts.each do |discount| %>
-      <li><%= link_to "Discount: #{number_to_percentage(discount.percent_discount, precision: 0)} - Quantity Threshold: #{discount.threshold_quantity}", merchant_discount_path(@merchant, discount.id) %></li>
+      <li><%= link_to "Discount: #{number_to_percentage(discount.percent_discount, precision: 0)} - Quantity Threshold: #{discount.threshold_quantity}", merchant_discount_path(@merchant, discount.id) %><%= button_to "Delete", merchant_discount_path(@merchant, discount.id), method: :delete, id: "delete-#{discount.id}" %></li>
     <% end %>
   </ul>
 </body>
