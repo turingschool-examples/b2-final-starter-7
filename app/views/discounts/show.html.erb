@@ -1,0 +1,6 @@
+<%= render partial: "shared/nav" %>
+
+
+<h3>My Discount</h3>
+<h4>Discount: <%= number_to_percentage(@discount.percent_discount, precision: 0) %></h4>
+<h4>Quantity Threshold: <%= @discount.threshold_quantity %></h4>
