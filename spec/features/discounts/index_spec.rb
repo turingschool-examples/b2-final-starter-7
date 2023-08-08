@@ -83,5 +83,14 @@ RSpec.describe "Merchant's Discounts Index Page", type: :feature do
 
       expect(current_path).to eq(new_merchant_discount_path(@merchant1))
     end
+
+    it "hak link next to discount to delete" do
+      within("#discount-list") do
+        expect(page).to have_button("Delete", id: "delete-#{@discount1.id}", count: 1)
+        expect(page).to have_button("Delete", id: "delete-#{@discount2.id}", count: 1)
+        expect(page).to have_button("Delete", id: "delete-#{@discount3.id}", count: 1)
+        expect(page).to have_button("Delete", id: "delete-#{@discount4.id}", count: 1)
+      end
+    end
   end
 end
