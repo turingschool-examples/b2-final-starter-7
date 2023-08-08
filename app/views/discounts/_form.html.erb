@@ -1,0 +1,11 @@
+<body>
+  <%= form_with model: @discount , url: url, method: method, id: id, local: true do |form| %>
+    <h3>Add a New Discount for <%= @merchant.name %></h3>
+    <%= form.label :percent_discount, "Discount Percent:" %>
+    <%= form.number_field :percent_discount, value: @discount&.percent_discount %> <br/><br/>
+    <%= form.label :threshold_quantity, "Quantity Threshold:" %>
+    <%= form.number_field :threshold_quantity, value: @discount&.threshold_quantity %> <br/><br/>
+    <%= form.hidden_field :merchant_id, value: @merchant.id %>
+    <%= form.submit button %>
+  <% end %>
+</body>
