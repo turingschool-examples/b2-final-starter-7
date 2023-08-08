@@ -11,7 +11,9 @@
   <br>
 
   <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
-  <p>Total Revenue: <%= @invoice.total_revenue %></p>
+  <p>Total Revenue: $<%= @invoice.total_revenue %></p>
+  <p>Total Discounted Revenue: $<%= @invoice.revenue_discounted %></p>
+
 
 
   <h4>Customer:</h4>
@@ -49,3 +51,22 @@
   </table>
 
 </body>
+
+<br>
+<br>
+<h3>Invoice Item Discounts<h3>
+<br>
+<% @invoice.discount_finder.each do |invoice_item| %>
+
+<p>Invoice item ID# <%= invoice_item.id %>
+<% if invoice_item.discount%>
+  <%=link_to "View Discount ##{invoice_item.discount} that was applied to this invoice item",merchant_bulk_discount_path(invoice_item.item.merchant, invoice_item.discount) %>
+<% else%>
+  No discount was applied to this invoice item
+  <% end %>
+</p>
+<% end %>
+
+  
+
+

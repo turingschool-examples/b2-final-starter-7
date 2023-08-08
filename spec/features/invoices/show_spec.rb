@@ -102,8 +102,22 @@ RSpec.describe "invoices show" do
 
   #US 6
   it "displays the total revenue from this invoice including and not including the merchants discounts" do
+
+    invoice_item_12 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 10, unit_price: 10, status: 2)
+
+    bulk_discount1 = BulkDiscount.create!(merchant_id: @merchant1.id, percentage_discount: 20, quantity_threshold: 10, tag: "20% off")
+
+
     visit merchant_invoice_path(@merchant1, @invoice_1)
-    #save_and_open_page
+
+    expect(page).to have_content("Total Discounted Revenue: $227.6")
+
+    
+  end
+
+  #US 7
+  it "Shows all the discounts that were applied to each invoice item and a link to that merchant's discount's show page" do
+
   end
 
 end
