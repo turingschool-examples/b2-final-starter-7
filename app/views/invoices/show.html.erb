@@ -10,9 +10,14 @@
   </div>
   <br>
 
-  <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
-  <p>Total Revenue: <%= @invoice.total_revenue %></p>
-
+  
+  <div id="invoice-info">
+    <p>Total Revenue: <%= @invoice.total_revenue %></p>
+    <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
+    <p>Total Revenue: <%= number_to_currency(@invoice.total_revenue) %></p>
+    <p>Total Discounts Applied: <b id="total-discount">(</b> <%= number_to_currency(@invoice.total_discount.round(2)) %> <b id="total-discount">)</b></p>
+    <p>Total Revenue After Discounts: <%= number_to_currency(@invoice.total_discounted_revenue.round(2)) %></p>
+  </div>
 
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>

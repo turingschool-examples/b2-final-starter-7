@@ -29,7 +29,6 @@ RSpec.describe "invoices show" do
     @invoice_5 = Invoice.create!(customer_id: @customer_4.id, status: 2)
     @invoice_6 = Invoice.create!(customer_id: @customer_5.id, status: 2)
     @invoice_7 = Invoice.create!(customer_id: @customer_6.id, status: 2)
-
     @invoice_8 = Invoice.create!(customer_id: @customer_6.id, status: 1)
 
     @ii_1 = InvoiceItem.create!(invoice_id: @invoice_1.id, item_id: @item_1.id, quantity: 9, unit_price: 10, status: 2)
@@ -106,14 +105,11 @@ RSpec.describe "invoices show" do
   end
 
   it "shows total discount for invoice" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+  
     within("#invoice-info") do
-      expect(page).to have_content(@invoice_1.total_discount)
-    end
-  end
-
-  it "shows total discounted revenue" do
-    within("#invoice-info") do
-      expect(page).to have_content(@invoice_1.total_discounted_revenue)
+      expect(page).to have_content(@invoice_1.total_discount.round(2))
+      expect(page).to have_content(@invoice_1.total_discounted_revenue.round(2))
     end
   end
 
