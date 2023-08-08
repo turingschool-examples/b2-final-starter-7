@@ -9,15 +9,11 @@ describe "Bulk Discounts" do
     @item3 = @m1.items.create(name: "Item 3", description: "Description for Item 3", unit_price: 20.0)
 
     @customer = Customer.create(first_name: "John", last_name: "Doe", address: "123 Main St", city: "Anytown", state: "CA", zip: 12345)
-    @invoice = Invoice.create(customer: @customer, status: 1) # Assuming status 1 is for "completed" invoices
+    @invoice = Invoice.create(customer: @customer, status: 1, created_at: "2012-03-27 14:54:09") # Assuming status 1 is for "completed" invoices
 
-    @invoice.invoice_items.create(item: @item1, quantity: 10, unit_price: @item1.unit_price)
-    @invoice.invoice_items.create(item: @item2, quantity: 5, unit_price: @item2.unit_price)
-    @invoice.invoice_items.create(item: @item3, quantity: 20, unit_price: @item3.unit_price)
-
-    @transaction1 = Transaction.create(credit_card_number: 1234567812345678, credit_card_expiration_date: "08/25", result: 1, invoice: @invoice)
-    @transaction2 = Transaction.create(credit_card_number: 8765432187654321, credit_card_expiration_date: "12/24", result: 1, invoice: @invoice)
-    @transaction3 = Transaction.create(credit_card_number: 5678123456781234, credit_card_expiration_date: "06/23", result: 1, invoice: @invoice)
+    @invoice.invoice_items.create(item: @item1, quantity: 10, unit_price: @item1.unit_price, status: 2)
+    @invoice.invoice_items.create(item: @item2, quantity: 5, unit_price: @item2.unit_price, status: 2)
+    @invoice.invoice_items.create(item: @item3, quantity: 20, unit_price: @item3.unit_price, status: 2)
   end
 
   #1: Merchant Bulk Discounts Index
@@ -175,10 +171,15 @@ describe "Bulk Discounts" do
       describe "Then I see the total revenue for my merchant from this invoice (not including discounts)" do
         it "And I see the total discounted revenue for my merchant from this invoice which includes bulk discounts in the calculation" do
           visit merchant_invoice_path(@m1, @invoice)
-          save_and_open_page
-          # expect(page).to have_content()
+
+          expect(page).to have_content("Total Revenue: 575.0")
+          expect(page).to have_content("Total Discounted Revenue: 475.0")
         end
       end
     end
   end
+
+  
+
+
 end
