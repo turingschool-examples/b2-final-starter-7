@@ -49,7 +49,7 @@ RSpec.describe "Merchant's Discounts Index Page", type: :feature do
       visit merchant_discounts_path(@merchant1)
     end
 
-    it "Shows all my discounts with percentage of" do
+    it "shows discounts with percentage of" do
       within("#discount-list") do
         expect(page).to have_content("Discount: #{@discount1.percent_discount}%", count: 1)
         expect(page).to have_content("Discount: #{@discount2.percent_discount}%", count: 1)
@@ -58,7 +58,7 @@ RSpec.describe "Merchant's Discounts Index Page", type: :feature do
       end
     end
 
-    it "Shows all my discounts with quantity threshold " do
+    it "dhows discounts with quantity threshold " do
       within("#discount-list") do
         expect(page).to have_content("- Quantity Threshold: #{@discount1.threshold_quantity}")
         expect(page).to have_content("- Quantity Threshold: #{@discount2.threshold_quantity}")
@@ -67,13 +67,21 @@ RSpec.describe "Merchant's Discounts Index Page", type: :feature do
       end
     end
 
-    it "Links to each Discount's show page " do
+    it "links to each discount's show page " do
       within("#discount-list") do
         expect(page).to have_link(href: merchant_discount_path(@merchant1, @discount1), count: 1)
         expect(page).to have_link(href: merchant_discount_path(@merchant1, @discount2), count: 1)
         expect(page).to have_link(href: merchant_discount_path(@merchant1, @discount3), count: 1)
         expect(page).to have_link(href: merchant_discount_path(@merchant1, @discount4), count: 1)
       end
+    end
+
+    it "has link to create a new discount" do
+      expect(page).to have_link("Add New Discount", href: new_merchant_discount_path(@merchant1))
+
+      click_link("Add New Discount")
+
+      expect(current_path).to eq(new_merchant_discount_path(@merchant1))
     end
   end
 end
