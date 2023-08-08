@@ -1,5 +1,5 @@
 class DiscountsController < ApplicationController
-  before_action :find_merchant_and_discount, only: [:show, :destroy]
+  before_action :find_merchant_and_discount, only: [:show, :update, :edit, :destroy]
   before_action :find_merchant, only: [:index, :new, :create]
 
   #this helps dry right?
@@ -30,13 +30,16 @@ class DiscountsController < ApplicationController
     redirect_to merchant_discounts_path(@merchant)
   end
 
+  def edit
+  end
+
   def update
     if @discount.update(discount_params)
       redirect_to merchant_discount_path(@merchant, @discount)
       flash[:success] = "Discount Successfully Updated!"
     else
-      flash[:danger] = "Discount Not Updated: Fields cannot be empty"
-      redirect_to edit_merchant_discount_path(@merchant, @discount)
+      flash.now[:danger] = "Discount Not Updated: Fields cannot be empty"
+      render :edit
     end
   end
   

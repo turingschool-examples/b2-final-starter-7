@@ -14,11 +14,11 @@ RSpec.describe 'Merchant Discount Show Page', type: :feature do
     expect(page).to have_content("Quantity Threshold: #{@discount1.threshold_quantity}", count: 1)
   end
 
-  it "has update button" do
-    expect(page).to have_button("Update")
+  it "has edit button" do
+    expect(page).to have_button("Edit Discount")
 
-    find("#update-discount-#{@discount1.id}").click
+    find("#edit-discount-#{@discount1.id}").click
 
-    expect(current_path).to eq(update_merchant_discount_path(@merchant1, @discount1))
+    expect(current_path).to eq(edit_merchant_discount_path(@merchant1, @discount1))
   end
 end
