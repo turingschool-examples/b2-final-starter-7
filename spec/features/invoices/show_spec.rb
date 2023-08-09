@@ -113,4 +113,10 @@ RSpec.describe "invoices show" do
     end
   end
 
+  it "displays links to applied bulk discounts next to invoice items" do
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+  
+    expect(page).to have_link("Applied Discount: #{@discount1.percent_discount}% off", href: merchant_discount_path(@merchant1, @discount1))
+  end
+
 end
