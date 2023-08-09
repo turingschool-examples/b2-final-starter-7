@@ -30,13 +30,28 @@ RSpec.describe InvoiceItem, type: :model do
       @i3 = Invoice.create!(customer_id: @c2.id, status: 2)
       @i4 = Invoice.create!(customer_id: @c3.id, status: 2)
       @i5 = Invoice.create!(customer_id: @c4.id, status: 2)
-      @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 1, unit_price: 10, status: 0)
+      @ii_1 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_1.id, quantity: 5, unit_price: 10, status: 0)
       @ii_2 = InvoiceItem.create!(invoice_id: @i1.id, item_id: @item_2.id, quantity: 1, unit_price: 8, status: 0)
-      @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 2)
+      @ii_3 = InvoiceItem.create!(invoice_id: @i2.id, item_id: @item_3.id, quantity: 9, unit_price: 5, status: 2)
       @ii_4 = InvoiceItem.create!(invoice_id: @i3.id, item_id: @item_3.id, quantity: 1, unit_price: 5, status: 1)
+
+      @discount1 = @m1.discounts.create!(percent_discount: 10, threshold_quantity: 5)
+      @discount2 = @m1.discounts.create!(percent_discount: 15, threshold_quantity: 9)
     end
+
     it 'incomplete_invoices' do
       expect(InvoiceItem.incomplete_invoices).to eq([@i1, @i3])
+    end
+
+    # normaly it only returns the highest discount but now its trying to give both again
+    it 'returns discounts that meet the threshold quantity' do
+      expect(@ii_1.applied_discounts).to contain_exactly(@discount1)
+      expect(@ii_3.applied_discounts).to contain_exactly(@discount1, @discount2)
+    end
+
+    it 'does not return discounts that do not meet the threshold quantity' do
+      expect(@ii_2.applied_discounts).to be_empty
+      expect(@ii_4.applied_discounts).to be_empty
     end
   end
 end
