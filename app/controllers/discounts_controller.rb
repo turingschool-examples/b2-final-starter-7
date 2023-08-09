@@ -5,7 +5,8 @@ class DiscountsController < ApplicationController
   #this helps dry right?
 
   def index
-    @holidays = HolidaysService.new.next_three_holidays
+    holidays_service = HolidaysService.new
+    @holidays = holidays_service.next_three_holidays
   end
 
   def show
