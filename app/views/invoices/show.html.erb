@@ -46,7 +46,10 @@
                 <%= f.select :status, Invoice.statuses.keys, selected: "#{@invoice.status}" %>
                 <%= f.submit 'Update Invoice' %>
               <% end %>
-              </td>
+              <% i.applied_discounts.each do |discount| %>
+                <%= link_to "Applied Discount: #{discount.percent_discount}% off", merchant_discount_path(@merchant, discount) %>
+              <% end %>
+            </td>
           </tr>
         </section>
       <% end %>
