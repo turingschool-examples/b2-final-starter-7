@@ -39,8 +39,6 @@ RSpec.describe "merchant bulk discount" do
     @transaction5 = Transaction.create!(credit_card_number: 102938, result: 1, invoice_id: @invoice_6.id)
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
-
-    visit merchant_dashboard_index_path(@merchant1)
   end
 
   describe "US 1 - I see a link to view all my discounts" do
@@ -48,6 +46,8 @@ RSpec.describe "merchant bulk discount" do
       it "I see all of my bulk discounts including their percentage discount and quantity thresholds and each bulk discount listed includes a link to its show page" do
         @bulk_discount_1 = BulkDiscount.create!(quantity_threshold: 10, percent_discount: 20, merchant_id: @merchant1.id)
         @bulk_discount_2 = BulkDiscount.create!(quantity_threshold: 15, percent_discount: 30, merchant_id: @merchant1.id)
+
+        visit merchant_dashboard_index_path(@merchant1)
 
         expect(page).to have_link("Bulk Discounts")
 
@@ -62,6 +62,43 @@ RSpec.describe "merchant bulk discount" do
         expect(page).to have_content(@bulk_discount_2.quantity_threshold)
         expect(page).to have_content(@bulk_discount_2.percent_discount)
         expect(page).to have_link("Bulk Discount #{@bulk_discount_2.id}")
+      end
+    end
+  end
+
+  describe "US 2 - Bulk Discount Create" do
+    describe "I see a link to create a new discount. When I click this link, I am taken to a new page where I see a form to add a new bulk discount, I fill in the form with valid data" do
+      it "I am redirected back to the bulk discount index and I see my new bulk discount listed" do
+        @bulk_discount_1 = BulkDiscount.create!(quantity_threshold: 10, percent_discount: 20, merchant_id: @merchant1.id)
+        @bulk_discount_2 = BulkDiscount.create!(quantity_threshold: 15, percent_discount: 30, merchant_id: @merchant1.id)
+
+        visit merchant_bulk_discounts_index_path(@merchant1)
+
+        expect(page).to have_link("Create New Bulk Discount")
+
+        click_link("Create New Bulk Discount")
+
+        expect(current_path).to eq(new_merchant_bulk_discount_path(@merchant1))
+
+        fill_in "Quantity Threshold", with: "20"
+        fill_in "Percent Discount", with: "40"
+        click_button "Submit"
+
+        expect(current_path).to eq(merchant_bulk_discounts_index_path(@merchant1))
+
+        save_and_open_page
+
+        expect(page).to have_content(@bulk_discount_1.quantity_threshold)
+        expect(page).to have_content(@bulk_discount_1.percent_discount)
+        expect(page).to have_link("Bulk Discount #{@bulk_discount_1.id}")
+
+        expect(page).to have_content(@bulk_discount_2.quantity_threshold)
+        expect(page).to have_content(@bulk_discount_2.percent_discount)
+        expect(page).to have_link("Bulk Discount #{@bulk_discount_2.id}")
+
+        expect(page).to have_content("20")
+        expect(page).to have_content("40")
+        expect(page).to have_link("Bulk Discount")
       end
     end
   end

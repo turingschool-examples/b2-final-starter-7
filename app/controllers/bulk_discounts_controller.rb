@@ -13,6 +13,10 @@ class BulkDiscountsController < ApplicationController
   end
 
   def create
+    BulkDiscount.create!(quantity_threshold: params[:quantity_threshold],
+      percent_discount: params[:percent_discount],
+      merchant: @merchant)
+    redirect_to merchant_bulk_discounts_index_path(@merchant)
   end
 
   def delete
