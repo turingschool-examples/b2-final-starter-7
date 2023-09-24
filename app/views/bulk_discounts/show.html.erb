@@ -1,0 +1,11 @@
+<%= render partial: "shared/nav" %>
+
+<body>
+  <div class="row">
+    <br>
+    <h3> <%= "Bulk Discount #{@bulk_discount.id}" %></h3>
+  </div>
+
+  <p>Quantity Threshold: <%= (@bulk_discount.quantity_threshold) %></p>
+  <p>Percent Discount: <%= (@bulk_discount.percent_discount) %></p>
+</body>

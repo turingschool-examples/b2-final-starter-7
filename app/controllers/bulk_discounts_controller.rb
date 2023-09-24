@@ -1,6 +1,4 @@
 class BulkDiscountsController < ApplicationController
-  before_action :find_invoice_and_merchant, only: [:show, :update]
-
   def index
     @merchant = Merchant.find(params[:merchant_id])
     @bulk_discounts = @merchant.bulk_discounts
