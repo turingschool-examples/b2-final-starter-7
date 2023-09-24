@@ -86,8 +86,6 @@ RSpec.describe "merchant bulk discount" do
 
         expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
 
-        save_and_open_page
-
         expect(page).to have_content(@bulk_discount_1.quantity_threshold)
         expect(page).to have_content(@bulk_discount_1.percent_discount)
         expect(page).to have_link("Bulk Discount #{@bulk_discount_1.id}")
@@ -99,6 +97,29 @@ RSpec.describe "merchant bulk discount" do
         expect(page).to have_content("20")
         expect(page).to have_content("40")
         expect(page).to have_link("Bulk Discount")
+      end
+    end
+  end
+
+  describe "US 3 - Bulk Discount Delete" do
+    describe "On my index page, next to each bulk discount I see a button to delete it" do
+      it "When I click this button I am redirected back to the bulk discounts index page and I no longer see the discount listed" do
+        @bulk_discount_1 = BulkDiscount.create!(quantity_threshold: 10, percent_discount: 20, merchant_id: @merchant1.id)
+        @bulk_discount_2 = BulkDiscount.create!(quantity_threshold: 15, percent_discount: 30, merchant_id: @merchant1.id)
+
+        visit(merchant_bulk_discounts_path(@merchant1))
+
+        expect(page).to have_button("Delete Bulk Discount #{@bulk_discount_1.id}")
+        expect(page).to have_button("Delete Bulk Discount #{@bulk_discount_2.id}")
+
+        click_button("Delete Bulk Discount #{@bulk_discount_2.id}")
+
+        expect(current_path).to eq(merchant_bulk_discounts_path(@merchant1))
+
+        expect(page).to have_content(@bulk_discount_1.quantity_threshold)
+        expect(page).to have_content(@bulk_discount_1.percent_discount)
+        expect(page).to have_link("Bulk Discount #{@bulk_discount_1.id}")
+        expect(page).to have_button("Delete Bulk Discount #{@bulk_discount_1.id}")
       end
     end
   end
