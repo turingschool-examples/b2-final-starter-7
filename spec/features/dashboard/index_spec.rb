@@ -121,7 +121,7 @@ RSpec.describe "merchant dashboard" do
     
   end
 
-  it "I see a link to view all my discounts" do
+  it "I see a link to view all my bulk discounts" do
 
     within("#all_discounts-#{@merchant1.id}") do
       expect(page).to have_link("#{@merchant1.name}'s Bulk Discounts")

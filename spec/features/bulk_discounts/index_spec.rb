@@ -40,22 +40,28 @@ RSpec.describe "merchant dashboard" do
     @transaction6 = Transaction.create!(credit_card_number: 879799, result: 1, invoice_id: @invoice_7.id)
     @transaction7 = Transaction.create!(credit_card_number: 203942, result: 1, invoice_id: @invoice_2.id)
 
-    visit merchant_dashboard_index_path(@merchant1)
+    @bulk_discount_1 = BulkDiscount.create!(percentage_discount: 10, quantity_threshold: 20.0, merchant_id: @merchant1.id)
+    @bulk_discount_2 = BulkDiscount.create!(percentage_discount: 15, quantity_threshold: 30.0, merchant_id: @merchant1.id)
+    @bulk_discount_3 = BulkDiscount.create!(percentage_discount: 20, quantity_threshold: 40.0, merchant_id: @merchant1.id)
+
+    visit "/merchants/#{@merchant1.id}/bulk_discounts"
   end
-  xit "each bulk discount listed includes a link to its show page" do
 
-    within("#all_discounts-#{@merchant1.id}") do
-      expect(page).to have_link("#{@merchant1.name}'s Bulk Discounts")
-      click_link("Bulk Discounts")
-    end
+  it "each bulk discount listed includes a link to its show page" do
+    expect(page).to have_content(@bulk_discount_1.percentage_discount)
+    expect(page).to have_content(@bulk_discount_1.quantity_threshold)
 
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/bulk_discounts")
+    expect(page).to have_content(@bulk_discount_2.percentage_discount)
+    expect(page).to have_content(@bulk_discount_2.quantity_threshold)
 
-    #might want to add a name to bulk_discounts for referencing?
-    #I think the user stories later on define them as holidays, but being able to refer to the sale by something would be helpful
+    expect(page).to have_content(@bulk_discount_3.percentage_discount)
+    expect(page).to have_content(@bulk_discount_3.quantity_threshold)
+
     within("#bulk_show_link-#{@bulk_discount_1.id}") do
-      expect(page).to have_link("#{@bulk_discount_1.id} show page")
+      expect(page).to have_link("#{@bulk_discount_1.id}")
+      click_link("#{@bulk_discount_1.id}")
     end
 
-
+    expect(current_path).to eq("/merchants/#{@merchant1.id}/bulk_discounts/#{@bulk_discount_1.id}")
   end
+end
