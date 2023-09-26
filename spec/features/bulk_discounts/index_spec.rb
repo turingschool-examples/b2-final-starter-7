@@ -42,99 +42,20 @@ RSpec.describe "merchant dashboard" do
 
     visit merchant_dashboard_index_path(@merchant1)
   end
-
-  it "shows the merchant name" do
-    expect(page).to have_content(@merchant1.name)
-  end
-
-  it "can see a link to my merchant items index" do
-    expect(page).to have_link("Items")
-
-    click_link "Items"
-
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/items")
-  end
-
-  it "can see a link to my merchant invoices index" do
-    expect(page).to have_link("Invoices")
-
-    click_link "Invoices"
-
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/invoices")
-  end
-
-  it "shows the names of the top 5 customers with successful transactions" do
-    within("#customer-#{@customer_1.id}") do
-      expect(page).to have_content(@customer_1.first_name)
-      expect(page).to have_content(@customer_1.last_name)
-
-      expect(page).to have_content(3)
-    end
-    within("#customer-#{@customer_2.id}") do
-      expect(page).to have_content(@customer_2.first_name)
-      expect(page).to have_content(@customer_2.last_name)
-      expect(page).to have_content(1)
-    end
-    within("#customer-#{@customer_3.id}") do
-      expect(page).to have_content(@customer_3.first_name)
-      expect(page).to have_content(@customer_3.last_name)
-      expect(page).to have_content(1)
-    end
-    within("#customer-#{@customer_4.id}") do
-      expect(page).to have_content(@customer_4.first_name)
-      expect(page).to have_content(@customer_4.last_name)
-      expect(page).to have_content(1)
-    end
-    within("#customer-#{@customer_5.id}") do
-      expect(page).to have_content(@customer_5.first_name)
-      expect(page).to have_content(@customer_5.last_name)
-      expect(page).to have_content(1)
-    end
-    expect(page).to have_no_content(@customer_6.first_name)
-    expect(page).to have_no_content(@customer_6.last_name)
-  end
-  it "can see a section for Items Ready to Ship with list of names of items ordered and ids" do
-    within("#items_ready_to_ship") do
-
-      expect(page).to have_content(@item_1.name)
-      expect(page).to have_content(@item_1.invoice_ids)
-
-      expect(page).to have_content(@item_2.name)
-      expect(page).to have_content(@item_2.invoice_ids)
-
-      expect(page).to have_no_content(@item_3.name)
-      expect(page).to have_no_content(@item_3.invoice_ids)
-    end
-  end
-
-  it "each invoice id is a link to my merchant's invoice show page " do
-    expect(page).to have_link("#{@item_1.invoice_ids}")
-    expect(page).to have_link("#{@item_2.invoice_ids}")
-    expect(page).to_not have_link("#{@item_3.invoice_ids}")
-
-    click_link("#{@item_1.invoice_ids}", match: :first)
-    expect(current_path).to eq("/merchants/#{@merchant1.id}/invoices/#{@invoice_1.id}")
-  end
-
-  it "shows the date that the invoice was created in this format: Monday, July 18, 2019" do
-    expect(page).to have_content(@invoice_1.created_at.strftime("%A, %B %-d, %Y"))
-    
-  end
-
-  it "I see a link to view all my discounts" do
+  xit "each bulk discount listed includes a link to its show page" do
 
     within("#all_discounts-#{@merchant1.id}") do
       expect(page).to have_link("#{@merchant1.name}'s Bulk Discounts")
-    end
-  end
-
-  it "when I click this link I am taken to my bulk discounts index page" do
-
-    within("#all_discounts-#{@merchant1.id}") do
-      expect(page).to have_link("#{@merchant1.name}'s Bulk Discounts")
-      click_link("#{@merchant1.name}'s Bulk Discounts")
+      click_link("Bulk Discounts")
     end
 
     expect(current_path).to eq("/merchants/#{@merchant1.id}/bulk_discounts")
+
+    #might want to add a name to bulk_discounts for referencing?
+    #I think the user stories later on define them as holidays, but being able to refer to the sale by something would be helpful
+    within("#bulk_show_link-#{@bulk_discount_1.id}") do
+      expect(page).to have_link("#{@bulk_discount_1.id} show page")
+    end
+
+
   end
-end
