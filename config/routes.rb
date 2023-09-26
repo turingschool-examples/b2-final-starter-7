@@ -12,4 +12,7 @@ Rails.application.routes.draw do
     resources :merchant_status, only: [:update]
     resources :invoices, except: [:new, :destroy]
   end
+
+  get "/merchants/:id/bulk_discounts", to: "bulk_discounts#index"
+  get "/merchants/:id/bulk_discounts/:id", to: "bulk_discounts#show"
 end
