@@ -3,5 +3,8 @@ class BulkDiscountsController < ApplicationController
     @bulk_discounts = BulkDiscount.all
   end
 
+  def show
+    @bulk_discount = BulkDiscount.find(params[:id])
+  end
 
 end
