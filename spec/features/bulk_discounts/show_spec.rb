@@ -64,23 +64,23 @@ RSpec.describe "merchant bulk discount show" do
 
         expect(page).to have_content(@bulk_discount_1.quantity_threshold)
         expect(page).to have_content(@bulk_discount_1.percent_discount)
-        expect(page).to have_link("Edit Bulk Discount")
+        expect(page).to have_link("Edit Bulk Discount #{@bulk_discount_1.id}")
 
-        click_link("Edit Bulk Discount")
+        click_on("Edit Bulk Discount")
 
         expect(current_path).to eq(edit_merchant_bulk_discount_path(@merchant1, @bulk_discount_1))
 
-        save_and_open_page
-        # I see that the discounts current attributes are pre-poluated in the form
+        expect(page).to have_content("Quantity Threshold")
+        expect(page).to have_content("Percent Discount")
 
-        # I change any/all of the information
+        fill_in "Quantity Threshold", with: "8"
+        fill_in "Percent Discount", with: "22"
 
-        click_button "Submit"
-
+        click_button "Submit Edit"
         expect(current_path).to eq(merchant_bulk_discount_path(@merchant1, @bulk_discount_1))
 
-        expect(page).to have_content(@bulk_discount_1.quantity_threshold)
-        expect(page).to have_content(@bulk_discount_1.percent_discount)
+        expect(page).to have_content("Quantity Threshold: 8")
+        expect(page).to have_content("Percent Discount: 22")
         expect(page).to have_link("Edit Bulk Discount")
       end
     end
