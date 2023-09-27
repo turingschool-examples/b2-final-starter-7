@@ -19,4 +19,11 @@ class Item < ApplicationRecord
     .order("money desc", "created_at desc")
     .first&.created_at&.to_date
   end
+
+  def applicable_discount(quantity)
+    merchant.discounts
+            .where('threshold <= ?', quantity)
+            .order(threshold: :desc)
+            .first
+  end
 end

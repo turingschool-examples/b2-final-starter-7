@@ -11,8 +11,8 @@
   <br>
 
   <p> Created on: <%= @invoice.created_at.strftime("%A, %B %-d, %Y") %></p>
-  <p>Total Revenue: <%= @invoice.total_revenue %></p>
-
+  <p>Total Revenue: $<%= @invoice.total_revenue %></p>
+  <p>Discounted Revenue: $<%= @invoice.discounted_revenue %></p>
 
   <h4>Customer:</h4>
     <%= @customer.first_name %> <%= @customer.last_name %><br>
@@ -42,10 +42,15 @@
                 <%= f.submit 'Update Invoice' %>
               <% end %>
               </td>
+              <td style="text-align:center">
+              <% discount = i.item.applicable_discount(i.quantity) %>
+              <% if discount %>
+                <%= link_to "Discount ##{discount.id}", merchant_discount_path(discount.merchant_id, discount.id) %>
+              <% end %>
+            </td>
           </tr>
         </section>
       <% end %>
     </tbody>
   </table>
-
 </body>
