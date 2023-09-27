@@ -14,7 +14,7 @@
       <% end %>
   <p>Created on: <%= @invoice.created_at.strftime("%A, %B %d, %Y") %>
   <p>Total Revenue: <%= number_to_currency(@invoice.total_revenue) %>
-  <p>Discount Revenue: <%= number_to_currency(@invoice.discounted_revenue) %>
+  <p>Total Discount Revenue: <%= number_to_currency(@invoice.total_discount_revenue) %>
 
   <h4>Customer:</h4>
     <%= @invoice.customer.first_name %> <%= @invoice.customer.last_name %><br>
@@ -30,7 +30,6 @@
         <th class="th1">Quantity</th>
         <th class="th1">Unit Price</th>
         <th class="th1">Status</th>
-        <th class="th1">Discounts Applied</th>
       </tr>
     </thead>
 
@@ -41,7 +40,6 @@
           <td style="text-align:center"><%= i.quantity %></td>
           <td style="text-align:center"><%= number_to_currency(i.unit_price) %></td>
           <td style="text-align:center"><%= i.status%></td>
-          <td style="text-align:center"><%= "Bulk Discount" %></td>
         </tr>
       <% end %>
     </tbody>
