@@ -1,0 +1,11 @@
+<%= render partial: "shared/nav" %>
+
+<body>
+  <div class="row">
+    <p class='col-12'>Discount #<%= @discount.id %></p>
+  </div>
+
+  <p>Discount:   %<%= @discount.percentage.to_i %></p>
+  <p>Min Quantity: <%= @discount.threshold %> items</p><br/>
+
+</body>
