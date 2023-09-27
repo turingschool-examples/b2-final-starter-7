@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-RSpec.describe "merchant discount show" do
-  before :each do
+RSpec.describe "merchant discount edit page" do
+  before(:each) do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Krusty Krab")
 
@@ -45,18 +45,10 @@ RSpec.describe "merchant discount show" do
     @discount2 = Discount.create!(merchant_id: @merchant1.id, threshold: 20, percentage: 15.00)
     @discount3 = Discount.create!(merchant_id: @merchant2.id, threshold: 15, percentage: 25.00)
   
-    visit merchant_discount_path(@merchant1, @discount1)
+    visit edit_merchant_discount_path(@merchant1, @discount1)
   end
 
-  # ----- 4: Merchant Bulk Discount Show
-  # When I visit my bulk discount show page
-  # Then I see the bulk discount's quantity threshold and percentage discount
-  it "shows the discount information" do
-    expect(page).to have_content("Discount: %10")
-    expect(page).to have_content("Min Quantity: 10 items")
-  end
-
-  # ------  5: Merchant Bulk Discount Edit
+  # -------  5: Merchant Bulk Discount Edit
   # When I visit my bulk discount show page
   # Then I see a link to edit the bulk discount
   # When I click this link
@@ -65,7 +57,17 @@ RSpec.describe "merchant discount show" do
   # When I change any/all of the information and click submit
   # Then I am redirected to the bulk discount's show page
   # And I see that the discount's attributes have been updated
-  it "shows a link to edit discount" do
-    expect(page).to have_link("Edit Discount")
+  it "renders the edit merchant discount form" do
+    expect(find_field("Percentage").value.to_i).to eq(@discount1.percentage.to_i)
+    expect(find_field("Threshold").value.to_i).to eq(@discount1.threshold)
+    expect(find_field("Percentage").value.to_i).to_not eq(@discount2.percentage.to_i)
+
+    fill_in "Percentage", with: 30
+    fill_in "Threshold", with: 30
+    click_button "Submit Discount"
+
+    expect(current_path).to eq(merchant_discount_path(@merchant1, @discount1))
+    expect(page).to have_content("Discount: %30")
+    expect(page).to have_content("Min Quantity: 30 items")
   end
 end
