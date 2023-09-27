@@ -4,4 +4,5 @@ class Discount < ApplicationRecord
                         :merchant_id
 
   belongs_to :merchant
+  has_many :invoice_items, through: :merchant
 end

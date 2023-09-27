@@ -46,7 +46,15 @@ class DiscountsController < ApplicationController
   private
 
   def discount_params
-    params.require(:discount).permit(:percentage, :threshold, :merchant)
+    params.require(:discount).permit(:percentage, :threshold, :merchant,:merchant_id, :id)
+  end
+
+  def find_discount
+    @discount = Discount.find(params[:id])
+  end
+
+  def find_merchant
+    @merchant = Merchant.find(params[:merchant_id])
   end
 
 end
