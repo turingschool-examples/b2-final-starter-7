@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "merchant discounts index" do
+RSpec.describe "merchant discount new" do
   before :each do
     @merchant1 = Merchant.create!(name: "Hair Care")
     @merchant2 = Merchant.create!(name: "Krusty Krab")
@@ -43,43 +43,25 @@ RSpec.describe "merchant discounts index" do
 
     @discount1 = Discount.create!(merchant_id: @merchant1.id, threshold: 10, percentage: 10.00)
     @discount2 = Discount.create!(merchant_id: @merchant1.id, threshold: 20, percentage: 15.00)
-    @discount3 = Discount.create!(merchant_id: @merchant2.id, threshold: 15, percentage: 25.00)
+    @discount3 = Discount.create!(merchant_id: @merchant2.id, threshold: 15, percentage: 15.00)
   
-    visit merchant_discounts_path(@merchant1)
+    visit new_merchant_discount_path(@merchant1)
   end
 
-  # -----  1: Merchant Bulk Discounts Index
-  # When I visit my merchant dashboard
-  # Then I see a link to view all my discounts
-  # When I click this link
-  # Then I am taken to my bulk discounts index page
-  # Where I see all of my bulk discounts including their
-  # percentage discount and quantity thresholds
-  # And each bulk discount listed includes a link to its show page
-  it "renders a list of merchant discounts" do
-    expect(page).to have_link("#{@discount1.id}")
-    expect(page).to have_content("Discount: %10")
-    expect(page).to have_content("Min Quantity: 10")
-    expect(page).to have_link("#{@discount2.id}")
-    expect(page).to have_content("Discount: %15")
-    expect(page).to have_content("Min Quantity: 20")
-    expect(page).to_not have_link("#{@discount3.id}")
-    expect(page).to_not have_content("Discount: %25")
-    expect(page).to_not have_content("Min Quantity: 15")
+    # ------- 2: Merchant Bulk Discount Create
+    # When I visit my bulk discounts index
+    # Then I see a link to create a new discount
+    # When I click this link
+    # Then I am taken to a new page where I see a form to add a new bulk discount
+    # When I fill in the form with valid data
+    # Then I am redirected back to the bulk discount index
+    # And I see my new bulk discount listed
+  it "renders new merchant discount form that works" do
+    fill_in "threshold", with: "100"
+    fill_in "percentage", with: "50"
+    click_button "Submit Discount"
+    expect(current_path).to eq(merchant_discounts_path(@merchant1))
+    expect(page).to have_content("Discount: %50")
+    expect(page).to have_content("Min Quantity: 100 items")
   end
-
-  # ------  2: Merchant Bulk Discount Create
-  # When I visit my bulk discounts index
-  # Then I see a link to create a new discount
-  # When I click this link
-  # Then I am taken to a new page where I see a form to add a new bulk discount
-  # When I fill in the form with valid data
-  # Then I am redirected back to the bulk discount index
-  # And I see my new bulk discount listed
-  it "shows a link to create a new merchant discount" do
-    expect(page).to have_link("Create New Discount")
-    click_link "Create New Discount"
-    expect(current_path).to eq(new_merchant_discount_path(@merchant1))
-  end
-
 end
