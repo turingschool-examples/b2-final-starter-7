@@ -1,0 +1,13 @@
+<%= render partial: "shared/nav" %>
+
+<body>
+  <div class="row">
+    <p class='col-12'>My Discounts</p>
+  </div>
+
+  <% @discounts.each do |discount| %>
+    <p><%= link_to "Discount ##{discount.id}", merchant_discount_path(@merchant, discount) %></p>
+    <p>Discount:   %<%= discount.percentage.to_i %></p>
+    <p>Min Quantity: <%= discount.threshold %> items</p>
+  <% end %>
+</body>
