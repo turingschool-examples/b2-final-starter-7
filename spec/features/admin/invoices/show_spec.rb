@@ -69,4 +69,14 @@ describe "Admin Invoices Index Page" do
       expect(@i1.status).to eq("completed")
     end
   end
+
+  it "US8 - shows the total revenue and total discounted revenue for this invoice" do
+    @bulk_discount_1 = BulkDiscount.create!(quantity_threshold: 10, percent_discount: 20, merchant_id: @m1.id)
+    @bulk_discount_2 = BulkDiscount.create!(quantity_threshold: 15, percent_discount: 30, merchant_id: @m1.id)
+
+    save_and_open_page
+
+    expect(page).to have_content(@i1.total_revenue)
+    expect(page).to have_content(@i1.discounted_revenue)
+  end
 end

@@ -98,4 +98,25 @@ RSpec.describe "invoices show" do
       expect(page).to_not have_content("in progress")
     end
   end
+
+  xit "US6 - shows the total revenue and total discounted revenue for this invoice" do
+    @bulk_discount_1 = BulkDiscount.create!(quantity_threshold: 10, percent_discount: 20, merchant_id: @merchant1.id)
+    @bulk_discount_2 = BulkDiscount.create!(quantity_threshold: 15, percent_discount: 30, merchant_id: @merchant1.id)
+
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    expect(page).to have_content(@invoice_1.total_revenue)
+    # expect(page).to have_content(@invoice_1.discounted_revenue)
+  end
+
+  xit "US 7 - Link to applied discounts" do
+    @bulk_discount_1 = BulkDiscount.create!(quantity_threshold: 10, percent_discount: 20, merchant_id: @merchant1.id)
+    @bulk_discount_2 = BulkDiscount.create!(quantity_threshold: 15, percent_discount: 30, merchant_id: @merchant1.id)
+
+    visit merchant_invoice_path(@merchant1, @invoice_1)
+
+    save_and_open_page
+
+    expect(page).to have_link("Discount #{@bulk_discount_1.id} was applied")
+  end
 end
