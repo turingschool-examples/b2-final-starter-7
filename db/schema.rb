@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_28_173356) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_13_214516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "coupons", force: :cascade do |t|
+    t.string "name"
+    t.string "coupon_code"
+    t.integer "discount_amount"
+    t.integer "discount_type"
+    t.bigint "merchant_id"
+    t.bigint "invoice_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoice_id"], name: "index_coupons_on_invoice_id"
+    t.index ["merchant_id"], name: "index_coupons_on_merchant_id"
+  end
 
   create_table "customers", force: :cascade do |t|
     t.string "first_name"
@@ -73,6 +86,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_28_173356) do
     t.index ["invoice_id"], name: "index_transactions_on_invoice_id"
   end
 
+  add_foreign_key "coupons", "invoices"
+  add_foreign_key "coupons", "merchants"
   add_foreign_key "invoice_items", "invoices"
   add_foreign_key "invoice_items", "items"
   add_foreign_key "items", "merchants"
