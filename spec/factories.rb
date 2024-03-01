@@ -24,7 +24,7 @@ FactoryBot.define do
 
   factory :transaction do
     result {[0,1].sample}
-    credit_card_number {Faker::Finance.credit_card}
+    credit_card_number {Faker::Bank.account_number(digits: 6)} # Faker cc number sometimes exceeds integer limit, should cast db to bigint
     invoice
   end
 

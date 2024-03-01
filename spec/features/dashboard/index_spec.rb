@@ -97,22 +97,22 @@ RSpec.describe "merchant dashboard" do
     within("#items_ready_to_ship") do
 
       expect(page).to have_content(@item_1.name)
-      expect(page).to have_content(@item_1.invoice_ids)
+      expect(page).to have_content(@ii_1.invoice_id)
 
       expect(page).to have_content(@item_2.name)
-      expect(page).to have_content(@item_2.invoice_ids)
+      expect(page).to have_content(@ii_2.invoice_id)
 
       expect(page).to have_no_content(@item_3.name)
-      expect(page).to have_no_content(@item_3.invoice_ids)
+      expect(page).to have_no_content(@ii_3.invoice_id)
     end
   end
 
   it "each invoice id is a link to my merchant's invoice show page " do
-    expect(page).to have_link("#{@item_1.invoice_ids}")
-    expect(page).to have_link("#{@item_2.invoice_ids}")
-    expect(page).to_not have_link("#{@item_3.invoice_ids}")
+    expect(page).to have_link("#{@ii_1.invoice_id}")
+    expect(page).to have_link("#{@ii_2.invoice_id}")
+    expect(page).to_not have_link("#{@ii_3.invoice_id}")
 
-    click_link("#{@item_1.invoice_ids}", match: :first)
+    click_link("#{@ii_1.invoice_id}", match: :first)
     expect(current_path).to eq("/merchants/#{@merchant1.id}/invoices/#{@invoice_1.id}")
   end
 

@@ -17,7 +17,7 @@ class Item < ApplicationRecord
     .where("invoices.status = 2")
     .select("CAST(invoices.created_at as date) as invoice_date, sum(invoice_items.unit_price * invoice_items.quantity) as total_rev")
     .group("invoice_date")
-    .order("total_rev desc")
+    .order("total_rev desc, invoice_date desc")
     .limit(1)
     .first&.invoice_date&.to_date
 
